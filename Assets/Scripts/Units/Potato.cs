@@ -1,7 +1,18 @@
+using System.Collections.Generic;
+
 public class Potato : Character
 {
-    public override void onClicked()
+    public int extraAttackDamage;
+    public override void targetedSkill(Unit target)
     {
-        canvasController.displayPotatoSkills();
+        target.receiveDamage(skillStrength * skillStrengthMultiplier);
+    }
+
+    public override void areaSkill(List<Unit> targets)
+    {
+        foreach (var target in targets)
+        {
+            target.receiveDamage(areaSkillStrength * skillStrengthMultiplier);
+        }
     }
 }

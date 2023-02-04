@@ -1,12 +1,18 @@
+using System.Collections.Generic;
+
 public abstract class Character : Unit
 {
-    public int damage;
-    public int damageMultiplier = 1;
-    public int attackRange;
+    public int skillStrength;
+    public int areaSkillStrength;
+    public int skillStrengthMultiplier = 1;
+    public int skillkRange;
     public int movementRange;
 
-    public void Reset()
+    public abstract void targetedSkill(Unit target);
+    public abstract void areaSkill(List<Unit> targets);
+
+    public void reset()
     {
-        damageMultiplier = 1;
+        skillStrengthMultiplier = 1;
     }
 }
