@@ -30,10 +30,16 @@ public abstract class Character : Unit
         skillStrengthMultiplier = 1;
     }
 
-    public void move(Vector2Int actCoord, Vector2Int maptileCoord)
+    public void move(Vector2Int coordinates)
     {
         CharacterMovement m = gameObject.GetComponent<CharacterMovement>();
-        m.StartMovingTo(maptileCoord);
-        pos = actCoord;
+        m.StartMovingTo(coordinates);
+        pos = coordinates;
+    }
+
+    public bool isBusy()
+    {
+        CharacterMovement m = gameObject.GetComponent<CharacterMovement>();
+        return m.isMoving();
     }
 }

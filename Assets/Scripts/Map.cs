@@ -60,19 +60,21 @@ public class Map2D
 {
     private MapNode[,] map;
     private Vector2Int size;
+    private Vector2Int offset;
 
-    public Map2D(int sx, int sy)
+    public Map2D(int sx, int sy, int ox, int oy)
     {
-        init(sx, sy);
+        init(sx, sy, ox, oy);
     }
 
-    public Map2D(Vector3Int v3)
+    public Map2D(Vector3Int v3, int ox, int oy)
     {
-        init(v3.x, v3.y);
+        init(v3.x, v3.y, ox, oy);
     }
 
-    public void init(int sx, int sy)
+    public void init(int sx, int sy, int ox, int oy)
     {
+        offset = new Vector2Int(ox, oy);
         map = new MapNode[sx, sy];
         size.x = sx; size.y = sy;
 
@@ -91,8 +93,11 @@ public class Map2D
         return size;
     }
 
-    public MapNode getNode(int x, int y)
+    public MapNode getNode(int px, int py)
     {
+        int x = px + offset.x;
+        int y = py + offset.y;
+
         if (x >= 0 && y >= 0 && x < size.x && y < size.y)
         {
             return map[x, y];
@@ -109,5 +114,23 @@ public class Map2D
     public MapNode getNode(Vector2Int v)
     {
         return getNode(v.x, v.y);
+    }
+
+    public List<PathFinding.PathNode> generatePathNodeList()
+    {
+        List<PathFinding.PathNode> pathList = new List<PathFinding.PathNode>();
+
+        for (int i = 0; i < size.x; i++)
+        {
+            for (int j = 0; j < size.y; j++)
+            {
+                if (map[i,j].Cost >= 0)
+                {
+                    pathList.Add(new PathFinding.PathNode( new Vector2Int(i - offset.x, j - offset.y)));
+                }
+            }
+        }
+
+        return pathList;
     }
 }

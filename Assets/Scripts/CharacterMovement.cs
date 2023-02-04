@@ -10,6 +10,11 @@ public class CharacterMovement : MonoBehaviour
     private MapController mapController;
     private bool m_Moving = false;
 
+    public bool isMoving()
+    {
+        return m_Moving;
+    }
+
     public void StartMovingTo(Vector2Int destination)
     {
         if(!m_Moving)
