@@ -220,7 +220,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 149b2d797f975d1488fb1243c67129a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dragSpeed: 2
 --- !u!1 &591066182
 GameObject:
   m_ObjectHideFlags: 0
@@ -312,9 +311,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e0d1111ada591449dc532d343fe1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: bc5336553269c9042b986e1bd17410c1, type: 2}
-  tile2: {fileID: 11400000, guid: ff0137bc174982f408590b79af49af22, type: 2}
-  tile3: {fileID: 11400000, guid: 6054138a8f8e41a4cb2c1688728da8d7, type: 2}
+  tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
+  highlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
+  tilemapSizeHalf: {x: 10, y: 7, z: 0}
 --- !u!483693784 &1658696433
 TilemapRenderer:
   m_ObjectHideFlags: 0
