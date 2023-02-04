@@ -1,6 +1,35 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+public class MapNode
+{
+    public int cost;
+
+    public MapNode(int c)
+    {
+        cost = c;
+    }
+
+}
+
+public class Map
+{
+    private MapNode[,] map;
+    
+    public Map(int sx, int sy)
+    {
+        map = new MapNode[sx, sy];
+
+        for (int i = 0; i < sx; i++)
+        {
+            for(int j = 0; j < sy; j++)
+            {
+                map[i, j].cost = 0;
+            }
+        }
+    }
+}
+
 public class MapController : MonoBehaviour
 {
     public Tile         tile;
