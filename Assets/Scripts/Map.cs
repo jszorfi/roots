@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class MapPos2D
+{
+    public Vector2Int pos2D;
+}
+
 public class MapNode
 {
     private int origCost;

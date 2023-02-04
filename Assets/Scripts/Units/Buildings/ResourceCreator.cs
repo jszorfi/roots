@@ -2,7 +2,7 @@ using System;
 
 public enum ResourceType { wood, plough, fertilizer, potato, carrot, radish }
 
-public abstract class ResoruceCreator : Building
+public abstract class ResourceCreator : Building
 {
     protected ResourceType resource;
     protected int resourceCount;
