@@ -6,6 +6,10 @@ public class Field : ResourceCreator
 {
     private SeedType planted;
 
+    Field()
+    {
+        resourceCount = 1;
+    }
     public override void onClicked()
     {
         canvasController.displayFieldOptions();

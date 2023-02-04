@@ -47,8 +47,9 @@ public class GameController : MonoBehaviour
 
     public void EndBuild()
     {
-
+        phase = Phase.PlayerTurn;
     }
+
     public void EndFight()
     {
         foreach (var resoruceCreator in mapController.resCreators)

@@ -7,6 +7,7 @@ public abstract class Unit : MonoBehaviour
     public int maxHealth;
     public int health;
     public Tuple<ResourceType, int> cost;
+    private bool isDead = false;
 
     protected CanvasController canvasController;
     protected SpriteAnimator animator;
@@ -22,7 +23,13 @@ public abstract class Unit : MonoBehaviour
         health -= damage;
         if (health < 0)
         {
-            animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
+            animator.SetAnimationByName("Die");
+            isDead = true;
         }
+    }
+    public void reset()
+    {
+        if (isDead)
+            Destroy(gameObject);
     }
 }

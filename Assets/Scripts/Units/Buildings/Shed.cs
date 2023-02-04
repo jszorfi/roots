@@ -1,6 +1,6 @@
 public class Shed : ResourceCreator
 {
-    Shed() { resource = ResourceType.plough; }
+    Shed() { resource = ResourceType.plough; resourceCount = 2; }
     public override void onClicked()
     {
         //nope
