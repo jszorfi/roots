@@ -16,7 +16,7 @@ public class CanvasController : MonoBehaviour
         builderSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
     }
 
-    public void ChangeDisplayedSkills(CanvasGroup skillsToDisplay)
+    private void ChangeDisplayedSkills(CanvasGroup skillsToDisplay)
     {
         if (displayedSkills != null)
             displayedSkills.alpha = 0;
