@@ -2,7 +2,7 @@ using System;
 
 public enum SeedType { none, potato, carrot, radish }
 
-public class Field : ResoruceCreator
+public class Field : ResourceCreator
 {
     private SeedType planted;
 

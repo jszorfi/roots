@@ -2169,8 +2169,13 @@ MonoBehaviour:
   tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
   highlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
   tilemapSizeHalf: {x: 10, y: 7, z: 0}
-  carrot: {fileID: 7994839833213486289, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
-  potato: {fileID: 5589451693130093928, guid: 0051c041e732e7047b545c2d8b7ae79a, type: 3}
+  carrotPrefab: {fileID: 7994839833213486289, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
+  potatoPrefab: {fileID: 5589451693130093928, guid: 0051c041e732e7047b545c2d8b7ae79a, type: 3}
+  radishPrefab: {fileID: 3233446422713348973, guid: 28a9d8797c9155f4aa50b92d315a880b, type: 3}
+  bunnyPrefab: {fileID: 3499839138552857736, guid: 69a1837e5ed371642975609ea67954d1, type: 3}
+  shedPrefab: {fileID: 1428083332931784292, guid: 6ce2b63ff1fa6204cbea25fa6ce89bf6, type: 3}
+  fieldPrefab: {fileID: 699431538376419830, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+  lumbermillPrefab: {fileID: 699431538376419830, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
   enemies: []
   characters: []
   resCreators: []

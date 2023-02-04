@@ -44,14 +44,14 @@ public class MapController : MonoBehaviour
     public GameObject   bunnyPrefab;
     public GameObject   shedPrefab;
     public GameObject   fieldPrefab;
-    public GameObject   lumbermillPrefab;
+    public GameObject   woodmillPrefab;
     private GameObject  carrotInst;
     private GameObject  potatoInst;
 
     [HideInInspector]
     public List<Enemy>              enemies;
     public List<Character>          characters;
-    public List<ResoruceCreator>    resCreators;
+    public List<ResourceCreator>    resCreators;
 
     // Start is called before the first frame update
     void Start()
@@ -181,7 +181,29 @@ public class MapController : MonoBehaviour
 
     public void placeUnit(UnitType unitType)
     {
+        switch (unitType)
+        {
+            case UnitType.Field:
 
+                break;
+            case UnitType.Shed:
+
+                break;
+            case UnitType.Woodmill:
+                //resCreators.Add(Instantiate(woodmillPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);)
+                break;
+            case UnitType.Carrot:
+
+                break;
+            case UnitType.Radish:
+
+                break;
+            case UnitType.Potato:
+
+                break;
+            default:
+                break;
+        }
     }
 
     public List<PathFinding.PathNode> getPathNodeList()
