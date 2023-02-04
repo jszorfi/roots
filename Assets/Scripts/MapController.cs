@@ -213,7 +213,6 @@ public class MapController : MonoBehaviour
                 break;
             default:
                 return; /*oof*/
-                break;
         }
     }
 
