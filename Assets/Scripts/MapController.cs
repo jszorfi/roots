@@ -117,7 +117,7 @@ public class MapController : MonoBehaviour
             {
                 MapNode clickedNode = map.getNode(mouseTileMapCoords);
 
-                //If no unit is selected, we can only select a unit
+                //If no unit is selected, we can select a unit (building or character) or an empty fields
                 if (selectedUnit == null)
                 {
                     if (clickedNode.Occupant != null)
@@ -131,6 +131,10 @@ public class MapController : MonoBehaviour
                         selectedUnit = clickedNode.Occupant;
                         selectedUnit.onClicked();
                  //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
+                    }
+                    else
+                    {
+                        canvasController.displayBuilderOptions();
                     }
                 }
                 else
@@ -159,6 +163,11 @@ public class MapController : MonoBehaviour
             deselectUnit();
         }
 
+
+    }
+
+    public void placeUnit(UnitType unitType)
+    {
 
     }
 
