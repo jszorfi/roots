@@ -1,32 +1,35 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using System.Collections.Generic;
 
 public class MapController : MonoBehaviour
 {
     //Private
-    private Vector3Int  bottomLeftBounds;
-    private Vector3Int  topRightBounds;
-    private Tilemap     tilemap;
-    private Vector3Int  oldHighlight;
-    private bool        oldHighlightSet = false;
+    private Vector3Int bottomLeftBounds;
+    private Vector3Int topRightBounds;
+    private Tilemap tilemap;
+    private Vector3Int oldHighlight;
+    private bool oldHighlightSet = false;
+    private CanvasController canvasController;
 
     //Public
-    public Tile         tile;
-    public Tile         highlightTile;
-    public Vector3Int   tilemapSizeHalf;
-    public Map2D        map;
-    public Unit         selectedUnit;
+    public Tile tile;
+    public Tile highlightTile;
+    public Vector3Int tilemapSizeHalf;
+    public Map2D map;
+    public Unit selectedUnit;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
+        canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
+
         gameObject.transform.position = new Vector3(0, 0, 0);
         tilemap = gameObject.GetComponent<Tilemap>();
         tilemap.origin = new Vector3Int(0, 0, 0);
-        tilemap.size = tilemapSizeHalf*2 + new Vector3Int(1,1,0);
+        tilemap.size = tilemapSizeHalf * 2 + new Vector3Int(1, 1, 0);
 
         //The cooridnates given here are to be interpreted as the whole tile. So the topright bound 3,3 means the topright bound of tile 3,3, which
         //in wordspace coordiantes means 4,4, as the coordiante of the tile in wordspace is the bottomleft corner
@@ -103,10 +106,10 @@ public class MapController : MonoBehaviour
                 {
                     MapNode previousNode = map.getNode(selectedUnit.pos);
 
-                    if(clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
+                    if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                     {
                         Character c = selectedUnit as Character;
-                        if(clickedNode.Occupy(selectedUnit))
+                        if (clickedNode.Occupy(selectedUnit))
                         {
                             c.move(clipVect3Int(actualMapCoordinates), clipVect3Int(tileMapCoordinates));
                         }
@@ -116,7 +119,7 @@ public class MapController : MonoBehaviour
             }
 
         }
-        else if(oldHighlightSet)
+        else if (oldHighlightSet)
         {
             tilemap.SetTile(oldHighlight, null);
             oldHighlightSet = false;
@@ -124,10 +127,10 @@ public class MapController : MonoBehaviour
         else if (Input.GetMouseButtonDown(0))
         {
             selectedUnit = null;
-            //TODO: RESET SELECTION DEPENDENT MENU
+            canvasController.clear();
         }
 
-    
+
     }
 
     public List<PathFinding.PathNode> getPathNodeList()
@@ -136,15 +139,15 @@ public class MapController : MonoBehaviour
 
         Vector2Int size = map.getSize();
 
-        for(int i = 0; i < size.x; i++)
+        for (int i = 0; i < size.x; i++)
         {
-            for(int j = 0; j < size.y; j++)
+            for (int j = 0; j < size.y; j++)
             {
                 MapNode n = map.getNode(i, j);
 
                 if (n.Cost >= 0)
                 {
-                    pathList.Add(new PathFinding.PathNode(map2DToTileMapCoordinates(i,j)));
+                    pathList.Add(new PathFinding.PathNode(map2DToTileMapCoordinates(i, j)));
                 }
             }
         }
