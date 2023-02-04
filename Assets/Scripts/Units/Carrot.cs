@@ -1,19 +1,22 @@
+using System.Collections.Generic;
+
 public class Carrot : Character
 {
-    public int extraAttackDamage;
-
     public override void onClicked()
     {
         canvasController.displayCarrotSkills();
     }
 
-    public void baseAttack(Unit target)
+    public override void targetedSkill(Unit target)
     {
-        target.receiveDamage(damage * damageMultiplier);
+        target.receiveDamage(skillStrength * skillStrengthMultiplier);
     }
 
-    public void extraAttack(Unit target)
+    public override void areaSkill(List<Unit> targets)
     {
-        target.receiveDamage(extraAttackDamage * damageMultiplier);
+        foreach (var target in targets)
+        {
+            target.receiveDamage(areaSkillStrength * skillStrengthMultiplier);
+        }
     }
 }
