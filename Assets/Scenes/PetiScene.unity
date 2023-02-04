@@ -1982,7 +1982,7 @@ MonoBehaviour:
   bunnyPrefab: {fileID: 3499839138552857736, guid: 69a1837e5ed371642975609ea67954d1, type: 3}
   shedPrefab: {fileID: 1428083332931784292, guid: 6ce2b63ff1fa6204cbea25fa6ce89bf6, type: 3}
   fieldPrefab: {fileID: 0}
-  lumbermillPrefab: {fileID: 0}
+  woodmillPrefab: {fileID: 0}
   enemies: []
   characters: []
   resCreators: []
@@ -2425,7 +2425,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3233446422713348970, guid: 28a9d8797c9155f4aa50b92d315a880b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -10.49
+      value: -4.49
       objectReference: {fileID: 0}
     - target: {fileID: 3233446422713348970, guid: 28a9d8797c9155f4aa50b92d315a880b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2543,7 +2543,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5589451693130093929, guid: 0051c041e732e7047b545c2d8b7ae79a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -9.48
+      value: -3.51
       objectReference: {fileID: 0}
     - target: {fileID: 5589451693130093929, guid: 0051c041e732e7047b545c2d8b7ae79a, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2662,7 +2662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7994839833213486290, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.41
+      value: -2.46
       objectReference: {fileID: 0}
     - target: {fileID: 7994839833213486290, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
       propertyPath: m_LocalPosition.y
