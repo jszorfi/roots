@@ -10,10 +10,14 @@ public class MapController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gameObject.transform.position = new Vector3(0, 0, 0);
         var t = gameObject.GetComponent<Tilemap>();
-        t.size = new Vector3Int(1, 1, 0);
-        t.FloodFill(new Vector3Int(0, 0, 1), tile2);
-        t.SetTile(t.origin, tile3);
+        t.origin = new Vector3Int(0, 0, 0);
+        t.size = new Vector3Int(2, 4, 0);
+        t.FloodFill(t.origin, tile2);
+        t.ResizeBounds();
+
+        //t.SetTile(t.origin, tile3);
         //t.SetTile()
     }
 

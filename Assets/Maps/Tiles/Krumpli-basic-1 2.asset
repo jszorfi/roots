@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Krumpli-basic-1 2
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 21300000, guid: ab53512288831ec478fbbf2f5a2524bc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cc8bbdbd1d780c94398020f6d99bebe0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1
