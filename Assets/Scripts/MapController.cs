@@ -47,7 +47,6 @@ public class MapController : MonoBehaviour
     public GameObject       shedPrefab;
     public GameObject       fieldPrefab;
     public GameObject       woodmillPrefab;
-    public GameObject       skillCanvas;
     private GameObject      carrotInst;
     private GameObject      potatoInst;
 
@@ -279,10 +278,14 @@ public class MapController : MonoBehaviour
 
     public bool isOnSkillPanel(Vector3 mouseScreenPos)
     {
+        if(canvasController.displayedGroup == null)
+        {
+            return false;
+        }
 
-        RectTransform canvasRect = skillCanvas.GetComponent<RectTransform>();
+        RectTransform canvasRect = canvasController.displayedGroup.GetComponent<RectTransform>();
 
-        if(RectTransformUtility.RectangleContainsScreenPoint(canvasRect, new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
+        if (RectTransformUtility.RectangleContainsScreenPoint(canvasRect, new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
         {
             return true;
         }

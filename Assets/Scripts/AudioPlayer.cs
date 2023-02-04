@@ -40,31 +40,31 @@ public class AudioPlayer : MonoBehaviour
     void Update()
     {
         // Checking whether a clip should be played
-        if(timePassed > timeToPass)
-        {
-            // Playing the next audio clip
-            int clipIndexToPlay = UnityEngine.Random.Range(0, ambientClips.Count);
-            audioSource.clip = ambientClips[clipIndexToPlay].Clip;
-            audioSource.Play();
+        //if(timePassed > timeToPass)
+        //{
+        //    // Playing the next audio clip
+        //    int clipIndexToPlay = UnityEngine.Random.Range(0, ambientClips.Count);
+        //    audioSource.clip = ambientClips[clipIndexToPlay].Clip;
+        //    audioSource.Play();
 
-            // Generating the next timeframe to wait 
-            timeToPass = RandomFloat(minimumIdleTime, maximumIdleTime);
-            timePassed = 0.0f;
-        }
+        //    // Generating the next timeframe to wait 
+        //    timeToPass = RandomFloat(minimumIdleTime, maximumIdleTime);
+        //    timePassed = 0.0f;
+        //}
 
-        // Updating time that has passed
-        timePassed += Time.deltaTime;
+        //// Updating time that has passed
+        //timePassed += Time.deltaTime;
     }
 
     public void PlayAudioByName(string name)
     {
-        foreach(NamedClip namedClip in effectClips)
-        {
-            if(namedClip.Name == name)
-            {
-                audioSource.clip = namedClip.Clip;
-                audioSource.Play();
-            }
-        }
+        //foreach(NamedClip namedClip in effectClips)
+        //{
+        //    if(namedClip.Name == name)
+        //    {
+        //        audioSource.clip = namedClip.Clip;
+        //        audioSource.Play();
+        //    }
+        //}
     } 
 }

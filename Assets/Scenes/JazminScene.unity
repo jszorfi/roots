@@ -535,6 +535,7 @@ MonoBehaviour:
   shedPrefab: {fileID: 1428083332931784292, guid: 6ce2b63ff1fa6204cbea25fa6ce89bf6, type: 3}
   fieldPrefab: {fileID: 3233446422713348973, guid: 28a9d8797c9155f4aa50b92d315a880b, type: 3}
   woodmillPrefab: {fileID: 3233446422713348973, guid: 28a9d8797c9155f4aa50b92d315a880b, type: 3}
+  skillCanvas: {fileID: 2198938343875761915}
   enemies: []
   characters: []
   resCreators: []

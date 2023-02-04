@@ -22,14 +22,20 @@ public class CanvasController : MonoBehaviour
 
     private Dictionary<UnitType, Button> builderButtons = new Dictionary<UnitType, Button>();
 
-    private CanvasGroup displayedGroup;
     private GameController gameController;
+    private MapController mapController;
+
+    [HideInInspector]
+    public CanvasGroup displayedGroup;
+
     private void Start()
     {
         gameController = GameObject.Find("GameController").gameObject.GetComponent<GameController>();
+        mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
 
         var skills = gameObject.transform.Find("Skills").gameObject.transform;
-        potatoSkills = skills.Find("PotatoSkills").gameObject.GetComponent<CanvasGroup>();
+        var potatoSkills2 = skills.Find("PotatoSkills").gameObject;
+        potatoSkills = potatoSkills2.GetComponent<CanvasGroup>();
         carrotSkills = skills.Find("CarrotSkills").gameObject.GetComponent<CanvasGroup>();
         radishSkills = skills.Find("RadishSkills").gameObject.GetComponent<CanvasGroup>();
 
@@ -45,6 +51,8 @@ public class CanvasController : MonoBehaviour
         builderButtons[UnitType.Carrot] = buttons.transform.GetChild(4).GetComponent<Button>();
         builderButtons[UnitType.Radish] = buttons.transform.GetChild(5).GetComponent<Button>();
 
+        potatoSkills2.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(delegate { mapController.Attack(); });
+
         foreach (var b in builderButtons)
         {
             b.Value.onClick.AddListener(delegate { gameController.placeUnit(b.Key); });
@@ -53,6 +61,8 @@ public class CanvasController : MonoBehaviour
         foreach (Transform skill in skills)
         {
             skill.gameObject.GetComponent<CanvasGroup>().alpha = 0;
+            skill.gameObject.GetComponent<CanvasGroup>().interactable = false;
+            skill.gameObject.GetComponent<CanvasGroup>().blocksRaycasts = false;
         }
         updateResources();
     }
@@ -62,6 +72,8 @@ public class CanvasController : MonoBehaviour
         if (displayedGroup != null)
         {
             displayedGroup.alpha = 0;
+            displayedGroup.interactable = false;
+            displayedGroup.blocksRaycasts = false;
             displayedGroup = null;
         }
     }
@@ -86,8 +98,14 @@ public class CanvasController : MonoBehaviour
     private void changeDisplayedGroup(CanvasGroup groupToDisplay)
     {
         if (displayedGroup != null)
+        {
             displayedGroup.alpha = 0;
+            displayedGroup.interactable = false;
+            displayedGroup.blocksRaycasts = false;
+        }
         groupToDisplay.alpha = 1;
+        groupToDisplay.interactable = true;
+        groupToDisplay.blocksRaycasts = true;
         displayedGroup = groupToDisplay;
     }
 
