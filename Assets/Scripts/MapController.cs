@@ -4,6 +4,7 @@ using UnityEngine.Tilemaps;
 
 public class MapController : MonoBehaviour
 {
+
     /*
      * Tile layer
      * 0 - Map
@@ -33,20 +34,22 @@ public class MapController : MonoBehaviour
     private MapPos2D selectedPosition;
 
     private CanvasController canvasController;
+    private GameController gameController;
 
     //Public
-    public Tile tile;
-    public Tile highlightTile;
-    public Vector3Int tilemapSizeHalf;
-    public GameObject carrotPrefab;
-    public GameObject potatoPrefab;
-    public GameObject radishPrefab;
-    public GameObject bunnyPrefab;
-    public GameObject shedPrefab;
-    public GameObject fieldPrefab;
-    public GameObject woodmillPrefab;
-    private GameObject carrotInst;
-    private GameObject potatoInst;
+    public Tile             tile;
+    public Tile             highlightTile;
+    public Vector3Int       tilemapSizeHalf;
+    public GameObject       carrotPrefab;
+    public GameObject       potatoPrefab;
+    public GameObject       radishPrefab;
+    public GameObject       bunnyPrefab;
+    public GameObject       shedPrefab;
+    public GameObject       fieldPrefab;
+    public GameObject       woodmillPrefab;
+    public GameObject       skillCanvas;
+    private GameObject      carrotInst;
+    private GameObject      potatoInst;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -57,6 +60,7 @@ public class MapController : MonoBehaviour
     void Start()
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
+        gameController   = GameObject.Find("GameController").GetComponent<GameController>();
 
         gameObject.transform.position = new Vector3(0, 0, 0);
         tilemap = gameObject.GetComponent<Tilemap>();
@@ -81,12 +85,14 @@ public class MapController : MonoBehaviour
 
         carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
         potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mouseScreen = Input.mousePosition;
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(mouseScreen);
         //The offsets are so when the negative coordinates are considered the bound calculations still work.
         int xoffset = 0;
         int yoffset = 0;
@@ -96,8 +102,8 @@ public class MapController : MonoBehaviour
 
         Vector3Int mouseTileMapCoords = new Vector3Int((int)mousePos.x + xoffset, (int)mousePos.y + yoffset, (int)TilemapLayers.HoverHighlight);
 
-        // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner
-        if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1)
+        // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner, and not on the skills panel
+        if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !isOnSkillPanel(mouseScreen))
         {
             /*-----------------------
             * Highlight handling
@@ -122,8 +128,10 @@ public class MapController : MonoBehaviour
             * Click handling
             * ----------------------*/
 
+
             if (Input.GetMouseButtonDown(0))
             {
+
                 MapNode clickedNode = map.getNode(mouseTileMapCoords);
 
                 //If no unit is selected, we can select a unit (building or character) or an empty fields
@@ -147,9 +155,16 @@ public class MapController : MonoBehaviour
                     //If the node is not occupied, we are selecting an empty field.
                     else
                     {
-                        selectedPosition = new MapPos2D();
-                        selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
-                        canvasController.displayBuilderOptions();
+                        // but empty field selection should only happen in buildphase.
+                        if(gameController.phase == Phase.Build)
+                        {
+
+
+                            selectedPosition = new MapPos2D();
+                            selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
+                            canvasController.displayBuilderOptions();
+                        }
+
                     }
                 }
                 else
@@ -158,6 +173,8 @@ public class MapController : MonoBehaviour
 
                     if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                     {
+                        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
+
                         Character c = selectedUnit as Character;
                         c.move(clipVect3Int(mouseTileMapCoords));
                         clickedNode.Occupy(selectedUnit);
@@ -180,6 +197,27 @@ public class MapController : MonoBehaviour
 
 
     }
+
+    public void Attack()
+    {
+        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
+        deselect();
+    }
+
+    public void Skill()
+    {
+        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
+        deselect();
+    }
+
+    public void Repair()
+    {
+        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
+        deselect();
+        
+
+    }
+
     public void placeUnit(UnitType unitType)
     {
         if (selectedPosition == null) { return; /*oof*/ }
@@ -231,11 +269,25 @@ public class MapController : MonoBehaviour
         //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
         selectedUnit = null;
         selectedPosition = null;
-        canvasController.clear();
+        //canvasController.clear();
     }
 
     public void Die(Unit u)
     {
+
+    }
+
+    public bool isOnSkillPanel(Vector3 mouseScreenPos)
+    {
+
+        RectTransform canvasRect = skillCanvas.GetComponent<RectTransform>();
+
+        if(RectTransformUtility.RectangleContainsScreenPoint(canvasRect, new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
+        {
+            return true;
+        }
+
+        return false;
 
     }
 
