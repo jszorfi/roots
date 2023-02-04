@@ -1,32 +1,96 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using System.Collections.Generic;
 
 public class MapNode
 {
-    public int cost;
+    private int origCost;
+    private int cost;
+    public int Cost
+    {
+        get { return cost; }
+        set { cost = value; origCost = value; }
+    }
 
     public MapNode(int c)
     {
-        cost = c;
+        origCost = c;
+        cost = origCost;
     }
+
+    public bool Occupy()
+    {
+        if (cost >= 0)
+        {
+            cost = -1;
+            return true;
+        }
+        else 
+        {
+            return false;
+        }
+    }
+
+    public bool Leave()
+    {
+        if (cost < 0)
+        {
+            cost = origCost;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+
 
 }
 
-public class Map
+public class Map2D
 {
     private MapNode[,] map;
+    private Vector2Int size;
     
-    public Map(int sx, int sy)
+    public Map2D(int sx, int sy)
+    {
+        init(sx, sy);
+    }
+
+    public Map2D(Vector3Int v3)
+    {
+        init(v3.x, v3.y);
+    }
+
+    public void init(int sx, int sy)
     {
         map = new MapNode[sx, sy];
+        size.x = sx; size.y = sy;
+
 
         for (int i = 0; i < sx; i++)
         {
-            for(int j = 0; j < sy; j++)
+            for (int j = 0; j < sy; j++)
             {
-                map[i, j].cost = 0;
+                map[i, j] = new MapNode(0);
             }
         }
+    }
+
+    public Vector2Int getSize()
+    {
+        return size;
+    }
+
+    public MapNode getNode(int x, int y)
+    {
+        if (x >= 0 && y >= 0 && x < size.x && y < size.y)
+        {
+            return map[x, y];
+        }
+
+        else return null;
     }
 }
 
@@ -35,6 +99,7 @@ public class MapController : MonoBehaviour
     public Tile         tile;
     public Tile         highlightTile;
     public Vector3Int   tilemapSizeHalf;
+    public Map2D          map;
     private Vector3Int  bottomLeftBounds;
     private Vector3Int  topRightBounds;
     private Tilemap     tilemap;
@@ -57,6 +122,7 @@ public class MapController : MonoBehaviour
         tilemap.BoxFill(bottomLeftBounds, tile, bottomLeftBounds.x, bottomLeftBounds.y, topRightBounds.x, topRightBounds.y);
         tilemap.ResizeBounds();
 
+        map = new Map2D(tilemap.size);
     }
 
     // Update is called once per frame
@@ -103,5 +169,27 @@ public class MapController : MonoBehaviour
             oldHighlightSet = false;
         }
         
+    }
+
+    public List<PathFinding.PathNode> getPathNodeList()
+    {
+        List<PathFinding.PathNode> pathList = new List<PathFinding.PathNode>();
+
+        Vector2Int size = map.getSize();
+
+        for(int i = 0; i < size.x; i++)
+        {
+            for(int j = 0; j < size.y; j++)
+            {
+                MapNode n = map.getNode(i, j);
+
+                if (n.Cost >= 0)
+                {
+                    pathList.Add(new PathFinding.PathNode(new Vector2Int(i,j)));
+                }
+            }
+        }
+
+        return pathList;
     }
 }
