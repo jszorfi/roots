@@ -10,6 +10,7 @@ public abstract class Unit : MonoBehaviour
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
     }
+
     public abstract void onClicked();
     public void receiveDamage(int damage)
     {
@@ -18,12 +19,5 @@ public abstract class Unit : MonoBehaviour
         {
 
         }
-    }
-
-    public void heal(int healing)
-    {
-        health += healing;
-        if (health > maxHealth)
-            health = maxHealth;
     }
 }

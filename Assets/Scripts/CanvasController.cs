@@ -5,44 +5,58 @@ public class CanvasController : MonoBehaviour
     private CanvasGroup potatoSkills;
     private CanvasGroup carrotSkills;
     private CanvasGroup radishSkills;
-    private CanvasGroup builderOptions;
 
-    private CanvasGroup displayedSkills;
+    private CanvasGroup builderOptions;
+    private CanvasGroup shrineOptions;
+    private CanvasGroup fieldOptions;
+
+    private CanvasGroup displayedGroup;
     private void Start()
     {
         potatoSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
-        carrotSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
-        radishSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
-        builderOptions = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
+        carrotSkills = gameObject.transform.GetChild(1).gameObject.GetComponent<CanvasGroup>();
+        radishSkills = gameObject.transform.GetChild(2).gameObject.GetComponent<CanvasGroup>();
+
+        builderOptions = gameObject.transform.GetChild(3).gameObject.GetComponent<CanvasGroup>();
+        shrineOptions = gameObject.transform.GetChild(4).gameObject.GetComponent<CanvasGroup>();
+        fieldOptions = gameObject.transform.GetChild(5).gameObject.GetComponent<CanvasGroup>();
+
+        foreach (Transform trafo in gameObject.transform)
+        {
+            trafo.gameObject.GetComponent<CanvasGroup>().alpha = 0;
+        }
     }
 
-    private void changeDisplayedSkills(CanvasGroup skillsToDisplay)
+    private void changeDisplayedGroup(CanvasGroup groupToDisplay)
     {
-        if (displayedSkills != null)
-            displayedSkills.alpha = 0;
-        skillsToDisplay.alpha = 1;
-        displayedSkills = skillsToDisplay;
+        if (displayedGroup != null)
+            displayedGroup.alpha = 0;
+        groupToDisplay.alpha = 1;
+        displayedGroup = groupToDisplay;
     }
 
     public void displayPotatoSkills()
     {
-        changeDisplayedSkills(potatoSkills);
+        changeDisplayedGroup(potatoSkills);
     }
     public void displayCarrotSkills()
     {
-        changeDisplayedSkills(carrotSkills);
+        changeDisplayedGroup(carrotSkills);
     }
     public void displayRadishSkills()
     {
-        changeDisplayedSkills(radishSkills);
+        changeDisplayedGroup(radishSkills);
     }
     public void displayBuilderOptions()
     {
-        changeDisplayedSkills(builderOptions);
+        changeDisplayedGroup(builderOptions);
     }
-
     public void displayShrineOptions()
     {
-
+        changeDisplayedGroup(shrineOptions);
+    }
+    public void displayFieldOptions()
+    {
+        changeDisplayedGroup(fieldOptions);
     }
 }

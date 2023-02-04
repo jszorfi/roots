@@ -6,16 +6,16 @@ public class Radish : Character
     {
         canvasController.displayRadishSkills();
     }
-    public override void targetedSkill(Unit target)
+    public override void targetedSkill(Character target)
     {
-        target.heal(skillStrength * skillStrengthMultiplier);
+        target.receiveHealing(skillStrength * skillStrengthMultiplier);
     }
 
-    public override void areaSkill(List<Unit> targets)
+    public override void areaSkill(List<Character> targets)
     {
         foreach (var target in targets)
         {
-            target.heal(areaSkillStrength * skillStrengthMultiplier);
+            target.receiveHealing(areaSkillStrength * skillStrengthMultiplier);
         }
     }
 }

@@ -1,6 +1,5 @@
-public class Shed : Unit
+public class Enemy : Unit
 {
-    public int ploughPerDay;
     public override void onClicked()
     {
         //nope
