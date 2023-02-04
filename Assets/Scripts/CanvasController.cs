@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class CanvasController : MonoBehaviour
@@ -10,21 +11,34 @@ public class CanvasController : MonoBehaviour
     private CanvasGroup shrineOptions;
     private CanvasGroup fieldOptions;
 
+    public TMP_Text wood;
+    public TMP_Text plough;
+    public TMP_Text fertilizer;
+    public TMP_Text potato;
+    public TMP_Text carrot;
+    public TMP_Text radish;
+
     private CanvasGroup displayedGroup;
+    private GameController gameController;
     private void Start()
     {
-        potatoSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
-        carrotSkills = gameObject.transform.GetChild(1).gameObject.GetComponent<CanvasGroup>();
-        radishSkills = gameObject.transform.GetChild(2).gameObject.GetComponent<CanvasGroup>();
+        gameController = GameObject.Find("GameController").gameObject.GetComponent<GameController>();
 
-        builderOptions = gameObject.transform.GetChild(3).gameObject.GetComponent<CanvasGroup>();
-        shrineOptions = gameObject.transform.GetChild(4).gameObject.GetComponent<CanvasGroup>();
-        fieldOptions = gameObject.transform.GetChild(5).gameObject.GetComponent<CanvasGroup>();
+        var skills = gameObject.transform.Find("Skills").gameObject.transform;
+        potatoSkills = skills.Find("PotatoSkills").gameObject.GetComponent<CanvasGroup>();
+        carrotSkills = skills.Find("CarrotSkills").gameObject.GetComponent<CanvasGroup>();
+        radishSkills = skills.Find("RadishSkills").gameObject.GetComponent<CanvasGroup>();
 
-        foreach (Transform trafo in gameObject.transform)
+        builderOptions = skills.Find("BuilderOptions").gameObject.GetComponent<CanvasGroup>();
+        shrineOptions = skills.Find("ShrineOptions").gameObject.GetComponent<CanvasGroup>();
+        fieldOptions = skills.Find("FieldOptions").gameObject.GetComponent<CanvasGroup>();
+
+        //gameObject.transform.Get
+        foreach (Transform skill in skills)
         {
-            trafo.gameObject.GetComponent<CanvasGroup>().alpha = 0;
+            skill.gameObject.GetComponent<CanvasGroup>().alpha = 0;
         }
+        updateResources();
     }
 
     public void clear()
@@ -35,6 +49,18 @@ public class CanvasController : MonoBehaviour
             displayedGroup = null;
         }
     }
+
+    public void updateResources()
+    {
+        var res = gameController.Resources;
+        wood.text = res[ResourceType.wood].ToString();
+        plough.text = res[ResourceType.plough].ToString();
+        fertilizer.text = res[ResourceType.fertilizer].ToString();
+        potato.text = res[ResourceType.potato].ToString();
+        carrot.text = res[ResourceType.carrot].ToString();
+        radish.text = res[ResourceType.radish].ToString();
+    }
+
     private void changeDisplayedGroup(CanvasGroup groupToDisplay)
     {
         if (displayedGroup != null)

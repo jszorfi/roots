@@ -4,7 +4,7 @@ public class Potato : Character
 {
     public override void onClicked()
     {
-        canvasController.displayCarrotSkills();
+        canvasController.displayPotatoSkills();
     }
     public override void targetedSkill(Character target)
     {

@@ -1,6 +1,6 @@
 using System;
 
-public enum ResourceType { wood, plough, cowshit, potato, carrot, radish }
+public enum ResourceType { wood, plough, fertilizer, potato, carrot, radish }
 
 public abstract class ResoruceCreator : Building
 {
