@@ -67,6 +67,9 @@ public class SpriteAnimator : MonoBehaviour
             } else {
                 CurrentSpriteIndex = Math.Min(CurrentSpriteIndex + 1, CurrentAnimation.Sprites.Count - 1);
             }
+
+            // Updating the sprite to display
+            Renderer.sprite = CurrentAnimation.Sprites[CurrentSpriteIndex];
         }
 
         // Updating the time spent in the current frame
