@@ -1,10 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class AudioPlayer : MonoBehaviour
 {
-    public List<AudioClip> audioClips;
+    [Serializable]
+    public class NamedClip
+    {
+        public string Name;
+        public AudioClip Clip;
+    }
+
+    [SerializeField]
+    public List<NamedClip> ambientClips;
+
+    [SerializeField]
+    public List<NamedClip> effectClips;
     public AudioSource audioSource;
     public float minimumIdleTime = 1.0f;
     public float maximumIdleTime = 5.0f;
@@ -31,8 +43,8 @@ public class AudioPlayer : MonoBehaviour
         if(timePassed > timeToPass)
         {
             // Playing the next audio clip
-            int clipIndexToPlay = Random.Range(0, audioClips.Count);
-            audioSource.clip = audioClips[clipIndexToPlay];
+            int clipIndexToPlay = UnityEngine.Random.Range(0, ambientClips.Count);
+            audioSource.clip = ambientClips[clipIndexToPlay].Clip;
             audioSource.Play();
 
             // Generating the next timeframe to wait 
@@ -43,4 +55,16 @@ public class AudioPlayer : MonoBehaviour
         // Updating time that has passed
         timePassed += Time.deltaTime;
     }
+
+    public void PlayAudioByName(string name)
+    {
+        foreach(NamedClip namedClip in effectClips)
+        {
+            if(namedClip.Name == name)
+            {
+                audioSource.clip = namedClip.Clip;
+                audioSource.Play();
+            }
+        }
+    } 
 }

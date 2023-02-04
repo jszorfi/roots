@@ -2522,6 +2522,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4612035235742111567, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+      propertyPath: ambientClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4612035235742111567, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+      propertyPath: ambientClips.Array.data[0].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 67a84fa108b05e6409f8fa53ad85bf88, type: 3}
+    - target: {fileID: 4612035235742111567, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+      propertyPath: ambientClips.Array.data[0].Name
+      value: Moo1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4612035235742111567, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+      propertyPath: ambientClips.Array.data[1].Clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 03b49a1991ff15e4d8f7d4d1c8102b55, type: 3}
+    - target: {fileID: 4612035235742111567, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
+      propertyPath: ambientClips.Array.data[1].Name
+      value: Moo2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
 --- !u!1001 &3233446421771156518
