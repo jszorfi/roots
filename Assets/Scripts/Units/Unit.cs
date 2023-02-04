@@ -2,6 +2,7 @@ using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
 {
+    public Vector2Int pos;
     public int maxHealth;
     public int health;
 

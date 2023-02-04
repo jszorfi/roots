@@ -2,109 +2,23 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections.Generic;
 
-public class MapNode
-{
-    private int origCost;
-    private int cost;
-    public int Cost
-    {
-        get { return cost; }
-        set { cost = value; origCost = value; }
-    }
-
-    public MapNode(int c)
-    {
-        origCost = c;
-        cost = origCost;
-    }
-
-    public bool Occupy()
-    {
-        if (cost >= 0)
-        {
-            cost = -1;
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
-    }
-
-    public bool Leave()
-    {
-        if (cost < 0)
-        {
-            cost = origCost;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-
-
-}
-
-public class Map2D
-{
-    private MapNode[,] map;
-    private Vector2Int size;
-    
-    public Map2D(int sx, int sy)
-    {
-        init(sx, sy);
-    }
-
-    public Map2D(Vector3Int v3)
-    {
-        init(v3.x, v3.y);
-    }
-
-    public void init(int sx, int sy)
-    {
-        map = new MapNode[sx, sy];
-        size.x = sx; size.y = sy;
-
-
-        for (int i = 0; i < sx; i++)
-        {
-            for (int j = 0; j < sy; j++)
-            {
-                map[i, j] = new MapNode(0);
-            }
-        }
-    }
-
-    public Vector2Int getSize()
-    {
-        return size;
-    }
-
-    public MapNode getNode(int x, int y)
-    {
-        if (x >= 0 && y >= 0 && x < size.x && y < size.y)
-        {
-            return map[x, y];
-        }
-
-        else return null;
-    }
-}
-
 public class MapController : MonoBehaviour
 {
-    public Tile         tile;
-    public Tile         highlightTile;
-    public Vector3Int   tilemapSizeHalf;
-    public Map2D          map;
+    //Private
     private Vector3Int  bottomLeftBounds;
     private Vector3Int  topRightBounds;
     private Tilemap     tilemap;
     private Vector3Int  oldHighlight;
     private bool        oldHighlightSet = false;
+
+    //Public
+    public Tile         tile;
+    public Tile         highlightTile;
+    public Vector3Int   tilemapSizeHalf;
+    public Map2D        map;
+    public Unit         selectedUnit;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -128,13 +42,16 @@ public class MapController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Highlight handling
-        Vector3Int newHighlight;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1)
         {
+            /*-----------------------
+            * Highlight handling
+            * ----------------------*/
+            Vector3Int newHighlight;
+
 
             //The offsets are so when the negative coordinates are considered the bound calculations still work.
             int xoffset = 0;
@@ -149,7 +66,9 @@ public class MapController : MonoBehaviour
                 yoffset--;
             }
 
-            newHighlight = new Vector3Int((int)mousePos.x + xoffset, (int)mousePos.y + yoffset, 1);
+            Vector3Int tileMapCoordinates = new Vector3Int((int)mousePos.x + xoffset, (int)mousePos.y + yoffset, 1);
+
+            newHighlight = tileMapCoordinates;
             tilemap.SetTile(newHighlight, highlightTile);
 
             if (!oldHighlightSet)
@@ -162,13 +81,53 @@ public class MapController : MonoBehaviour
                 tilemap.SetTile(oldHighlight, null);
                 oldHighlight = newHighlight;
             }
+
+            /*-----------------------
+            * Click handling
+            * ----------------------*/
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3Int actualMapCoordinates = tileMapToMap2DCoordinates(tileMapCoordinates);
+                MapNode clickedNode = map.getNode(actualMapCoordinates);
+
+                //If no unit is selected, we can only select a unit
+                if (selectedUnit == null)
+                {
+                    if (clickedNode.Occupant != null)
+                    {
+                        selectedUnit = clickedNode.Occupant;
+                    }
+                }
+                else
+                {
+                    MapNode previousNode = map.getNode(selectedUnit.pos);
+
+                    if(clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
+                    {
+                        Character c = selectedUnit as Character;
+                        if(clickedNode.Occupy(selectedUnit))
+                        {
+                            c.move(clipVect3Int(actualMapCoordinates), clipVect3Int(tileMapCoordinates));
+                        }
+                    }
+                }
+
+            }
+
         }
         else if(oldHighlightSet)
         {
             tilemap.SetTile(oldHighlight, null);
             oldHighlightSet = false;
         }
-        
+        else if (Input.GetMouseButtonDown(0))
+        {
+            selectedUnit = null;
+            //TODO: RESET SELECTION DEPENDENT MENU
+        }
+
+    
     }
 
     public List<PathFinding.PathNode> getPathNodeList()
@@ -185,11 +144,47 @@ public class MapController : MonoBehaviour
 
                 if (n.Cost >= 0)
                 {
-                    pathList.Add(new PathFinding.PathNode(new Vector2Int(i - tilemapSizeHalf.x, j - tilemapSizeHalf.y)));
+                    pathList.Add(new PathFinding.PathNode(map2DToTileMapCoordinates(i,j)));
                 }
             }
         }
 
         return pathList;
     }
+
+    public Vector3Int tileMapToMap2DCoordinates(Vector3Int v)
+    {
+        return new Vector3Int(v.x + tilemapSizeHalf.x, v.y + tilemapSizeHalf.y, 0);
+    }
+
+    public Vector3Int map2DToTileMapCoordinates(Vector3Int v)
+    {
+        return new Vector3Int(v.x - tilemapSizeHalf.x, v.y - tilemapSizeHalf.y, 0);
+    }
+
+    public Vector2Int tileMapToMap2DCoordinates(Vector2Int v)
+    {
+        return new Vector2Int(v.x + tilemapSizeHalf.x, v.y + tilemapSizeHalf.y);
+    }
+
+    public Vector2Int map2DToTileMapCoordinates(Vector2Int v)
+    {
+        return new Vector2Int(v.x - tilemapSizeHalf.x, v.y - tilemapSizeHalf.y);
+    }
+
+    public Vector3Int tileMapToMap2DCoordinates(int x, int y)
+    {
+        return new Vector3Int(x + tilemapSizeHalf.x, y + tilemapSizeHalf.y, 0);
+    }
+
+    public Vector2Int map2DToTileMapCoordinates(int x, int y)
+    {
+        return new Vector2Int(x - tilemapSizeHalf.x, y - tilemapSizeHalf.y);
+    }
+
+    public Vector2Int clipVect3Int(Vector3Int v)
+    {
+        return new Vector2Int(v.x, v.y);
+    }
+
 }

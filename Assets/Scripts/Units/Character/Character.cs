@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public abstract class Character : Unit
 {
@@ -27,5 +28,12 @@ public abstract class Character : Unit
     public void reset()
     {
         skillStrengthMultiplier = 1;
+    }
+
+    public void move(Vector2Int actCoord, Vector2Int maptileCoord)
+    {
+        CharacterMovement m = gameObject.GetComponent<CharacterMovement>();
+        m.StartMovingTo(actCoord);
+        pos = maptileCoord;
     }
 }
