@@ -47,6 +47,9 @@ public class CharacterMovement : MonoBehaviour
         // Calculating current position on the map
         Vector2Int currentPosition = PointToGridCell(transform.position);
 
+        // Add back current position as it is technically impassable
+        nodes.Add(new PathFinding.PathNode(currentPosition));
+
         // Finding a path from the current position to the target position
         m_NodesOnPath = PathFinding.FindPath(nodes, currentPosition, m_TargetCoordinates);
         Vector2Int lastTargetPosition = m_TargetCoordinates;

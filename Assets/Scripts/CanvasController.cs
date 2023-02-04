@@ -27,6 +27,14 @@ public class CanvasController : MonoBehaviour
         }
     }
 
+    public void clear()
+    {
+        if (displayedGroup != null)
+        {
+            displayedGroup.alpha = 0;
+            displayedGroup = null;
+        }
+    }
     private void changeDisplayedGroup(CanvasGroup groupToDisplay)
     {
         if (displayedGroup != null)

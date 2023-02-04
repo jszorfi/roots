@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3233446422713348968}
   - component: {fileID: 3233446422713348971}
   - component: {fileID: 3233446422713348969}
+  - component: {fileID: 3258713824514681424}
   m_Layer: 0
   m_Name: RadishPrefab
   m_TagString: Untagged
@@ -142,3 +143,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7b079708384ef4b9db80136a4bec85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3258713824514681424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3233446422713348973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7a7ee6c4427a4a4190e94ff82d55073, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pos: {x: 0, y: 0}
+  maxHealth: 0
+  health: 0
+  skillStrength: 0
+  areaSkillStrength: 0
+  repairStrength: 0
+  skillStrengthMultiplier: 1
+  skillkRange: 0
+  movementRange: 0
