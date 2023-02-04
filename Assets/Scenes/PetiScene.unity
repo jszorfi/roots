@@ -408,7 +408,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7b079708384ef4b9db80136a4bec85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapController: {fileID: 1658696432}
 --- !u!1 &1274761035
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +550,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7b079708384ef4b9db80136a4bec85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapController: {fileID: 1658696432}
 --- !u!1 &1658696430
 GameObject:
   m_ObjectHideFlags: 0
@@ -726,6 +724,7 @@ GameObject:
   - component: {fileID: 1690840870}
   - component: {fileID: 1690840872}
   - component: {fileID: 1690840871}
+  - component: {fileID: 1690840873}
   m_Layer: 0
   m_Name: CarrotTest
   m_TagString: Untagged
@@ -763,34 +762,34 @@ MonoBehaviour:
   Animations:
   - Name: Idle
     Srites:
-    - {fileID: 21300000, guid: d9bca99b6908350459ace035cd244c95, type: 3}
-    - {fileID: 21300000, guid: 6c3cd4ce238e4ff4789fd149f97a7b8a, type: 3}
-    - {fileID: 21300000, guid: 9a61ccec50929db418acf57a42fe5891, type: 3}
+    - {fileID: 21300000, guid: 9d4954284303d5744a24cd3151f1ccd3, type: 3}
+    - {fileID: 21300000, guid: ecab902b9237c61498f67a2568e9e45d, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Cast Spell
     Srites:
-    - {fileID: 21300000, guid: 1d59db2231cb68049a66d6cfb444f55c, type: 3}
-    - {fileID: 21300000, guid: f2051019f4456e24980d0d62f5ccf831, type: 3}
-    - {fileID: 21300000, guid: e524033562128c3478e24a19738840c5, type: 3}
+    - {fileID: 21300000, guid: 13a948cbcb6559543a88f127769a778c, type: 3}
+    - {fileID: 21300000, guid: df9442e4e88bc1941814afbbe744ca49, type: 3}
+    - {fileID: 21300000, guid: 7e88f70941dfda54fbf173c9c3155863, type: 3}
+    - {fileID: 21300000, guid: da0d426b43218484ab52242f5579ab91, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Down
     Srites:
-    - {fileID: 21300000, guid: 6afaf1ffed276e046baf0682eaa36aeb, type: 3}
-    - {fileID: 21300000, guid: 596a3ca6849c865449604dc62301b116, type: 3}
+    - {fileID: 21300000, guid: abe1d65a034aaff419ca33eea3a23e89, type: 3}
+    - {fileID: 21300000, guid: 56bbb68e85da5234da1a2a374785a063, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Left
     Srites:
-    - {fileID: 21300000, guid: b614b3dd7ef373646bc6138024f362c6, type: 3}
-    - {fileID: 21300000, guid: a927028d00c1ce74f9e64e0eaef5ce5c, type: 3}
+    - {fileID: 21300000, guid: e1292112644e9ef40942b3fd38cdb1fc, type: 3}
+    - {fileID: 21300000, guid: e51ebe3b85d52414da22a80a08d9fc2e, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Right
     Srites:
-    - {fileID: 21300000, guid: fbb06425516768943969423159529408, type: 3}
-    - {fileID: 21300000, guid: d77ad7dad2ddc00448370e9973cc71ba, type: 3}
+    - {fileID: 21300000, guid: 4a3cca234852e9542b8fd5873d69066d, type: 3}
+    - {fileID: 21300000, guid: fec00c23ada03c84c8b90cbdac284d16, type: 3}
     FrameDuration: 0.25
     Repeating: 1
 --- !u!212 &1690840872
@@ -845,3 +844,15 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1690840873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690840869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7b079708384ef4b9db80136a4bec85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

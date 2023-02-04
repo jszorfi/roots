@@ -8,7 +8,7 @@ public class CharacterMovement : MonoBehaviour
 
     private List<PathFinding.PathNode> m_NodesOnPath;
     private Vector2Int m_TargetCoordinates;
-    public MapController mapController;
+    private MapController mapController;
 
     public void StartMovingTo(Vector2Int destination)
     {
