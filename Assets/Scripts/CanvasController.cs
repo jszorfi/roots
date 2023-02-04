@@ -5,7 +5,7 @@ public class CanvasController : MonoBehaviour
     private CanvasGroup potatoSkills;
     private CanvasGroup carrotSkills;
     private CanvasGroup radishSkills;
-    private CanvasGroup builderSkills;
+    private CanvasGroup builderOptions;
 
     private CanvasGroup displayedSkills;
     private void Start()
@@ -13,10 +13,10 @@ public class CanvasController : MonoBehaviour
         potatoSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
         carrotSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
         radishSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
-        builderSkills = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
+        builderOptions = gameObject.transform.GetChild(0).gameObject.GetComponent<CanvasGroup>();
     }
 
-    private void ChangeDisplayedSkills(CanvasGroup skillsToDisplay)
+    private void changeDisplayedSkills(CanvasGroup skillsToDisplay)
     {
         if (displayedSkills != null)
             displayedSkills.alpha = 0;
@@ -24,20 +24,25 @@ public class CanvasController : MonoBehaviour
         displayedSkills = skillsToDisplay;
     }
 
-    public void DisplayPotatoSkills()
+    public void displayPotatoSkills()
     {
-        ChangeDisplayedSkills(potatoSkills);
+        changeDisplayedSkills(potatoSkills);
     }
-    public void DisplayCarrotSkills()
+    public void displayCarrotSkills()
     {
-        ChangeDisplayedSkills(carrotSkills);
+        changeDisplayedSkills(carrotSkills);
     }
-    public void DisplayRadishSkills()
+    public void displayRadishSkills()
     {
-        ChangeDisplayedSkills(radishSkills);
+        changeDisplayedSkills(radishSkills);
     }
-    public void DisplayBuilderSkills()
+    public void displayBuilderOptions()
     {
-        ChangeDisplayedSkills(builderSkills);
+        changeDisplayedSkills(builderOptions);
+    }
+
+    public void displayShrineOptions()
+    {
+
     }
 }
