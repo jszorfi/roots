@@ -185,7 +185,7 @@ public class MapController : MonoBehaviour
 
                 if (n.Cost >= 0)
                 {
-                    pathList.Add(new PathFinding.PathNode(new Vector2Int(i,j)));
+                    pathList.Add(new PathFinding.PathNode(new Vector2Int(i - tilemapSizeHalf.x, j - tilemapSizeHalf.y)));
                 }
             }
         }
