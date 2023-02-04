@@ -21,9 +21,12 @@ public class MapController : MonoBehaviour
     public GameObject  carrot;
     private GameObject carrotInst;
     public GameObject  potato;
-    private GameObject potatoInst;  
+    private GameObject potatoInst;
 
-
+    [HideInInspector]
+    public List<Enemy>              enemies;
+    public List<Character>          characters;
+    public List<ResoruceCreator>    resCreators;
 
     // Start is called before the first frame update
     void Start()
@@ -128,6 +131,7 @@ public class MapController : MonoBehaviour
                         c.move(clipVect3Int(actualMapCoordinates), clipVect3Int(tileMapCoordinates));
                         clickedNode.Occupy(selectedUnit);
                     }
+                    unselectUnit();
                 }
 
             }
@@ -140,8 +144,7 @@ public class MapController : MonoBehaviour
         }
         else if (Input.GetMouseButtonDown(0))
         {
-            selectedUnit = null;
-            canvasController.clear();
+            unselectUnit();
         }
 
 
@@ -202,6 +205,17 @@ public class MapController : MonoBehaviour
     public Vector2Int clipVect3Int(Vector3Int v)
     {
         return new Vector2Int(v.x, v.y);
+    }
+
+    private void unselectUnit()
+    {
+        selectedUnit = null;
+        canvasController.clear();
+    }
+
+    public void Die(Unit u)
+    {
+
     }
 
 }
