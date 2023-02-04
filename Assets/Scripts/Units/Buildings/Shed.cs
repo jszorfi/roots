@@ -1,6 +1,6 @@
-public class Shed : Unit
+public class Shed : ResoruceCreator
 {
-    public int ploughPerDay;
+    Shed() { resource = ResourceType.plough; }
     public override void onClicked()
     {
         //nope

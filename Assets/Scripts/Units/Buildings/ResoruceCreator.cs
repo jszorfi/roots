@@ -1,0 +1,15 @@
+using System;
+
+public enum ResourceType { wood, plough, cowshit, potato, carrot, radish }
+
+public abstract class ResoruceCreator : Building
+{
+    protected ResourceType resource;
+    protected int resourceCount;
+
+    public virtual Tuple<ResourceType, int> collectResources()
+    {
+        return new Tuple<ResourceType, int>(resource, resourceCount);
+    }
+
+}

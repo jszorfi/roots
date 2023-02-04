@@ -1,6 +1,6 @@
-public class Woodmill : Unit
+public class Woodmill : ResoruceCreator
 {
-    public int woodPerDay;
+    Woodmill() { resource = ResourceType.wood; }
     public override void onClicked()
     {
         //nope
