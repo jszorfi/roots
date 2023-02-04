@@ -2,41 +2,51 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public float dragSpeed = 2;
-    private bool downThisFrame = false;
-    private float speed = 0.01f;
+    private bool downThisFrame  = false;
+    private float speed         = 0.03f;
+    private Vector3 dir;
+    private readonly Vector3 up    = new Vector3( 0,  1,  0);
+    private readonly Vector3 down  = new Vector3( 0, -1,  0);
+    private readonly Vector3 left  = new Vector3(-1,  0,  0);
+    private readonly Vector3 right = new Vector3( 1,  0,  0);
 
-    void Update()
+    void FixedUpdate()
     {
 
         if (Input.GetKey(KeyCode.W))
         {
-            transform.Translate(new Vector3(0, speed, 0), Space.World);
+            dir = up;
             downThisFrame = true;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.Translate(new Vector3(-speed, 0, 0), Space.World);
+            dir = left;
             downThisFrame = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate(new Vector3(0, -speed, 0), Space.World);
+            dir = down;
             downThisFrame = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.Translate(new Vector3(speed, 0, 0), Space.World);
+            
+            dir = right;
             downThisFrame = true;
         }
 
-        if (downThisFrame && speed < 0.7f)
+        if (downThisFrame)
         {
-            speed += 0.0005f;
+            transform.Translate(speed*dir, Space.World);
+
+            if(speed < 0.7f)
+            {
+                speed += 0.01f;
+            }
         }
         else
         {
-            speed = 0.01f;
+            speed = 0.03f;
         }
 
         downThisFrame = false;

@@ -5,6 +5,8 @@ ProjectSettings
 Temp
 UserSettings
 obj
+.vscode
+Roots_BurstDebugInformation_DoNotShip
 .vs
 *.vsconfig
 *.csproj
