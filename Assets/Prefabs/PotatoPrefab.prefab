@@ -131,6 +131,15 @@ MonoBehaviour:
     - {fileID: 21300000, guid: d77ad7dad2ddc00448370e9973cc71ba, type: 3}
     FrameDuration: 0.25
     Repeating: 1
+  - Name: Die
+    Srites:
+    - {fileID: 21300000, guid: 21ba73c8f370e6c4c82ea626db0998e2, type: 3}
+    - {fileID: 21300000, guid: ea8f62ded834fe04bb760eadd92533b2, type: 3}
+    - {fileID: 21300000, guid: 6c90029f15675864397124edbce661ba, type: 3}
+    - {fileID: 21300000, guid: b8610aebd891c364b9d9c7ad19b9c27d, type: 3}
+    - {fileID: 21300000, guid: 0cf3c3e6d231e5f469b198151dde0461, type: 3}
+    FrameDuration: 0.25
+    Repeating: 1
 --- !u!114 &5589451693130093932
 MonoBehaviour:
   m_ObjectHideFlags: 0
