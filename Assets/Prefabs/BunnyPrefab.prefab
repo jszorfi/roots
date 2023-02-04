@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3499839138552857738}
   - component: {fileID: 3499839138552857844}
   - component: {fileID: 3499839138552857845}
+  - component: {fileID: 7626453337688598225}
   m_Layer: 0
   m_Name: BunnyPrefab
   m_TagString: Untagged
@@ -159,3 +160,20 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 22b8805e6dced724b97be3dcd4c889fe, type: 3}
     FrameDuration: 0.25
     Repeating: 1
+--- !u!114 &7626453337688598225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3499839138552857736}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08468881ac3dcd94c8bfd29e7aa6fdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pos: {x: 0, y: 0}
+  maxHealth: 0
+  health: 0
+  skillStrength: 0
+  areaSkillStrength: 0
