@@ -2,7 +2,10 @@ using System.Collections.Generic;
 
 public class Potato : Character
 {
-    public int extraAttackDamage;
+    public override void onClicked()
+    {
+        canvasController.displayCarrotSkills();
+    }
     public override void targetedSkill(Unit target)
     {
         target.receiveDamage(skillStrength * skillStrengthMultiplier);

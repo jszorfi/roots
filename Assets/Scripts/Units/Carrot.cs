@@ -2,8 +2,6 @@ using System.Collections.Generic;
 
 public class Carrot : Character
 {
-    public int extraAttackDamage;
-
     public override void onClicked()
     {
         canvasController.displayCarrotSkills();

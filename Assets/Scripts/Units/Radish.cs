@@ -2,7 +2,6 @@ using System.Collections.Generic;
 
 public class Radish : Character
 {
-    public int extraAttackDamage;
     public override void onClicked()
     {
         canvasController.displayRadishSkills();
