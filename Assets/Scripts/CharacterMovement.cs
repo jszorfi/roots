@@ -5,15 +5,18 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     private SpriteAnimator Animator;
-
     private List<PathFinding.PathNode> m_NodesOnPath;
     private Vector2Int m_TargetCoordinates;
     private MapController mapController;
+    private bool m_Moving = false;
 
     public void StartMovingTo(Vector2Int destination)
     {
-        m_TargetCoordinates = destination;
-        StartCoroutine(MoveToDestination());
+        if(!m_Moving)
+        {
+            m_TargetCoordinates = destination;
+            StartCoroutine(MoveToDestination());
+        }
     }
 
     // Start is called before the first frame update
@@ -41,6 +44,9 @@ public class CharacterMovement : MonoBehaviour
 
     private IEnumerator MoveToDestination()
     {
+        // Indicating that the character is moving
+        m_Moving = true;
+
         // Getting the walkable nodes from the map
         List<PathFinding.PathNode> nodes = mapController.getPathNodeList();
 
@@ -99,5 +105,8 @@ public class CharacterMovement : MonoBehaviour
 
         // If we are not moving, play the Idle animation
         Animator.SetAnimationByName("Idle");
+
+        // Indicating that the character is not moving
+        m_Moving = false;
     }
 }

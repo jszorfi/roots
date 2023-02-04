@@ -25,9 +25,7 @@ public class CameraController : MonoBehaviour
 
         if(Input.GetKey(KeyCode.W))
         {
-            Debug.Log("Before set: " + m_TargetPosition);
             m_TargetPosition += new Vector3(0.0f, 1.0f, 0.0f) * cameraSpeed * heightFactor;
-            Debug.Log("After set: " + m_TargetPosition);
         }
 
         if(Input.GetKey(KeyCode.S))
@@ -45,8 +43,6 @@ public class CameraController : MonoBehaviour
             m_TargetPosition += new Vector3(1.0f, 0.0f, 0.0f) * cameraSpeed * heightFactor;
         }
 
-        //Debug.Log("Before move: " + m_Camera.transform.position);
         m_Camera.transform.position = Vector3.SmoothDamp(m_Camera.transform.position, m_TargetPosition, ref m_CameraVelocity, smoothness);     
-        //Debug.Log("After move: " + m_Camera.transform.position);
     }
 }

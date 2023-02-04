@@ -43,7 +43,7 @@ public class SpriteAnimator : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Updating the time spent in the current frame
         TimeSpentInFrame += Time.deltaTime;
