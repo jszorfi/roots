@@ -30,7 +30,7 @@ public class MapController : MonoBehaviour
 
     //If selected unit is null, but selectedNode isn't, we have selected an empty node.
     private Unit selectedUnit;
-    private MapNode selectedNode;
+    private MapPos2D selectedPosition;
     
     private CanvasController canvasController;
 
@@ -139,14 +139,16 @@ public class MapController : MonoBehaviour
                         }
 
                         selectedUnit = clickedNode.Occupant;
-                        selectedNode = clickedNode;
+                        selectedPosition = new MapPos2D();
+                        selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
                         selectedUnit.onClicked();
                  //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
                     }
                     //If the node is not occupied, we are selecting an empty field.
                     else
                     {
-                        selectedNode = clickedNode;
+                        selectedPosition = new MapPos2D();
+                        selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
                         canvasController.displayBuilderOptions();
                     }
                 }
@@ -181,27 +183,36 @@ public class MapController : MonoBehaviour
 
     public void placeUnit(UnitType unitType)
     {
+        if(selectedPosition == null) { return; /*oof*/ }
+
         switch (unitType)
         {
             case UnitType.Field:
-
+                resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
                 break;
             case UnitType.Shed:
-
+                resCreators.Add(Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
                 break;
             case UnitType.Woodmill:
-                //resCreators.Add(Instantiate(woodmillPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);)
+                resCreators.Add(Instantiate(woodmillPrefab, new Vector3( (float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
                 break;
             case UnitType.Carrot:
-
+                characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
                 break;
             case UnitType.Radish:
-
+                characters.Add(Instantiate(radishPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
                 break;
             case UnitType.Potato:
-
+                characters.Add(Instantiate(potatoPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
                 break;
             default:
+                return; /*oof*/
                 break;
         }
     }
@@ -221,7 +232,7 @@ public class MapController : MonoBehaviour
      //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
      //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
         selectedUnit = null;
-        selectedNode = null;
+        selectedPosition = null;
         canvasController.clear();
     }
 
