@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public abstract class Unit : MonoBehaviour
@@ -5,6 +6,7 @@ public abstract class Unit : MonoBehaviour
     public Vector2Int pos;
     public int maxHealth;
     public int health;
+    public Tuple<ResourceType, int> cost;
 
     protected CanvasController canvasController;
     protected SpriteAnimator animator;
@@ -20,7 +22,7 @@ public abstract class Unit : MonoBehaviour
         health -= damage;
         if (health < 0)
         {
-            animator.SetAnimationByName("Die");
+            animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
         }
     }
 }

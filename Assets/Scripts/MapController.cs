@@ -14,44 +14,44 @@ public class MapController : MonoBehaviour
 
     enum TilemapLayers : int
     {
-        Map             = 0,
-        HoverHighlight  = 1,
-        FixHiglight     = 2,
-        Buildings       = 3
+        Map = 0,
+        HoverHighlight = 1,
+        FixHiglight = 2,
+        Buildings = 3
     }
 
     //Private
-    private Vector3Int  bottomLeftBounds;
-    private Vector3Int  topRightBounds;
-    private Tilemap     tilemap;
-    private Vector3Int  oldHighlightCoords;
-    private bool        oldHighlightSet = false;
+    private Vector3Int bottomLeftBounds;
+    private Vector3Int topRightBounds;
+    private Tilemap tilemap;
+    private Vector3Int oldHighlightCoords;
+    private bool oldHighlightSet = false;
     private Map2D map;
 
     //If selected unit is null, but selectedNode isn't, we have selected an empty node.
     private Unit selectedUnit;
     private MapPos2D selectedPosition;
-    
+
     private CanvasController canvasController;
 
     //Public
-    public Tile         tile;
-    public Tile         highlightTile;
-    public Vector3Int   tilemapSizeHalf;
-    public GameObject   carrotPrefab;
-    public GameObject   potatoPrefab;
-    public GameObject   radishPrefab;
-    public GameObject   bunnyPrefab;
-    public GameObject   shedPrefab;
-    public GameObject   fieldPrefab;
-    public GameObject   woodmillPrefab;
-    private GameObject  carrotInst;
-    private GameObject  potatoInst;
+    public Tile tile;
+    public Tile highlightTile;
+    public Vector3Int tilemapSizeHalf;
+    public GameObject carrotPrefab;
+    public GameObject potatoPrefab;
+    public GameObject radishPrefab;
+    public GameObject bunnyPrefab;
+    public GameObject shedPrefab;
+    public GameObject fieldPrefab;
+    public GameObject woodmillPrefab;
+    private GameObject carrotInst;
+    private GameObject potatoInst;
 
     [HideInInspector]
-    public List<Enemy>              enemies;
-    public List<Character>          characters;
-    public List<ResourceCreator>    resCreators;
+    public List<Enemy> enemies;
+    public List<Character> characters;
+    public List<ResourceCreator> resCreators;
 
     // Start is called before the first frame update
     void Start()
@@ -75,9 +75,9 @@ public class MapController : MonoBehaviour
 
         carrotInst = Instantiate(carrotPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);
         potatoInst = Instantiate(potatoPrefab, new Vector3(0.5f, 1.5f, -2.0f), Quaternion.identity);
-        
-        map.getNode(0,0).Occupy(carrotInst.GetComponent<Carrot>());
-        map.getNode(0,1).Occupy(potatoInst.GetComponent<Potato>());
+
+        map.getNode(0, 0).Occupy(carrotInst.GetComponent<Carrot>());
+        map.getNode(0, 1).Occupy(potatoInst.GetComponent<Potato>());
 
         carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
         potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
@@ -133,7 +133,7 @@ public class MapController : MonoBehaviour
                     if (clickedNode.Occupant != null)
                     {
                         Character chara = clickedNode.Occupant as Character;
-                        if(chara != null && chara.isBusy())
+                        if (chara != null && chara.isBusy())
                         {
                             return;
                         }
@@ -142,7 +142,7 @@ public class MapController : MonoBehaviour
                         selectedPosition = new MapPos2D();
                         selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
                         selectedUnit.onClicked();
-                 //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
+                        //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
                     }
                     //If the node is not occupied, we are selecting an empty field.
                     else
@@ -180,10 +180,9 @@ public class MapController : MonoBehaviour
 
 
     }
-
     public void placeUnit(UnitType unitType)
     {
-        if(selectedPosition == null) { return; /*oof*/ }
+        if (selectedPosition == null) { return; /*oof*/ }
 
         switch (unitType)
         {
@@ -196,7 +195,7 @@ public class MapController : MonoBehaviour
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
                 break;
             case UnitType.Woodmill:
-                resCreators.Add(Instantiate(woodmillPrefab, new Vector3( (float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
                 break;
             case UnitType.Carrot:
@@ -228,8 +227,8 @@ public class MapController : MonoBehaviour
 
     private void deselect()
     {
-     //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
-     //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
+        //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
+        //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
         selectedUnit = null;
         selectedPosition = null;
         canvasController.clear();

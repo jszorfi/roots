@@ -1,8 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public enum Phase { Build, PlayerTurn, EnemyTurn }
-public enum UnitType { Field, Shed, Woodmill, Carrot, Radish, Potato }
+public enum UnitType { Field, Shed, Woodmill, Potato, Carrot, Radish }
 
 public class GameController : MonoBehaviour
 {
@@ -12,15 +13,31 @@ public class GameController : MonoBehaviour
     private CanvasController canvasController;
     private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
         { ResourceType.wood, 0 },
-        { ResourceType.plough, 0 },
+        { ResourceType.plough, 50 },
         { ResourceType.fertilizer, 0 },
         { ResourceType.potato, 0 },
         { ResourceType.carrot, 0 },
         { ResourceType.radish, 0 },
     };
+
+    public Dictionary<UnitType, Tuple<ResourceType, int>> unitCosts = new Dictionary<UnitType, Tuple<ResourceType, int>> {
+        {UnitType.Field, new Tuple<ResourceType, int>( ResourceType.plough, 2 )},
+        {UnitType.Shed, new Tuple<ResourceType, int>( ResourceType.wood, 5 )},
+        {UnitType.Woodmill, new Tuple<ResourceType, int>( ResourceType.wood, 5 )},
+        {UnitType.Carrot, new Tuple<ResourceType, int>( ResourceType.carrot, 5 )},
+        {UnitType.Radish, new Tuple<ResourceType, int>( ResourceType.radish, 5 )},
+        {UnitType.Potato, new Tuple<ResourceType, int>( ResourceType.potato, 5 )}
+    };
     public Dictionary<ResourceType, int> Resources
     {
         get => resources;
+    }
+
+    public void placeUnit(UnitType type)
+    {
+        resources[unitCosts[type].Item1] -= unitCosts[type].Item2;
+        canvasController.updateResources();
+        mapController.placeUnit(type);
     }
     private void Start()
     {
@@ -41,4 +58,11 @@ public class GameController : MonoBehaviour
         }
         canvasController.updateResources();
     }
+    public bool haveEnoughResourceForUnit(UnitType unit)
+    {
+        if (Resources[unitCosts[unit].Item1] < unitCosts[unit].Item2)
+            return false;
+        return true;
+    }
+
 }
