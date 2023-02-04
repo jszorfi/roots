@@ -33,7 +33,7 @@ public abstract class Character : Unit
     public void move(Vector2Int actCoord, Vector2Int maptileCoord)
     {
         CharacterMovement m = gameObject.GetComponent<CharacterMovement>();
-        m.StartMovingTo(actCoord);
-        pos = maptileCoord;
+        m.StartMovingTo(maptileCoord);
+        pos = actCoord;
     }
 }

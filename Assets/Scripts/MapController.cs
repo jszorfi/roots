@@ -5,19 +5,23 @@ using UnityEngine.Tilemaps;
 public class MapController : MonoBehaviour
 {
     //Private
-    private Vector3Int bottomLeftBounds;
-    private Vector3Int topRightBounds;
-    private Tilemap tilemap;
-    private Vector3Int oldHighlight;
-    private bool oldHighlightSet = false;
+    private Vector3Int  bottomLeftBounds;
+    private Vector3Int  topRightBounds;
+    private Tilemap     tilemap;
+    private Vector3Int  oldHighlight;
+    private bool        oldHighlightSet = false;
+    private Map2D map;
+    private Unit selectedUnit;
     private CanvasController canvasController;
 
     //Public
-    public Tile tile;
-    public Tile highlightTile;
-    public Vector3Int tilemapSizeHalf;
-    public Map2D map;
-    public Unit selectedUnit;
+    public Tile         tile;
+    public Tile         highlightTile;
+    public Vector3Int   tilemapSizeHalf;
+    public GameObject  carrot;
+    private GameObject carrotInst;
+    public GameObject  potato;
+    private GameObject potatoInst;  
 
 
 
@@ -40,6 +44,17 @@ public class MapController : MonoBehaviour
         tilemap.ResizeBounds();
 
         map = new Map2D(tilemap.size);
+
+        carrotInst = Instantiate(carrot, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);
+        potatoInst = Instantiate(potato, new Vector3(0.5f, 1.5f, -2.0f), Quaternion.identity);
+        
+        map.getNode( clipVect3Int(tileMapToMap2DCoordinates(0, 0)) ).Occupy(carrotInst.GetComponent<Carrot>());
+        map.getNode( clipVect3Int(tileMapToMap2DCoordinates(0, 1))).Occupy(potatoInst.GetComponent<Potato>());
+
+        carrotInst.GetComponent<Carrot>().pos = clipVect3Int(tileMapToMap2DCoordinates(0, 0));
+        potatoInst.GetComponent<Potato>().pos = clipVect3Int(tileMapToMap2DCoordinates(0, 1));
+
+
     }
 
     // Update is called once per frame
@@ -50,6 +65,8 @@ public class MapController : MonoBehaviour
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1)
         {
+            Debug.Log(selectedUnit);
+            Debug.Log(mousePos.x + ", " + mousePos.y);
             /*-----------------------
             * Highlight handling
             * ----------------------*/
@@ -100,6 +117,7 @@ public class MapController : MonoBehaviour
                     if (clickedNode.Occupant != null)
                     {
                         selectedUnit = clickedNode.Occupant;
+                        selectedUnit.onClicked();
                     }
                 }
                 else
@@ -109,10 +127,8 @@ public class MapController : MonoBehaviour
                     if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                     {
                         Character c = selectedUnit as Character;
-                        if (clickedNode.Occupy(selectedUnit))
-                        {
-                            c.move(clipVect3Int(actualMapCoordinates), clipVect3Int(tileMapCoordinates));
-                        }
+                        c.move(clipVect3Int(actualMapCoordinates), clipVect3Int(tileMapCoordinates));
+                        clickedNode.Occupy(selectedUnit);
                     }
                 }
 

@@ -10,7 +10,7 @@ public class MapNode
 
     public Unit Occupant
     {
-        get;
+        get { return occupant; }
     }
     public int Cost
     {
