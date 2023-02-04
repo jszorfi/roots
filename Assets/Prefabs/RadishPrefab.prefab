@@ -111,6 +111,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 31f8d6c39320e204484bb21e553eb248, type: 3}
     - {fileID: 21300000, guid: 9b82a2103a97d2349b584df64a23a6d3, type: 3}
     - {fileID: 21300000, guid: d063af67e77ce2142b23d6fa78caf7ef, type: 3}
+    - {fileID: 21300000, guid: 2f30153d82d0499439867797bad3a58b, type: 3}
+    - {fileID: 21300000, guid: cee560fe1666e93408ad40aeb659a73a, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Down
@@ -129,6 +131,15 @@ MonoBehaviour:
     Srites:
     - {fileID: 21300000, guid: 511ce585e8e76524085c117495367a74, type: 3}
     - {fileID: 21300000, guid: b69e31478cb5ac1488f43efc48189477, type: 3}
+    FrameDuration: 0.25
+    Repeating: 1
+  - Name: Die
+    Srites:
+    - {fileID: 21300000, guid: 38b404b2d16ab8a47883fdd0dcb65f59, type: 3}
+    - {fileID: 21300000, guid: 74b7f0d67c8f6054691125224f0e3aa0, type: 3}
+    - {fileID: 21300000, guid: ef567a38b6407ec47933746825522cb8, type: 3}
+    - {fileID: 21300000, guid: a8c4349ae4e4a6d48b36f550b1d0096a, type: 3}
+    - {fileID: 21300000, guid: 29cc66edd87257240a5a8f07ba8d9ee2, type: 3}
     FrameDuration: 0.25
     Repeating: 1
 --- !u!114 &3233446422713348969
