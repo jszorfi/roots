@@ -34,7 +34,7 @@ public class CharacterMovement : MonoBehaviour
 
     private static Vector3 CellCenterToPoint(Vector2Int cell)
     {
-        return new Vector3(cell.x + 0.5f, cell.y + 0.5f, -1.0f);
+        return new Vector3(cell.x + 0.5f, cell.y + 0.5f, -2.0f);
     }
 
     private static Vector2Int PointToGridCell(Vector3 point)
