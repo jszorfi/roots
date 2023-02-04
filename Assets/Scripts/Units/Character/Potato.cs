@@ -6,12 +6,12 @@ public class Potato : Character
     {
         canvasController.displayCarrotSkills();
     }
-    public override void targetedSkill(Unit target)
+    public override void targetedSkill(Character target)
     {
         target.receiveDamage(skillStrength * skillStrengthMultiplier);
     }
 
-    public override void areaSkill(List<Unit> targets)
+    public override void areaSkill(List<Character> targets)
     {
         foreach (var target in targets)
         {
