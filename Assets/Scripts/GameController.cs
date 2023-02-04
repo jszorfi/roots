@@ -26,7 +26,6 @@ public class GameController : MonoBehaviour
     {
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
-        canvasController.updateResources();
     }
 
     public void EndBuild()
