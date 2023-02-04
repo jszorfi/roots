@@ -166,7 +166,7 @@ public class MapController : MonoBehaviour
 
     }
 
-    public void buildBuildingOnEmptyField(BuildingType buildingType)
+    public void placeUnit(UnitType unitType)
     {
 
     }

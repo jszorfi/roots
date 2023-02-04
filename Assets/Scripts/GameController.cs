@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Phase { Build, PlayerTurn, EnemyTurn }
-public enum BuildingType { Field, Shed, Woodmill }
+public enum UnitType { Field, Shed, Woodmill, Carrot, Radish, Potato }
 
 public class GameController : MonoBehaviour
 {
