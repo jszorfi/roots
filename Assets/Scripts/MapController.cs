@@ -101,8 +101,10 @@ public class MapController : MonoBehaviour
 
         Vector3Int mouseTileMapCoords = new Vector3Int((int)mousePos.x + xoffset, (int)mousePos.y + yoffset, (int)TilemapLayers.HoverHighlight);
 
+        bool clickedOnUI = isOnSkillPanel(mouseScreen);
+
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner, and not on the skills panel
-        if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !isOnSkillPanel(mouseScreen))
+        if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !clickedOnUI)
         {
             /*-----------------------
             * Highlight handling
@@ -189,7 +191,7 @@ public class MapController : MonoBehaviour
             tilemap.SetTile(oldHighlightCoords, null);
             oldHighlightSet = false;
         }
-        else if (Input.GetMouseButtonDown(0))
+        else if (Input.GetMouseButtonDown(0) && !clickedOnUI)
         {
             deselect();
         }
@@ -225,31 +227,32 @@ public class MapController : MonoBehaviour
         {
             case UnitType.Field:
                 resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
                 break;
             case UnitType.Shed:
                 resCreators.Add(Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Woodmill:
                 resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
                 break;
             case UnitType.Carrot:
                 characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             case UnitType.Radish:
                 characters.Add(Instantiate(radishPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             case UnitType.Potato:
                 characters.Add(Instantiate(potatoPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             default:
-                return; /*oof*/
+                break; /*oof*/
         }
+        deselect();
     }
 
     public List<PathFinding.PathNode> getPathNodeList()
@@ -268,7 +271,7 @@ public class MapController : MonoBehaviour
         //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
         selectedUnit = null;
         selectedPosition = null;
-        //canvasController.clear();
+        canvasController.clear();
     }
 
     public void Die(Unit u)

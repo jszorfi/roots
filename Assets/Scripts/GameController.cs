@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
     private CanvasController canvasController;
     private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
         { ResourceType.wood, 0 },
-        { ResourceType.plough, 50 },
+        { ResourceType.plough, 6 },
         { ResourceType.fertilizer, 0 },
         { ResourceType.potato, 0 },
         { ResourceType.carrot, 0 },
