@@ -37,8 +37,6 @@ public class MapController : MonoBehaviour
         Vector3Int newHighlight;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        Debug.Log(mousePos.x + ", " + mousePos.y + ", " + topRightBounds.x + ", " + topRightBounds.y);
-
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1)
         {
