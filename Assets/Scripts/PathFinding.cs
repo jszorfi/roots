@@ -69,21 +69,25 @@ public class PathFinding
     {
         // Initializing the list of walkable neighbour coordinates
         List<PathNode> neighbours = new List<PathNode>();
+        
+        // Creating the list of valid neighbour offsets
+        List<Vector2Int> offsets = new List<Vector2Int>();
+        offsets.Add(new Vector2Int(-1,  0));
+        offsets.Add(new Vector2Int( 0, -1));
+        offsets.Add(new Vector2Int( 1,  0));
+        offsets.Add(new Vector2Int( 0,  1));
 
-        // Iterating over the possible neighbouring coordinates
-        foreach(int x in Enumerable.Range(-1, 3))
+        // Checking each cell by offset
+        foreach(Vector2Int offset in offsets)
         {
-            foreach(int y in Enumerable.Range(-1, 3))
-            {
-                // Finding the pathnode at this position
-                PathNode checkedNode = nodes.FirstOrDefault(node => node.position == (currentNode.position + new Vector2Int(x, y)));
+            // Finding the pathnode at this position
+            PathNode checkedNode = nodes.FirstOrDefault(node => node.position == (currentNode.position + offset));
 
-                // Checking whether we found pathnode at this position
-                if(checkedNode != null)
-                {
-                    // Adding the current coordinates to the list of walkable neighbours
-                    neighbours.Add(checkedNode);
-                }
+            // Checking whether we found pathnode at this position
+            if(checkedNode != null)
+            {
+                // Adding the current coordinates to the list of walkable neighbours
+                neighbours.Add(checkedNode);
             }
         }
 

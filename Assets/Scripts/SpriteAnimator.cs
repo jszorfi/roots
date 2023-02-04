@@ -26,9 +26,6 @@ public class SpriteAnimator : MonoBehaviour
     private float TimeSpentInFrame = 0.0f;
     private Animation CurrentAnimation;
 
-    private int LastAnimationIndex;
-    public int CurrentAnimationIndex = 0;
-
     /** The SriteRenderer of the GameObject */
     private SpriteRenderer Renderer;
 
@@ -48,20 +45,11 @@ public class SpriteAnimator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // Editor test: Detect animation changed in Editor
-        bool animationChanged = false;
-        if(CurrentAnimationIndex != LastAnimationIndex)
-        {
-            animationChanged = true;
-        }
-        LastAnimationIndex = CurrentAnimationIndex;
-        CurrentAnimation = Animations[CurrentAnimationIndex];
-
         // Updating the time spent in the current frame
         TimeSpentInFrame += Time.deltaTime;
 
         // Checking whether we need to change frames or animations
-        if(animationChanged || TimeSpentInFrame > CurrentAnimation.FrameDuration)
+        if(TimeSpentInFrame > CurrentAnimation.FrameDuration)
         {
             // We start the clock on a new frame
             TimeSpentInFrame = 0.0f;
@@ -81,7 +69,7 @@ public class SpriteAnimator : MonoBehaviour
     /**
      * Sets the animation to be played by its name.
      */
-    void SetAnimationByName(string animationName)
+    public void SetAnimationByName(string animationName)
     {
         foreach(Animation animation in Animations)
         {
