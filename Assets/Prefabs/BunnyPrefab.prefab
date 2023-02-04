@@ -112,34 +112,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animations:
   - Name: Idle
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: 7e5b8298e83a2ce49b5f2885e9317351, type: 3}
     - {fileID: 21300000, guid: eb6541afe33d84b4ebe1e2823b2aae1f, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Down
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: f8f17c7d2b4a8d94aae30b5b10affdf3, type: 3}
     - {fileID: 21300000, guid: 6c508dc37feb8e744be1e38f4272226c, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Left
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: b04bae4ef3ade0443885652d74800dc2, type: 3}
     - {fileID: 21300000, guid: 4a652fe14a1518248bd95df2374709dd, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Right
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: d46fd6153c9b1d1439a9ca8f40e96b76, type: 3}
     - {fileID: 21300000, guid: 977b67ce122d5d54a8266e9c6c8159a8, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Cast Spell
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: fa48c5188782ebe4683a1211bdcbc7b8, type: 3}
     - {fileID: 21300000, guid: fd6f4b19ab6068f4b9161e0b9f41c51b, type: 3}
     - {fileID: 21300000, guid: f8e3c1e31215fbc429746f5948e95bb3, type: 3}
     - {fileID: 21300000, guid: 9931508c8527981468a423c43ebc61cb, type: 3}
+    FrameDuration: 0.25
+    Repeating: 1
+  - Name: Die
+    Sprites:
+    - {fileID: 21300000, guid: 386638abf187bb0429f5140951878c04, type: 3}
+    - {fileID: 21300000, guid: 0c948eecacb7555448570d173a22e1f7, type: 3}
+    - {fileID: 21300000, guid: ad52a6c917f01f44db1ec37c47c5062f, type: 3}
+    - {fileID: 21300000, guid: 259efc50fff5a5348991fb97c53eb1ff, type: 3}
+    - {fileID: 21300000, guid: a01ed629327065a43baada04366420dd, type: 3}
+    - {fileID: 21300000, guid: d07d2c386708d6142ad3c7370ebaf628, type: 3}
+    - {fileID: 21300000, guid: 451a9ec7f39e66240b1fb922ab21461c, type: 3}
+    - {fileID: 21300000, guid: f884dfaf50da3a640a74faba53c320ce, type: 3}
+    - {fileID: 21300000, guid: e95701dab0dbf0348894ef4c339438e5, type: 3}
+    - {fileID: 21300000, guid: e79c42dc7d5b6ea48a30be65fbceb911, type: 3}
+    - {fileID: 21300000, guid: 382402bc856ce494fad02a568bf0be9a, type: 3}
+    - {fileID: 21300000, guid: 22b8805e6dced724b97be3dcd4c889fe, type: 3}
     FrameDuration: 0.25
     Repeating: 1

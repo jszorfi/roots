@@ -101,13 +101,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Animations:
   - Name: Idle
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: 6be82892f10b7694799e432f87228080, type: 3}
     - {fileID: 21300000, guid: a99c38773c0dfa047bbf07b7efebaffe, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Cast Spell
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: 31f8d6c39320e204484bb21e553eb248, type: 3}
     - {fileID: 21300000, guid: 9b82a2103a97d2349b584df64a23a6d3, type: 3}
     - {fileID: 21300000, guid: d063af67e77ce2142b23d6fa78caf7ef, type: 3}
@@ -116,25 +116,25 @@ MonoBehaviour:
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Down
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: ab4ca5775ca589843a7f48e03f2a601e, type: 3}
     - {fileID: 21300000, guid: 9c8f146e4049add4fa22b51bd72dace0, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Left
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: d5afcb8a29aa35e448c44f3e0b3d7631, type: 3}
     - {fileID: 21300000, guid: 1bd2eadfce6a7614ebedaf39587f6cfa, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Walk Right
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: 511ce585e8e76524085c117495367a74, type: 3}
     - {fileID: 21300000, guid: b69e31478cb5ac1488f43efc48189477, type: 3}
     FrameDuration: 0.25
     Repeating: 1
   - Name: Die
-    Srites:
+    Sprites:
     - {fileID: 21300000, guid: 38b404b2d16ab8a47883fdd0dcb65f59, type: 3}
     - {fileID: 21300000, guid: 74b7f0d67c8f6054691125224f0e3aa0, type: 3}
     - {fileID: 21300000, guid: ef567a38b6407ec47933746825522cb8, type: 3}

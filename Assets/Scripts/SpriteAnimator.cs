@@ -13,7 +13,7 @@ public class SpriteAnimator : MonoBehaviour
         public string Name;
 
         /** The list of sprites in the animation */
-        public List<Sprite> Srites;
+        public List<Sprite> Sprites;
 
         /** The duration of each frame in the animation in seconds */
         public float FrameDuration;
@@ -22,9 +22,13 @@ public class SpriteAnimator : MonoBehaviour
         public bool Repeating;
     }
 
+    // Delegate type for animation completed callbacks
+    public delegate void AnimationCompletedCallBack(bool isRepeating);
+
     private int CurrentSpriteIndex = 0;
     private float TimeSpentInFrame = 0.0f;
     private Animation CurrentAnimation;
+    private AnimationCompletedCallBack AnimationDoneCallback;
 
     /** The SriteRenderer of the GameObject */
     private SpriteRenderer Renderer;
@@ -45,31 +49,34 @@ public class SpriteAnimator : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        // Updating the time spent in the current frame
-        TimeSpentInFrame += Time.deltaTime;
-
         // Checking whether we need to change frames or animations
         if(TimeSpentInFrame > CurrentAnimation.FrameDuration)
         {
             // We start the clock on a new frame
             TimeSpentInFrame = 0.0f;
 
+            // When the animation is done, invoke a callback to notify others
+            if(CurrentSpriteIndex == CurrentAnimation.Sprites.Count - 1 && AnimationDoneCallback != null)
+            {
+                AnimationDoneCallback(CurrentAnimation.Repeating);
+            }
+
             // We get the index of the next sprite to show
             if(CurrentAnimation.Repeating) {
-                CurrentSpriteIndex = (CurrentSpriteIndex + 1) % CurrentAnimation.Srites.Count;
+                CurrentSpriteIndex = (CurrentSpriteIndex + 1) % CurrentAnimation.Sprites.Count;
             } else {
-                CurrentSpriteIndex = Math.Min(CurrentSpriteIndex + 1, CurrentAnimation.Srites.Count - 1);
+                CurrentSpriteIndex = Math.Min(CurrentSpriteIndex + 1, CurrentAnimation.Sprites.Count - 1);
             }
-            
-            // Updating the sprite to display
-            Renderer.sprite = CurrentAnimation.Srites[CurrentSpriteIndex];
         }
+
+        // Updating the time spent in the current frame
+        TimeSpentInFrame += Time.deltaTime;
     }
 
     /**
      * Sets the animation to be played by its name.
      */
-    public void SetAnimationByName(string animationName)
+    public void SetAnimationByName(string animationName, AnimationCompletedCallBack callback = null)
     {
         foreach(Animation animation in Animations)
         {
@@ -78,6 +85,10 @@ public class SpriteAnimator : MonoBehaviour
                 CurrentSpriteIndex = 0;
                 TimeSpentInFrame = 0.0f;
                 CurrentAnimation = animation;
+                AnimationDoneCallback = callback;
+
+                // Updating the sprite to display
+                Renderer.sprite = CurrentAnimation.Sprites[CurrentSpriteIndex];
             }
         }
     }
