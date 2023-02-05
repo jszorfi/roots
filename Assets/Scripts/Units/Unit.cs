@@ -30,7 +30,7 @@ public abstract class Unit : MonoBehaviour
     {
         animator = gameObject.GetComponent<SpriteAnimator>();
         audioPlayer = gameObject.GetComponent<AudioPlayer>();
-        healthBar = gameObject.transform.GetChild(0).GetComponent<RectTransform>();
+        healthBar = gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<RectTransform>();
         maxHealthWidth = healthBar.sizeDelta.x;
     }
 
