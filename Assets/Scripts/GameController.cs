@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,6 +11,7 @@ public enum UnitType { Field, Shed, Woodmill, Potato, Carrot, Radish }
 public class GameController : MonoBehaviour
 {
     public Phase phase = Phase.Build;
+    public TMP_Text buildPhaseText;
 
     //A turn consists of however many ints have been provided.
     public List<int> turn1;
@@ -77,6 +79,7 @@ public class GameController : MonoBehaviour
         //canvasController.night.enabled = true;
         canvasController.finishTurnInactive.enabled = false;
         canvasController.finishTurnText.text = "Finish turn";
+        buildPhaseText.text = "Player's turn";
     }
 
     public void FinishTurn()
@@ -107,6 +110,7 @@ public class GameController : MonoBehaviour
     {
         canvasController.finishTurnInactive.enabled = true;
         canvasController.finishTurnText.text = "Enemy's turn";
+        buildPhaseText.text = "Enemy's turn";
         phase = Phase.EnemyTurn;
         foreach (var enemy in mapController.enemies)
         {
@@ -135,6 +139,7 @@ public class GameController : MonoBehaviour
             }
             canvasController.finishTurnInactive.enabled = false;
             canvasController.finishTurnText.text = "Finish turn";
+            buildPhaseText.text = "Player's turn";
         }
 
         bool moreSpawn = false;
@@ -169,6 +174,7 @@ public class GameController : MonoBehaviour
         //canvasController.night.enabled = false;
         canvasController.finishTurnInactive.enabled = false;
         canvasController.finishTurnText.text = "Finish build";
+        buildPhaseText.text = "Building phase";
     }
     public bool haveEnoughResourceForUnit(UnitType unit)
     {
@@ -182,21 +188,21 @@ public class GameController : MonoBehaviour
         List<int> currentWave = waves[turn];
         var enemyspawnercopy = enemySpawnerList;
 
-        if(currentWave.Count == 0)
+        if (currentWave.Count == 0)
         {
             return;
         }
         int toSpawn = currentWave[wave];
 
-        while(toSpawn > 0)
+        while (toSpawn > 0)
         {
             bool spawned = false;
 
-            while(!spawned)
+            while (!spawned)
             {
-                int es = UnityEngine.Random.Range(0, enemyspawnercopy.Count-1);
+                int es = UnityEngine.Random.Range(0, enemyspawnercopy.Count - 1);
 
-                if( mapController.SpawnEnemy(enemyspawnercopy[es].pos) )
+                if (mapController.SpawnEnemy(enemyspawnercopy[es].pos))
                 {
                     spawned = true;
                 }
@@ -204,7 +210,7 @@ public class GameController : MonoBehaviour
                 {
                     enemyspawnercopy.RemoveAt(es);
 
-                    if(enemyspawnercopy.Count == 0)
+                    if (enemyspawnercopy.Count == 0)
                     {
                         return;
                     }
