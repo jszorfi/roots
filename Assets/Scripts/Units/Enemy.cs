@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 public class Enemy : Character
 {
@@ -11,11 +10,7 @@ public class Enemy : Character
     {
         base.targetedSkill(target);
         target.receiveDamage(skillStrength);
-        var potato = target as Potato;
-        if (potato != null)
-        {
-            potato.counterAttack(this);
-        }
+        target.counterAttack(this);
     }
 
     public override void areaSkill(List<Unit> targets)
@@ -26,7 +21,7 @@ public class Enemy : Character
             target.receiveDamage(areaSkillStrength);
         }
     }
-    public void counterAttack(Character target)
+    public override void counterAttack(Unit target)
     {
         target.receiveDamage(skillStrength);
     }
