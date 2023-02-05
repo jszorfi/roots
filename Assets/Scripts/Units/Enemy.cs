@@ -6,7 +6,7 @@ public class Enemy : Character
 {
     public override void onClicked() { /*nope*/ }
     private MapController mapController;
-
+    private bool isWaitingToAttack = false;
     void Start()
     {
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
@@ -51,6 +51,36 @@ public class Enemy : Character
         if (closest != null)
         {
             mapController.moveEnemy(this, closest.pos);
+        }
+    }
+
+    private void Attack()
+    {
+        var neaighbours = mapController.neighbours4(pos);
+        int minHealth = 10000;
+        Unit minHealthUnit = null;
+        foreach (var n in neaighbours)
+        {
+            var enemy = n as Enemy;
+            if (enemy == null)
+                continue;
+            if (n.health < minHealth)
+            {
+                minHealth = n.health;
+                minHealthUnit = n;
+            }
+        }
+        if (minHealthUnit != null)
+        {
+            targetedSkill(minHealthUnit);
+        }
+    }
+    public void Update()
+    {
+        if (isWaitingToAttack && !isBusy())
+        {
+            isWaitingToAttack = false;
+            Attack();
         }
     }
 }
