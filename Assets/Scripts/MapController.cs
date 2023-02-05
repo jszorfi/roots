@@ -54,6 +54,8 @@ public class MapController : MonoBehaviour
 
     private List<Vector3Int> fixedHighlights;
 
+    private bool currentCursoBasic = true;
+
     private GameObject carrotInst;
     private GameObject potatoInst;
     private GameObject bunnyInst1;
@@ -164,11 +166,19 @@ public class MapController : MonoBehaviour
 
             if(hoverNode.Occupant == null)
             {
-                Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.ForceSoftware);
+                if(currentCursoBasic)
+                {
+                    Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.ForceSoftware);
+                    currentCursoBasic = false;
+                }
             }
             else
             {
-                Cursor.SetCursor(basicCursor, Vector2.zero, CursorMode.ForceSoftware);
+                if (!currentCursoBasic)
+                {
+                    Cursor.SetCursor(basicCursor, Vector2.zero, CursorMode.ForceSoftware);
+                    currentCursoBasic = true;
+                }
             }
 
 
@@ -262,6 +272,8 @@ public class MapController : MonoBehaviour
                 {
                     // What we can do here is context sensitive
 
+                    int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords));
+
                     switch (selectionState)
                     {
                         case SelectionState.Building:
@@ -271,50 +283,43 @@ public class MapController : MonoBehaviour
 
                             MapNode previousNode = map.getNode(selectedUnit.pos);
 
-                            if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
+                            if (clickedNode.Occupant == null && selectedUnit is Character && ! (selectedUnit is Enemy) )
                             {
                                 Character c = selectedUnit as Character;
-                                Building b = selectedUnit as Building;
 
-                                if (c != null)
+                                previousNode.Leave(selectedUnit);
+
+                                if (gameController.phase == Phase.Build)
                                 {
-                                    if (gameController.phase == Phase.Build)
-                                    {
-                                        c.move(clipVect3Int(mouseTileMapCoords));
-                                        clickedNode.Occupy(selectedUnit);
-                                    }
-                                    else if (gameController.phase == Phase.PlayerTurn)
-                                    {
-                                        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
+                                    c.move(clipVect3Int(mouseTileMapCoords));
+                                    clickedNode.Occupy(selectedUnit);
+                                }
+                                else if (gameController.phase == Phase.PlayerTurn)
+                                {
+                                    List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
 
-                                        if (path.Count == 0 || c.currentMovement == 0)
+                                    if (path.Count == 0 || c.currentMovement == 0)
+                                    {
+                                        //If we can't go anywhere, occupy the tile we just left
+                                        previousNode.Occupy(selectedUnit);
+                                    }
+                                    else
+                                    {
+                                        Vector2Int target = path[path.Count - 1].position;
+
+                                        if (path.Count > c.currentMovement)
                                         {
-                                            //If we can't go anywhere, occupy the tile we just left
-                                            previousNode.Occupy(selectedUnit);
+                                            target = path[c.currentMovement - 1].position;
+                                            c.currentMovement = 0;
                                         }
                                         else
                                         {
-                                            Vector2Int target = path[path.Count - 1].position;
-
-                                            if (path.Count > c.currentMovement)
-                                            {
-                                                target = path[c.currentMovement - 1].position;
-                                                c.currentMovement = 0;
-                                            }
-                                            else
-                                            {
-                                                c.currentMovement -= path.Count;
-                                            }
-
-                                            c.move(target);
-                                            map.getNode(target).Occupy(selectedUnit);
+                                            c.currentMovement -= path.Count;
                                         }
-                                    }
-                                }
 
-                                if(b != null)
-                                {
-                                    previousNode.Occupy(selectedUnit);
+                                        c.move(target);
+                                        map.getNode(target).Occupy(selectedUnit);
+                                    }
                                 }
                             }
 
@@ -325,10 +330,18 @@ public class MapController : MonoBehaviour
                             //We can (hopefully) safely assume that the selected unit is a character
                             chara = selectedUnit as Character;
 
-                            //If we clicked where there is no unit, we can stop and deselect
                             if (clickedNode.Occupant != null)
                             {
-                                chara.targetedSkill(clickedNode.Occupant);
+
+                                if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
+                                {
+                                    chara.targetedSkill(clickedNode.Occupant);
+                                }
+                                else if (chara.skillkRange == (int)SkillRange.All && hamDist <= chara.skillkRange)
+                                {
+                                    chara.targetedSkill(clickedNode.Occupant);
+                                }
+
                             }
                             deselect();
 
@@ -338,15 +351,13 @@ public class MapController : MonoBehaviour
                             //We can (hopefully) safely assume that the selected unit is a character
                             chara = selectedUnit as Character;
 
-                            int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords));
-
                             if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
                             {
                                 chara.areaSkill(chara.skillkRange == (int)SkillRange.CloseQuarters ? allneighbours4(selectedPosition.pos2D) : allneighbours8(selectedPosition.pos2D));
                             }
-                            else if (chara.skillkRange == (int)SkillRange.Ranged && hamDist <= chara.skillkRange)
+                            else if (chara.skillkRange == (int)SkillRange.All && hamDist <= chara.skillkRange)
                             {
-                                chara.areaSkill(allneighbours8(selectedPosition.pos2D));
+                                chara.areaSkill(allneighbours4and8(selectedPosition.pos2D));
                             }
 
                             deselect();
@@ -487,8 +498,6 @@ public class MapController : MonoBehaviour
 
     private void deselect()
     {
-        //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
-        //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
         selectionState = SelectionState.Building;
         selectedUnit = null;
         selectedPosition = null;
@@ -712,7 +721,7 @@ public class MapController : MonoBehaviour
 
         foreach (var item in allUnits)
         {
-            if (HamiltonianDistance(item.pos, pos) == 2 || HamiltonianDistance(item.pos, pos) == 10)
+            if (HamiltonianDistance(item.pos, pos) == 2 || HamiltonianDistance(item.pos, pos) == 1)
             {
                 r.Add(item);
             }
