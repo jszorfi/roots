@@ -114,25 +114,25 @@ MonoBehaviour:
     - {fileID: 21300000, guid: d063af67e77ce2142b23d6fa78caf7ef, type: 3}
     - {fileID: 21300000, guid: 2f30153d82d0499439867797bad3a58b, type: 3}
     - {fileID: 21300000, guid: cee560fe1666e93408ad40aeb659a73a, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Down
     Sprites:
     - {fileID: 21300000, guid: ab4ca5775ca589843a7f48e03f2a601e, type: 3}
     - {fileID: 21300000, guid: 9c8f146e4049add4fa22b51bd72dace0, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Left
     Sprites:
     - {fileID: 21300000, guid: d5afcb8a29aa35e448c44f3e0b3d7631, type: 3}
     - {fileID: 21300000, guid: 1bd2eadfce6a7614ebedaf39587f6cfa, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Right
     Sprites:
     - {fileID: 21300000, guid: 511ce585e8e76524085c117495367a74, type: 3}
     - {fileID: 21300000, guid: b69e31478cb5ac1488f43efc48189477, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Die
     Sprites:
@@ -141,7 +141,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: ef567a38b6407ec47933746825522cb8, type: 3}
     - {fileID: 21300000, guid: a8c4349ae4e4a6d48b36f550b1d0096a, type: 3}
     - {fileID: 21300000, guid: 29cc66edd87257240a5a8f07ba8d9ee2, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
 --- !u!114 &3233446422713348969
 MonoBehaviour:

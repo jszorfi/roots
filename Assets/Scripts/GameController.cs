@@ -56,6 +56,9 @@ public class GameController : MonoBehaviour
                 canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), true);
             }
         }
+        canvasController.night.enabled = true;
+        canvasController.finishTurnInactive.enabled = false;
+        canvasController.finishTurnText.text = "Finish turn";
     }
 
     public void FinishTurn()
@@ -81,6 +84,8 @@ public class GameController : MonoBehaviour
 
     private void EnemyTurn()
     {
+        canvasController.finishTurnInactive.enabled = true;
+        canvasController.finishTurnText.text = "Enemy's turn";
         phase = Phase.EnemyTurn;
         foreach (var enemy in mapController.enemies)
         {
@@ -88,7 +93,7 @@ public class GameController : MonoBehaviour
         }
         if (mapController.enemies.Count == 0)
         {
-            phase = Phase.Build;
+            EndFight();
         }
     }
 
@@ -106,6 +111,12 @@ public class GameController : MonoBehaviour
             {
                 enemy.refresh();
             }
+            canvasController.finishTurnInactive.enabled = false;
+            canvasController.finishTurnText.text = "Finish turn";
+        }
+        if (phase != Phase.Build && mapController.enemies.Count == 0)
+        {
+            EndFight();
         }
     }
     private void EndFight()
@@ -125,6 +136,9 @@ public class GameController : MonoBehaviour
                 canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), false);
             }
         }
+        canvasController.night.enabled = false;
+        canvasController.finishTurnInactive.enabled = false;
+        canvasController.finishTurnText.text = "Finish build";
     }
     public bool haveEnoughResourceForUnit(UnitType unit)
     {

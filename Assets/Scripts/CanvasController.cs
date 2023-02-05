@@ -14,29 +14,36 @@ public class CanvasController : MonoBehaviour
     private CanvasGroup shrineOptions;
     private CanvasGroup fieldOptions;
 
-    private Image night;
-
     public TMP_Text wood;
     public TMP_Text plough;
     public TMP_Text fertilizer;
     public TMP_Text potatoSeed;
     public TMP_Text carrotSeed;
     public TMP_Text radishSeed;
+    public TMP_Text finishTurnText;
 
     private Dictionary<UnitType, Button> builderButtons = new Dictionary<UnitType, Button>();
 
 
     [HideInInspector]
     public CanvasGroup displayedGroup;
+    [HideInInspector]
     public GameController gameController;
+    [HideInInspector]
     public MapController mapController;
+    [HideInInspector]
     public Button finishTurn;
+    [HideInInspector]
+    public Image finishTurnInactive;
+    [HideInInspector]
+    public Image night;
 
     private void Start()
     {
         gameController = GameObject.Find("GameController").gameObject.GetComponent<GameController>();
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
         finishTurn = GameObject.Find("FinishTurn").GetComponent<Button>();
+        finishTurnInactive = finishTurn.gameObject.transform.GetChild(1).GetComponent<Image>();
         night = GameObject.Find("Night").gameObject.GetComponent<Image>();
 
         var skills = gameObject.transform.Find("Skills").gameObject.transform;

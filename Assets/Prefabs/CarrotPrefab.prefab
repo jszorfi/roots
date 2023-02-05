@@ -296,19 +296,19 @@ MonoBehaviour:
     Sprites:
     - {fileID: 21300000, guid: abe1d65a034aaff419ca33eea3a23e89, type: 3}
     - {fileID: 21300000, guid: 56bbb68e85da5234da1a2a374785a063, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Left
     Sprites:
     - {fileID: 21300000, guid: e1292112644e9ef40942b3fd38cdb1fc, type: 3}
     - {fileID: 21300000, guid: e51ebe3b85d52414da22a80a08d9fc2e, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Right
     Sprites:
     - {fileID: 21300000, guid: 4a3cca234852e9542b8fd5873d69066d, type: 3}
     - {fileID: 21300000, guid: fec00c23ada03c84c8b90cbdac284d16, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Die
     Sprites:
@@ -316,7 +316,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: a9e4cb594ba4902439dc00b23c8028ed, type: 3}
     - {fileID: 21300000, guid: e3f3dc722f571ae49b4f250059588671, type: 3}
     - {fileID: 21300000, guid: 6d691697812c5ce40a1b3a35f84e3c08, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 0
 --- !u!114 &7994839833213486301
 MonoBehaviour:

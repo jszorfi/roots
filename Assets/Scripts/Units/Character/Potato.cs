@@ -9,9 +9,8 @@ public class Potato : Character
     public override void targetedSkill(Unit target)
     {
         base.targetedSkill(target);
-        var enemy = target as Enemy;
-        enemy.receiveDamage(skillStrength * skillStrengthMultiplier);
-        enemy.counterAttack(this);
+        target.receiveDamage(skillStrength * skillStrengthMultiplier);
+        target.counterAttack(this);
         canvasController.displayPotatoSkills(false);
     }
 
@@ -25,7 +24,7 @@ public class Potato : Character
         canvasController.displayPotatoSkills(false);
     }
 
-    public void counterAttack(Character target)
+    public override void counterAttack(Unit target)
     {
         target.receiveDamage(skillStrength);
     }

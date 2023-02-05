@@ -35,11 +35,14 @@ public abstract class Unit : MonoBehaviour
             {
                 animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
             }
-            else 
+            else
             {
                 Destroy(gameObject);
             }
         }
     }
     public abstract void refresh();
+    public virtual void counterAttack(Unit unit)
+    {
+    }
 }
