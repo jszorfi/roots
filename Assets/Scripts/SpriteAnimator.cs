@@ -36,11 +36,16 @@ public class SpriteAnimator : MonoBehaviour
     /** The List of animations for the GameObject */
     public List<Animation> Animations;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         // Getting the SpriteRenderer for the GameObject
         Renderer = gameObject.GetComponent<SpriteRenderer>();
+
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
 
         // Playing the first animation by default
         CurrentAnimation = Animations[0];
