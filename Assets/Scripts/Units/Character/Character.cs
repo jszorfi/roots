@@ -11,8 +11,8 @@ public abstract class Character : Unit
     public int movementRange;
     public int currentMovement;
 
-    public abstract void targetedSkill(Character target);
-    public abstract void areaSkill(List<Character> targets);
+    public abstract void targetedSkill(Unit target);
+    public abstract void areaSkill(List<Unit> targets);
 
     public void receiveHealing(int healing)
     {
@@ -26,8 +26,9 @@ public abstract class Character : Unit
         target.receiveRepair(repairStrength);
     }
 
-    public void reset()
+    public override void reset()
     {
+        base.reset();
         skillStrengthMultiplier = 1;
         currentMovement = movementRange;
     }

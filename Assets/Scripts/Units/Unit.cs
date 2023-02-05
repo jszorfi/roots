@@ -27,7 +27,7 @@ public abstract class Unit : MonoBehaviour
             isDead = true;
         }
     }
-    public void reset()
+    public virtual void reset()
     {
         if (isDead)
             Destroy(gameObject);

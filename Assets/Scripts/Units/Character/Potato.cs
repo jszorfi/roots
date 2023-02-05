@@ -6,16 +6,23 @@ public class Potato : Character
     {
         canvasController.displayPotatoSkills();
     }
-    public override void targetedSkill(Character target)
+    public override void targetedSkill(Unit target)
     {
-        target.receiveDamage(skillStrength * skillStrengthMultiplier);
+        var enemy = target as Enemy;
+        enemy.receiveDamage(skillStrength * skillStrengthMultiplier);
+        enemy.counterAttack(this);
     }
 
-    public override void areaSkill(List<Character> targets)
+    public override void areaSkill(List<Unit> targets)
     {
         foreach (var target in targets)
         {
             target.receiveDamage(areaSkillStrength * skillStrengthMultiplier);
         }
+    }
+
+    public void counterAttack(Character target)
+    {
+        target.receiveDamage(skillStrength);
     }
 }

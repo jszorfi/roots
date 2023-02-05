@@ -7,12 +7,12 @@ public class Carrot : Character
         canvasController.displayCarrotSkills();
     }
 
-    public override void targetedSkill(Character target)
+    public override void targetedSkill(Unit target)
     {
         target.receiveDamage(skillStrength * skillStrengthMultiplier);
     }
 
-    public override void areaSkill(List<Character> targets)
+    public override void areaSkill(List<Unit> targets)
     {
         foreach (var target in targets)
         {

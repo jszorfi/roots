@@ -20,6 +20,12 @@ public class Field : ResourceCreator
         planted = seed;
     }
 
+    public override void reset()
+    {
+        base.reset();
+        planted = SeedType.none;
+        resourceCount = 1;
+    }
     public override Tuple<ResourceType, int> collectResources()
     {
         ResourceType createdPlant = ResourceType.potato; ;

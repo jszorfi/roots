@@ -50,7 +50,32 @@ public class GameController : MonoBehaviour
         phase = Phase.PlayerTurn;
     }
 
-    public void EndFight()
+    public void FinishTurn()
+    {
+        if (phase == Phase.Build)
+        {
+            EndBuild();
+        }
+        else if (phase == Phase.PlayerTurn) { EndPlayerTurn(); }
+    }
+    private void EndPlayerTurn()
+    {
+        if (mapController.enemies.Count == 0)
+        {
+            EndFight();
+        }
+        else { EnemyTurn(); }
+    }
+
+    private void EnemyTurn()
+    {
+        phase = Phase.EnemyTurn;
+        foreach (var enemy in mapController.enemies)
+        {
+            enemy.Turn();
+        }
+    }
+    private void EndFight()
     {
         foreach (var resoruceCreator in mapController.resCreators)
         {
