@@ -80,6 +80,7 @@ public class MapController : MonoBehaviour
     public Sprite           raddishFarm;
     public Texture2D        buildCursor;
     public Texture2D        basicCursor;
+    public List<Tree> trees;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -132,6 +133,7 @@ public class MapController : MonoBehaviour
         //enemies.Add(bunnyInst1.GetComponent<Enemy>());
         //enemies.Add(bunnyInst2.GetComponent<Enemy>());
 
+        makeTrees();
     }
 
     // Update is called once per frame
@@ -772,8 +774,11 @@ public class MapController : MonoBehaviour
 
     }
 
-    public void Treeeeeee(Vector2Int p)
+    public void makeTrees()
     {
-        map.makeImpassable(p);
+        foreach(var t in trees)
+        {
+            map.makeImpassable(t.pos);
+        }
     }
 }

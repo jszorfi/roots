@@ -6,13 +6,11 @@ using UnityEngine.Tilemaps;
 public class Tree : MonoBehaviour
 {
     private MapController mapController;
+    public Vector2Int pos;
 
     void Start()
     {
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
-
-        Vector2Int pos = mapController.clipVect3Int(mapController.gameObject.GetComponent<Tilemap>().LocalToCell(gameObject.transform.position));
-
-        mapController.Treeeeeee(pos);
+        pos = mapController.clipVect3Int(mapController.gameObject.GetComponent<Tilemap>().LocalToCell(gameObject.transform.position));
     }
 }
