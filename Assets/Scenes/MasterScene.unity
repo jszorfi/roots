@@ -2228,11 +2228,11 @@ MonoBehaviour:
   potatoSeed: {fileID: 881321051}
   carrotSeed: {fileID: 1843120977}
   radishSeed: {fileID: 1510134131}
+  finishTurnText: {fileID: 1380839292}
   displayedGroup: {fileID: 0}
   gameController: {fileID: 0}
   mapController: {fileID: 0}
   finishTurn: {fileID: 0}
-  finishTurnText: {fileID: 0}
   finishTurnInactive: {fileID: 0}
   night: {fileID: 0}
 --- !u!1 &1504345608
@@ -2566,6 +2566,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1504345609}
     m_Modifications:
+    - target: {fileID: 7859335739065333149, guid: 65c5601e6c54e31479247ff85c09ef35, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859335739065333149, guid: 65c5601e6c54e31479247ff85c09ef35, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859335739065333149, guid: 65c5601e6c54e31479247ff85c09ef35, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7859335739065333149, guid: 65c5601e6c54e31479247ff85c09ef35, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -15
+      objectReference: {fileID: 0}
     - target: {fileID: 8092717642033680816, guid: 65c5601e6c54e31479247ff85c09ef35, type: 3}
       propertyPath: m_Name
       value: Carrot
