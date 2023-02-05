@@ -442,7 +442,6 @@ public class MapController : MonoBehaviour
         List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), e.pos, target);
         path.Add(new PathFinding.PathNode(e.pos));
         path.Add(new PathFinding.PathNode(target));
-        Character c = selectedUnit as Character;
 
         if (path.Count == 0)
         {
@@ -450,22 +449,23 @@ public class MapController : MonoBehaviour
         }
         else
         {
-            //Vector2Int target = path[path.Count - 1].position;
+            //If we can, we try to move to the goal, but we may be able to move less than we liked
+            int index = Mathf.Min(path.Count, e.currentMovement) - 1;
+            e.currentMovement = 0;
 
-            //if (path.Count > c.currentMovement)
-            //{
-            //    target = path[c.currentMovement - 1].position;
-            //    c.currentMovement = 0;
-            //}
-            //else
-            //{
-            //    c.currentMovement -= path.Count;
-            //}
+            Vector2Int moveTo = path[index].position;
 
-            //c.move(target);
-            //map.getNode(target).Occupy(selectedUnit);
+            //if we would arrive at the target, which is occupied, stop at the last stop instead, which is right next to it, and must
+            //be free, as we did not trick the pathing algorithm to think it is.
+            if (moveTo == target)
+            {
+                moveTo = path[index - 1].position;
+            }
 
-            ////TODO: DRAIN MOVEMENT POINTS
+            e.move(moveTo);
+            map.getNode(e.pos).Leave(e);
+            map.getNode(moveTo).Occupy(selectedUnit);
+
         }
     }
 
