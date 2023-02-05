@@ -3967,6 +3967,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   phase: 0
+  turn1: 
+  turn2: 
+  turn3: 
+  turn4: 
+  turn5: 
+  enemySpawnerList: []
 --- !u!4 &1996207455
 Transform:
   m_ObjectHideFlags: 0

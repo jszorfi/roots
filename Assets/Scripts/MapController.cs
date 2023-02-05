@@ -63,21 +63,23 @@ public class MapController : MonoBehaviour
 
 
     //Public
-    public Tile tile;
-    public Tile blueHighlightTile;
-    public Tile redHighlightTile;
-    public Tile purpleHighlightTile;
-    public Vector3Int tilemapSizeHalf;
-    public GameObject carrotPrefab;
-    public GameObject potatoPrefab;
-    public GameObject radishPrefab;
-    public GameObject bunnyPrefab;
-    public GameObject shedPrefab;
-    public GameObject fieldPrefab;
-    public GameObject woodmillPrefab;
-    public Sprite carrotFarm;
-    public Sprite potatoFarm;
-    public Sprite raddishFarm;
+    public Tile             tile;
+    public Tile             blueHighlightTile;
+    public Tile             redHighlightTile;
+    public Tile             purpleHighlightTile;
+    public Vector3Int       tilemapSizeHalf;
+    public GameObject       carrotPrefab;
+    public GameObject       potatoPrefab;
+    public GameObject       radishPrefab;
+    public GameObject       bunnyPrefab;
+    public GameObject       shedPrefab;
+    public GameObject       fieldPrefab;
+    public GameObject       woodmillPrefab;
+    public Sprite           carrotFarm;
+    public Sprite           potatoFarm;
+    public Sprite           raddishFarm;
+    public Texture2D        buildCursor;
+    public Texture2D        basicCursor;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -146,7 +148,7 @@ public class MapController : MonoBehaviour
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !clickedOnUI)
         {
             /*-----------------------
-            * Hover Highlight handling
+            * Hover Highlight and Cursor handling
             * ----------------------*/
             Vector3Int newHighlightCoords;
 
@@ -163,6 +165,14 @@ public class MapController : MonoBehaviour
                 tilemap.SetTile(oldHighlightCoords, null);
                 oldHighlightCoords = newHighlightCoords;
             }
+
+            MapNode hoverNode = map.getNode(mouseTileMapCoords);
+
+            if(hoverNode.Occupant == null )
+            {
+                Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.Auto);
+            }
+
 
             /*-----------------------
             * Click handling with fix highlight handling
@@ -481,6 +491,8 @@ public class MapController : MonoBehaviour
 
     public void Die(Unit u)
     {
+        map.getNode(u.pos).Leave(u);
+
         var enem = u as Enemy;
         if (enem != null)
         {
