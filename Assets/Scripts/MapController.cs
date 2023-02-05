@@ -36,6 +36,8 @@ public class MapController : MonoBehaviour
     private CanvasController canvasController;
     private GameController gameController;
 
+    private List<Vector3Int> fixedHighlights;
+
     //Public
     public Tile             tile;
     public Tile             highlightTile;
@@ -60,6 +62,7 @@ public class MapController : MonoBehaviour
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
         gameController   = GameObject.Find("GameController").GetComponent<GameController>();
+        fixedHighlights = new List<Vector3Int>();
 
         gameObject.transform.position = new Vector3(0, 0, 0);
         tilemap = gameObject.GetComponent<Tilemap>();
@@ -92,22 +95,16 @@ public class MapController : MonoBehaviour
     {
         Vector3 mouseScreen = Input.mousePosition;
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(mouseScreen);
-        //The offsets are so when the negative coordinates are considered the bound calculations still work.
-        int xoffset = 0;
-        int yoffset = 0;
-
-        if (mousePos.x < 0) { xoffset--; }
-        if (mousePos.y < 0) { yoffset--; }
-
-        Vector3Int mouseTileMapCoords = new Vector3Int((int)mousePos.x + xoffset, (int)mousePos.y + yoffset, (int)TilemapLayers.HoverHighlight);
+        Vector3Int mouseTileMapCoords = tilemap.WorldToCell(mousePos);
+        mouseTileMapCoords.z = (int)TilemapLayers.HoverHighlight;
 
         bool clickedOnUI = isOnSkillPanel(mouseScreen);
-
+        
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner, and not on the skills panel
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !clickedOnUI)
         {
             /*-----------------------
-            * Highlight handling
+            * Hover Highlight handling
             * ----------------------*/
             Vector3Int newHighlightCoords;
 
@@ -126,18 +123,22 @@ public class MapController : MonoBehaviour
             }
 
             /*-----------------------
-            * Click handling
+            * Click handling with fix highlight handling
             * ----------------------*/
-
 
             if (Input.GetMouseButtonDown(0))
             {
-
                 MapNode clickedNode = map.getNode(mouseTileMapCoords);
 
                 //If no unit is selected, we can select a unit (building or character) or an empty fields
                 if (selectedUnit == null)
                 {
+                    //There was already a selection (that wasn't a unit or we wouldn't be here), clear the selection before a new one.
+                    if (selectedPosition != null)
+                    {
+                        deselect();
+                    }
+
                     //If the node is occuped, it is either a Character, Enemy, or Building
                     if (clickedNode.Occupant != null)
                     {
@@ -148,9 +149,8 @@ public class MapController : MonoBehaviour
                         }
 
                         selectedUnit = clickedNode.Occupant;
-                        selectedPosition = new MapPos2D();
-                        selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
                         selectedUnit.onClicked();
+                        selectPos(mouseTileMapCoords);
                         //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
                     }
                     //If the node is not occupied, we are selecting an empty field.
@@ -159,11 +159,8 @@ public class MapController : MonoBehaviour
                         // but empty field selection should only happen in buildphase.
                         if(gameController.phase == Phase.Build)
                         {
-
-
-                            selectedPosition = new MapPos2D();
-                            selectedPosition.pos2D = clipVect3Int(mouseTileMapCoords);
                             canvasController.displayBuilderOptions();
+                            selectPos(mouseTileMapCoords);
                         }
 
                     }
@@ -174,11 +171,20 @@ public class MapController : MonoBehaviour
 
                     if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                     {
-                        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
+                        if(gameController.phase == Phase.Build)
+                        {
 
-                        Character c = selectedUnit as Character;
-                        c.move(clipVect3Int(mouseTileMapCoords));
-                        clickedNode.Occupy(selectedUnit);
+                        }
+                        else if(gameController.phase == Phase.PlayerTurn)
+                        {
+                            List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
+
+                            Character c = selectedUnit as Character;
+                            c.move(clipVect3Int(mouseTileMapCoords));
+                            clickedNode.Occupy(selectedUnit);
+
+                        }
+
                     }
                     deselect();
                 }
@@ -252,6 +258,7 @@ public class MapController : MonoBehaviour
             default:
                 break; /*oof*/
         }
+
         deselect();
     }
 
@@ -265,6 +272,22 @@ public class MapController : MonoBehaviour
         return new Vector2Int(v.x, v.y);
     }
 
+    private void selectPos(Vector2Int v)
+    {
+        selectedPosition = new MapPos2D();
+        selectedPosition.pos2D = v;
+        fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], highlightTile);
+    }
+
+    private void selectPos(Vector3Int v)
+    {
+        selectedPosition = new MapPos2D();
+        selectedPosition.pos2D = clipVect3Int(v);
+        fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], highlightTile);
+    }
+
     private void deselect()
     {
         //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
@@ -272,6 +295,17 @@ public class MapController : MonoBehaviour
         selectedUnit = null;
         selectedPosition = null;
         canvasController.clear();
+        clearFixHighlightLayer();
+    }
+
+    private void clearFixHighlightLayer()
+    {
+        foreach (var hl in fixedHighlights)
+        {
+            tilemap.SetTile(hl, null);
+        }
+
+        fixedHighlights.Clear();
     }
 
     public void Die(Unit u)
