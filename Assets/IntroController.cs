@@ -19,6 +19,11 @@ public class IntroController : MonoBehaviour
     {
         SceneManager.LoadScene("OutroScene");
     }
+
+    public void Defeat()
+    {
+        SceneManager.LoadScene("DefeatScene");
+    }
     public void ExitGame()
     {
         Application.Quit();
