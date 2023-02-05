@@ -3480,7 +3480,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
-  highlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
+  blueHighlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
+  redHighlightTile: {fileID: 11400000, guid: e493606e18111604db59f9ea0c24edba, type: 2}
+  purpleHighlightTile: {fileID: 11400000, guid: b430340c09ebe9a4d8c58966d5be38a1, type: 2}
   tilemapSizeHalf: {x: 10, y: 7, z: 0}
   carrotPrefab: {fileID: 7994839833213486289, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
   potatoPrefab: {fileID: 5589451693130093928, guid: 0051c041e732e7047b545c2d8b7ae79a, type: 3}
