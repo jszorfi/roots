@@ -28,6 +28,7 @@ public abstract class Character : Unit
         health += healing;
         if (health > maxHealth)
             health = maxHealth;
+        healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * maxHealthWidth, healthBar.sizeDelta.y);
     }
 
     public void repair(Building target)

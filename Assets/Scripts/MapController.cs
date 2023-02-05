@@ -60,24 +60,24 @@ public class MapController : MonoBehaviour
     private GameObject bunnyInst2;
 
     private SelectionState selectionState = SelectionState.NoSelection;
-    
+
 
     //Public
-    public Tile             tile;
-    public Tile             blueHighlightTile;
-    public Tile             redHighlightTile;
-    public Tile             purpleHighlightTile;
-    public Vector3Int       tilemapSizeHalf;
-    public GameObject       carrotPrefab;
-    public GameObject       potatoPrefab;
-    public GameObject       radishPrefab;
-    public GameObject       bunnyPrefab;
-    public GameObject       shedPrefab;
-    public GameObject       fieldPrefab;
-    public GameObject       woodmillPrefab;
-    public Sprite           carrotFarm;
-    public Sprite           potatoFarm;
-    public Sprite           raddishFarm;
+    public Tile tile;
+    public Tile blueHighlightTile;
+    public Tile redHighlightTile;
+    public Tile purpleHighlightTile;
+    public Vector3Int tilemapSizeHalf;
+    public GameObject carrotPrefab;
+    public GameObject potatoPrefab;
+    public GameObject radishPrefab;
+    public GameObject bunnyPrefab;
+    public GameObject shedPrefab;
+    public GameObject fieldPrefab;
+    public GameObject woodmillPrefab;
+    public Sprite carrotFarm;
+    public Sprite potatoFarm;
+    public Sprite raddishFarm;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -89,7 +89,7 @@ public class MapController : MonoBehaviour
     void Start()
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
-        gameController   = GameObject.Find("GameController").GetComponent<GameController>();
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
         fixedHighlights = new List<Vector3Int>();
 
         gameObject.transform.position = new Vector3(0, 0, 0);
@@ -141,7 +141,7 @@ public class MapController : MonoBehaviour
         mouseTileMapCoords.z = (int)TilemapLayers.HoverHighlight;
 
         bool clickedOnUI = isOnSkillPanel(mouseScreen);
-        
+
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner, and not on the skills panel
         if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !clickedOnUI)
         {
@@ -203,11 +203,11 @@ public class MapController : MonoBehaviour
                         {
                             //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
                             Vector2Int movementShadowBottomLeft = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.currentMovement, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.currentMovement, bottomLeftBounds.y));
-                            Vector2Int movementShadowTopRight    = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.currentMovement, topRightBounds.x  ), Mathf.Min(mouseTileMapCoords.y + chara.currentMovement, topRightBounds.y  ));
-                            
+                            Vector2Int movementShadowTopRight = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.currentMovement, topRightBounds.x), Mathf.Min(mouseTileMapCoords.y + chara.currentMovement, topRightBounds.y));
+
                             //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
                             Vector2Int currPos = clipVect3Int(mouseTileMapCoords);
-                            
+
                             List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
                             fullPathGraph.Add(new PathFinding.PathNode(currPos));
 
@@ -216,14 +216,14 @@ public class MapController : MonoBehaviour
                                 for (int j = movementShadowBottomLeft.y; j <= movementShadowTopRight.y; j++)
                                 {
                                     Vector2Int posToCheck = new Vector2Int(i, j);
-                                    if ( HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
+                                    if (HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
                                     {
                                         //Maybe copying instead of recreating the list will boost speed;
                                         List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
 
-                                        List <PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, posToCheck);
+                                        List<PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, posToCheck);
 
-                                        if(path.Count > 0 && path.Count <= chara.currentMovement)
+                                        if (path.Count > 0 && path.Count <= chara.currentMovement)
                                         {
                                             fixHighlightTile(posToCheck, purpleHighlightTile);
                                         }
@@ -237,7 +237,7 @@ public class MapController : MonoBehaviour
                     else
                     {
                         // but empty field selection should only happen in buildphase.
-                        if(gameController.phase == Phase.Build)
+                        if (gameController.phase == Phase.Build)
                         {
                             canvasController.displayBuilderOptions();
                             selectPos(mouseTileMapCoords);
@@ -256,7 +256,7 @@ public class MapController : MonoBehaviour
                             break;
 
                         case SelectionState.Movement:
-                            
+
                             MapNode previousNode = map.getNode(selectedUnit.pos);
 
                             if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
@@ -305,7 +305,7 @@ public class MapController : MonoBehaviour
                             chara = selectedUnit as Character;
 
                             //If we clicked where there is no unit, we can stop and deselect
-                            if ( clickedNode.Occupant != null )
+                            if (clickedNode.Occupant != null)
                             {
                                 chara.targetedSkill(clickedNode.Occupant);
                             }
@@ -319,11 +319,11 @@ public class MapController : MonoBehaviour
 
                             int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords));
 
-                            if ( (chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged ) && hamDist == chara.skillkRange)
+                            if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
                             {
                                 chara.areaSkill(chara.skillkRange == (int)SkillRange.CloseQuarters ? allneighbours4(selectedPosition.pos2D) : allneighbours8(selectedPosition.pos2D));
                             }
-                            else if ( chara.skillkRange == (int)SkillRange.Ranged && hamDist <= chara.skillkRange )
+                            else if (chara.skillkRange == (int)SkillRange.Ranged && hamDist <= chara.skillkRange)
                             {
                                 chara.areaSkill(allneighbours8(selectedPosition.pos2D));
                             }
@@ -394,7 +394,7 @@ public class MapController : MonoBehaviour
         {
             case UnitType.Field:
                 resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
@@ -407,23 +407,23 @@ public class MapController : MonoBehaviour
             case UnitType.Woodmill:
                 resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
+                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Carrot:
                 characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
                 characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
                 break;
             case UnitType.Radish:
                 characters.Add(Instantiate(radishPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
                 characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
                 break;
             case UnitType.Potato:
                 characters.Add(Instantiate(potatoPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
                 characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
+                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
                 break;
             default:
                 break; /*oof*/
@@ -447,7 +447,7 @@ public class MapController : MonoBehaviour
         selectedPosition = new MapPos2D();
         selectedPosition.pos2D = v;
         fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
-        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], blueHighlightTile);
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], blueHighlightTile);
     }
 
     private void selectPos(Vector3Int v)
@@ -511,13 +511,13 @@ public class MapController : MonoBehaviour
     public bool isOnSkillPanel(Vector3 mouseScreenPos)
     {
         //We are on the next turn button
-        if(RectTransformUtility.RectangleContainsScreenPoint(canvasController.finishTurn.gameObject.GetComponent<RectTransform>(), new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
+        if (RectTransformUtility.RectangleContainsScreenPoint(canvasController.finishTurn.gameObject.GetComponent<RectTransform>(), new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
         {
             return true;
         }
 
         //If not, we may be on the currently displayed skillbar
-        if(canvasController.displayedGroup == null)
+        if (canvasController.displayedGroup == null)
         {
             return false;
         }
@@ -536,7 +536,7 @@ public class MapController : MonoBehaviour
     public void fixHighlightTile(Vector2Int pos, Tile tile)
     {
         fixedHighlights.Add(new Vector3Int(pos.x, pos.y, (int)TilemapLayers.FixHiglight));
-        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], tile);
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], tile);
     }
 
     public int HamiltonianDistance(Vector2Int v1, Vector2Int v2)
@@ -548,7 +548,7 @@ public class MapController : MonoBehaviour
     {
         var plr = new List<PathFinding.PathNode>();
 
-        foreach(var i in pl)
+        foreach (var i in pl)
         {
             plr.Add(new PathFinding.PathNode(i.position));
         }
@@ -725,7 +725,7 @@ public class MapController : MonoBehaviour
                 Vector2Int posToCheck = new Vector2Int(i, j);
                 int hamDist = HamiltonianDistance(posToCheck, center);
 
-                if ((sr == SkillRange.CloseQuarters || sr == SkillRange.Ranged) && hamDist == radius)              
+                if ((sr == SkillRange.CloseQuarters || sr == SkillRange.Ranged) && hamDist == radius)
                 {
                     fixHighlightTile(posToCheck, redHighlightTile);
                 }

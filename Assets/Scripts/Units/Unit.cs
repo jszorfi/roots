@@ -7,7 +7,8 @@ public abstract class Unit : MonoBehaviour
     public int maxHealth;
     public int health;
     public Tuple<ResourceType, int> cost;
-    private RectTransform healthBar;
+    protected RectTransform healthBar;
+    protected float maxHealthWidth;
 
     // Test
     private RectTransform hb_mid;
@@ -21,13 +22,14 @@ public abstract class Unit : MonoBehaviour
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
         animator = gameObject.GetComponent<SpriteAnimator>();
         healthBar = gameObject.transform.GetChild(0).GetComponent<RectTransform>();
+        maxHealthWidth = healthBar.sizeDelta.x;
     }
 
     public abstract void onClicked();
     public void receiveDamage(int damage)
     {
         health -= damage;
-        healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * healthBar.sizeDelta.x, healthBar.sizeDelta.y);
+        healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * maxHealthWidth, healthBar.sizeDelta.y);
         if (health <= 0)
         {
             canvasController.mapController.Die(this);
