@@ -26,9 +26,9 @@ public abstract class Character : Unit
         target.receiveRepair(repairStrength);
     }
 
-    public override void reset()
+    public override void refresh()
     {
-        base.reset();
+        base.refresh();
         skillStrengthMultiplier = 1;
         currentMovement = movementRange;
     }

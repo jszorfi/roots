@@ -22,16 +22,18 @@ public class CanvasController : MonoBehaviour
 
     private Dictionary<UnitType, Button> builderButtons = new Dictionary<UnitType, Button>();
 
-    private GameController gameController;
-    private MapController mapController;
 
     [HideInInspector]
     public CanvasGroup displayedGroup;
+    public GameController gameController;
+    public MapController mapController;
+    public Button finishTurn;
 
     private void Start()
     {
         gameController = GameObject.Find("GameController").gameObject.GetComponent<GameController>();
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
+        finishTurn = GameObject.Find("FinishTurn").GetComponent<Button>();
 
         var skills = gameObject.transform.Find("Skills").gameObject.transform;
         var potatoSkills2 = skills.Find("PotatoSkills").gameObject;

@@ -165,9 +165,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0}
-  maxHealth: 0
-  health: 0
-  skillStrength: 0
+  maxHealth: 10
+  health: 10
+  skillStrength: 2
   areaSkillStrength: 0
   repairStrength: 0
   skillStrengthMultiplier: 1

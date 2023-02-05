@@ -56,6 +56,8 @@ public class MapController : MonoBehaviour
     public Sprite           raddishFarm;
     private GameObject      carrotInst;
     private GameObject      potatoInst;
+    private GameObject      bunnyInst1;
+    private GameObject      bunnyInst2;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -93,6 +95,20 @@ public class MapController : MonoBehaviour
 
         carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
         potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
+
+        bunnyInst1 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 2.5f, -2.0f), Quaternion.identity);
+        bunnyInst2 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 3.5f, -2.0f), Quaternion.identity);
+
+        map.getNode(-10, 2).Occupy(bunnyInst1.GetComponent<Enemy>());
+        map.getNode(-10, 3).Occupy(bunnyInst2.GetComponent<Enemy>());
+
+        bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-9, 2);
+        bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-9, 3);
+
+        characters.Add(carrotInst.GetComponent<Carrot>());
+        characters.Add(potatoInst.GetComponent<Potato>());
+        enemies.Add(bunnyInst1.GetComponent<Enemy>());
+        enemies.Add(bunnyInst2.GetComponent<Enemy>());
 
     }
 
@@ -376,11 +392,42 @@ public class MapController : MonoBehaviour
 
     public void Die(Unit u)
     {
+        var enem = u as Enemy;
+        if (enem != null)
+        {
+            enemies.Remove(enem);
+            return;
+        }
+
+        var chara = u as Character;
+        if (chara != null)
+        {
+            characters.Remove(chara);
+            return;
+        }
+
+        var build = u as Building;
+        if (build != null)
+        {
+            buildings.Remove(build);
+        }
+
+        var res = u as ResourceCreator;
+        if (res != null)
+        {
+            resCreators.Remove(res);
+        }
 
     }
-
     public bool isOnSkillPanel(Vector3 mouseScreenPos)
     {
+        //We are on the next turn button
+        if(RectTransformUtility.RectangleContainsScreenPoint(canvasController.finishTurn.gameObject.GetComponent<RectTransform>(), new Vector2(mouseScreenPos.x, mouseScreenPos.y)))
+        {
+            return true;
+        }
+
+        //If not, we may be on the currently displayed skillbar
         if(canvasController.displayedGroup == null)
         {
             return false;
@@ -438,10 +485,11 @@ public class MapController : MonoBehaviour
     public void moveEnemy(Enemy e, Vector2Int target)
     {
         //Since the target is always a unit or building, we will need to add back it to the list.
-        
-        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), e.pos, target);
-        path.Add(new PathFinding.PathNode(e.pos));
-        path.Add(new PathFinding.PathNode(target));
+        List<PathFinding.PathNode> pathGraph = map.generatePathNodeList();
+        pathGraph.Add(new PathFinding.PathNode(e.pos));
+        pathGraph.Add(new PathFinding.PathNode(target));
+
+        List<PathFinding.PathNode> path = PathFinding.FindPath(pathGraph, e.pos, target);
 
         if (path.Count == 0)
         {
@@ -451,6 +499,8 @@ public class MapController : MonoBehaviour
         {
             //If we can, we try to move to the goal, but we may be able to move less than we liked
             int index = Mathf.Min(path.Count, e.currentMovement) - 1;
+
+            if (index <= 0) return;
             e.currentMovement = 0;
 
             Vector2Int moveTo = path[index].position;
@@ -462,10 +512,9 @@ public class MapController : MonoBehaviour
                 moveTo = path[index - 1].position;
             }
 
-            e.move(moveTo);
             map.getNode(e.pos).Leave(e);
-            map.getNode(moveTo).Occupy(selectedUnit);
-
+            e.move(moveTo);
+            map.getNode(moveTo).Occupy(e);
         }
     }
 

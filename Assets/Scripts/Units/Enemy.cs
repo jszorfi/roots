@@ -5,12 +5,7 @@ using UnityEngine;
 public class Enemy : Character
 {
     public override void onClicked() { /*nope*/ }
-    private MapController mapController;
     private bool isWaitingToAttack = false;
-    void Start()
-    {
-        mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
-    }
 
     public override void targetedSkill(Unit target)
     {
@@ -36,7 +31,7 @@ public class Enemy : Character
 
     public void Turn()
     {
-        List<Unit> hitable = Enumerable.Concat<Unit>(mapController.buildings, mapController.characters).ToList();
+        List<Unit> hitable = Enumerable.Concat<Unit>(canvasController.mapController.buildings, canvasController.mapController.characters).ToList();
         Unit closest = null;
         float min = 10000;
         foreach (var h in hitable)
@@ -50,19 +45,20 @@ public class Enemy : Character
         }
         if (closest != null)
         {
-            mapController.moveEnemy(this, closest.pos);
+            canvasController.mapController.moveEnemy(this, closest.pos);
+            isWaitingToAttack = true;
         }
     }
 
     private void Attack()
     {
-        var neaighbours = mapController.neighbours4(pos);
+        var neaighbours = canvasController.mapController.neighbours4(pos);
         int minHealth = 10000;
         Unit minHealthUnit = null;
         foreach (var n in neaighbours)
         {
             var enemy = n as Enemy;
-            if (enemy == null)
+            if (enemy != null)
                 continue;
             if (n.health < minHealth)
             {

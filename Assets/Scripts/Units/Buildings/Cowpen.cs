@@ -15,9 +15,9 @@ public class Cowpen : ResourceCreator
         return new Tuple<ResourceType, int>(resource, fertilizerCreated);
     }
 
-    public override void reset()
+    public override void refresh()
     {
-        base.reset();
+        base.refresh();
         deadBunnyCount = 0;
     }
 

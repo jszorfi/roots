@@ -20,9 +20,9 @@ public class Field : ResourceCreator
         planted = seed;
     }
 
-    public override void reset()
+    public override void refresh()
     {
-        base.reset();
+        base.refresh();
         planted = SeedType.none;
         resourceCount = 1;
     }

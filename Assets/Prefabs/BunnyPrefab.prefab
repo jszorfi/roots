@@ -173,7 +173,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0}
-  maxHealth: 0
-  health: 0
-  skillStrength: 0
-  areaSkillStrength: 0
+  maxHealth: 10
+  health: 10
+  skillStrength: 2
+  areaSkillStrength: 2
+  repairStrength: 1
+  skillStrengthMultiplier: 1
+  skillkRange: 1
+  movementRange: 4
+  currentMovement: 4

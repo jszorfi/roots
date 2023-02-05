@@ -45,7 +45,7 @@ public class GameController : MonoBehaviour
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
     }
 
-    public void EndBuild()
+    private void EndBuild()
     {
         phase = Phase.PlayerTurn;
     }
@@ -70,9 +70,30 @@ public class GameController : MonoBehaviour
     private void EnemyTurn()
     {
         phase = Phase.EnemyTurn;
+        if (mapController.enemies.Count == 0)
+        {
+            phase = Phase.Build;
+        }
         foreach (var enemy in mapController.enemies)
         {
             enemy.Turn();
+        }
+    }
+
+    public void Update()
+    {
+        if(phase == Phase.EnemyTurn)
+        {
+            foreach (var enemy in mapController.enemies)
+            {
+                if (enemy.isBusy()) return;
+            }
+
+            phase = Phase.PlayerTurn;
+            foreach (var enemy in mapController.enemies)
+            {
+                enemy.refresh();
+            }
         }
     }
     private void EndFight()
@@ -83,6 +104,7 @@ public class GameController : MonoBehaviour
             resources[r.Item1] += r.Item2;
         }
         canvasController.updateResources();
+        phase = Phase.Build;
     }
     public bool haveEnoughResourceForUnit(UnitType unit)
     {
