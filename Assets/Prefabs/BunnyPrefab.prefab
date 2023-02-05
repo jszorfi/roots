@@ -306,19 +306,19 @@ MonoBehaviour:
     Sprites:
     - {fileID: 21300000, guid: f8f17c7d2b4a8d94aae30b5b10affdf3, type: 3}
     - {fileID: 21300000, guid: 6c508dc37feb8e744be1e38f4272226c, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Left
     Sprites:
     - {fileID: 21300000, guid: b04bae4ef3ade0443885652d74800dc2, type: 3}
     - {fileID: 21300000, guid: 4a652fe14a1518248bd95df2374709dd, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Walk Right
     Sprites:
     - {fileID: 21300000, guid: d46fd6153c9b1d1439a9ca8f40e96b76, type: 3}
     - {fileID: 21300000, guid: 977b67ce122d5d54a8266e9c6c8159a8, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Cast Spell
     Sprites:
@@ -326,7 +326,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: fd6f4b19ab6068f4b9161e0b9f41c51b, type: 3}
     - {fileID: 21300000, guid: f8e3c1e31215fbc429746f5948e95bb3, type: 3}
     - {fileID: 21300000, guid: 9931508c8527981468a423c43ebc61cb, type: 3}
-    FrameDuration: 0.25
+    FrameDuration: 0.15
     Repeating: 1
   - Name: Die
     Sprites:
@@ -366,6 +366,7 @@ MonoBehaviour:
   skillkRange: 1
   movementRange: 4
   currentMovement: 4
+  hasActtion: 1
 --- !u!222 &604621933677610345
 CanvasRenderer:
   m_ObjectHideFlags: 0
