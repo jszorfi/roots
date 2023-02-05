@@ -179,7 +179,42 @@ public class GameController : MonoBehaviour
 
     private void SpawnEnemiesForWave()
     {
-        int toSpawn = waves[turn][wave];
+        List<int> currentWave = waves[turn];
+        var enemyspawnercopy = enemySpawnerList;
+
+        if(currentWave.Count == 0)
+        {
+            return;
+        }
+        int toSpawn = currentWave[wave];
+
+        while(toSpawn > 0)
+        {
+            bool spawned = false;
+
+            while(!spawned)
+            {
+                int es = UnityEngine.Random.Range(0, enemyspawnercopy.Count-1);
+
+                if( mapController.SpawnEnemy(enemyspawnercopy[es].pos) )
+                {
+                    spawned = true;
+                }
+                else
+                {
+                    enemyspawnercopy.RemoveAt(es);
+
+                    if(enemyspawnercopy.Count == 0)
+                    {
+                        return;
+                    }
+                }
+            }
+
+            toSpawn--;
+        }
+
+
     }
 
     void handleFightPhaseEnd()

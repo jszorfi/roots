@@ -124,8 +124,8 @@ public class MapController : MonoBehaviour
         map.getNode(-10, 2).Occupy(bunnyInst1.GetComponent<Enemy>());
         map.getNode(-10, 3).Occupy(bunnyInst2.GetComponent<Enemy>());
 
-        bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-9, 2);
-        bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-9, 3);
+        bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-10, 2);
+        bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-10, 3);
 
         characters.Add(carrotInst.GetComponent<Carrot>());
         characters.Add(potatoInst.GetComponent<Potato>());
@@ -756,8 +756,19 @@ public class MapController : MonoBehaviour
 
     }
 
-    public void SpawnEnemy(Vector2Int pos)
+    public bool SpawnEnemy(Vector2Int pos)
     {
+        if (map.getNode(pos).Occupant != null)
+        {
+            return false;
+        }
+
+        enemies.Add(Instantiate(bunnyPrefab, new Vector3((float)pos.x + 0.5f, (float)pos.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Enemy>());
+
+        map.getNode(pos).Occupy(enemies[enemies.Count-1].GetComponent<Enemy>());
+
+        enemies[enemies.Count - 1].GetComponent<Enemy>().pos = pos;
+        return true;
 
     }
 }
