@@ -15,6 +15,10 @@ public class Field : ResourceCreator
     }
     public override void onClicked()
     {
+        if (gameController.phase != Phase.Build)
+        {
+            return;
+        }
         canvasController.displayFieldOptions(gameController.resources[ResourceType.fertilizer] > 0);
         render = gameObject.GetComponent<SpriteRenderer>();
     }
