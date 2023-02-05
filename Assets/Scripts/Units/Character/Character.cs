@@ -11,7 +11,16 @@ public abstract class Character : Unit
     public int movementRange;
     public int currentMovement;
     public bool hasActtion = true;
+    private bool sleepCalled = false;
 
+    public void Update()
+    {
+        if (!sleepCalled && !hasActtion && currentMovement == 0 && !isBusy())
+        {
+            animator.SetAnimationByName("Sleep");
+            sleepCalled = true;
+        }
+    }
     public virtual void targetedSkill(Unit target)
     {
         animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
@@ -41,6 +50,8 @@ public abstract class Character : Unit
         skillStrengthMultiplier = 1;
         currentMovement = movementRange;
         hasActtion = true;
+        sleepCalled = false;
+        animator.SetAnimationByName("Idle");
     }
 
     public void move(Vector2Int coordinates)
