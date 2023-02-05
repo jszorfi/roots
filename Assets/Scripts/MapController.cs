@@ -738,4 +738,9 @@ public class MapController : MonoBehaviour
         }
 
     }
+
+    public void SpawnEnemy(Vector2Int pos)
+    {
+
+    }
 }
