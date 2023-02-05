@@ -353,8 +353,8 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   maxHealth: 10
   health: 10
-  skillStrength: 4
-  areaSkillStrength: 3
+  skillStrength: 5
+  areaSkillStrength: 4
   repairStrength: 0
   skillStrengthMultiplier: 1
   skillkRange: 2
