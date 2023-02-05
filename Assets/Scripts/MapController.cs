@@ -233,6 +233,11 @@ public class MapController : MonoBehaviour
                                 if (path.Count > c.currentMovement)
                                 {
                                     target = path[c.currentMovement - 1].position;
+                                    c.currentMovement = 0;
+                                }
+                                else
+                                {
+                                    c.currentMovement -= path.Count;
                                 }
 
                                 c.move(target);
