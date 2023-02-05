@@ -117,27 +117,27 @@ public class CanvasController : MonoBehaviour
         displayedGroup = groupToDisplay;
     }
 
-    public void displayPotatoSkills()
+    public void displayPotatoSkills(bool active)
     {
         foreach (Transform s in potatoSkills.gameObject.transform)
         {
-            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build && active);
         }
         changeDisplayedGroup(potatoSkills);
     }
-    public void displayCarrotSkills()
+    public void displayCarrotSkills(bool active)
     {
         foreach (Transform s in carrotSkills.gameObject.transform)
         {
-            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build && active);
         }
         changeDisplayedGroup(carrotSkills);
     }
-    public void displayRadishSkills()
+    public void displayRadishSkills(bool active)
     {
         foreach (Transform s in radishSkills.gameObject.transform)
         {
-            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build && active);
         }
         changeDisplayedGroup(radishSkills);
     }

@@ -4,7 +4,7 @@ public class Radish : Character
 {
     public override void onClicked()
     {
-        canvasController.displayRadishSkills();
+        canvasController.displayRadishSkills(hasActtion);
     }
     public override void targetedSkill(Unit target)
     {
@@ -12,6 +12,7 @@ public class Radish : Character
         var ally = target as Character;
         if (ally == null) return;
         ally.receiveHealing(skillStrength * skillStrengthMultiplier);
+        canvasController.displayRadishSkills(false);
     }
 
     public override void areaSkill(List<Unit> targets)
@@ -23,5 +24,6 @@ public class Radish : Character
             if (ally == null) continue;
             ally.receiveHealing(areaSkillStrength * skillStrengthMultiplier);
         }
+        canvasController.displayRadishSkills(false);
     }
 }

@@ -10,14 +10,17 @@ public abstract class Character : Unit
     public int skillkRange;
     public int movementRange;
     public int currentMovement;
+    public bool hasActtion = true;
 
     public virtual void targetedSkill(Unit target)
     {
         animator.SetAnimationByName("CastSpell");
+        hasActtion = false;
     }
     public virtual void areaSkill(List<Unit> targets)
     {
         animator.SetAnimationByName("CastSpell");
+        hasActtion = false;
     }
 
     public void receiveHealing(int healing)
@@ -36,6 +39,7 @@ public abstract class Character : Unit
     {
         skillStrengthMultiplier = 1;
         currentMovement = movementRange;
+        hasActtion = true;
     }
 
     public void move(Vector2Int coordinates)

@@ -4,13 +4,14 @@ public class Carrot : Character
 {
     public override void onClicked()
     {
-        canvasController.displayCarrotSkills();
+        canvasController.displayCarrotSkills(hasActtion);
     }
 
     public override void targetedSkill(Unit target)
     {
         base.targetedSkill(target);
         target.receiveDamage(skillStrength * skillStrengthMultiplier);
+        canvasController.displayCarrotSkills(false);
     }
 
     public override void areaSkill(List<Unit> targets)
@@ -20,5 +21,6 @@ public class Carrot : Character
         {
             target.receiveDamage(areaSkillStrength * skillStrengthMultiplier);
         }
+        canvasController.displayCarrotSkills(false);
     }
 }
