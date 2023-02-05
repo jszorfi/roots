@@ -60,6 +60,10 @@ public class GameController : MonoBehaviour
     }
     private void EndPlayerTurn()
     {
+        foreach (var ally in mapController.characters)
+        {
+            ally.refresh();
+        }
         if (mapController.enemies.Count == 0)
         {
             EndFight();
@@ -82,7 +86,7 @@ public class GameController : MonoBehaviour
 
     public void Update()
     {
-        if(phase == Phase.EnemyTurn)
+        if (phase == Phase.EnemyTurn)
         {
             foreach (var enemy in mapController.enemies)
             {
@@ -102,6 +106,7 @@ public class GameController : MonoBehaviour
         {
             var r = resoruceCreator.collectResources();
             resources[r.Item1] += r.Item2;
+            resoruceCreator.refresh();
         }
         canvasController.updateResources();
         phase = Phase.Build;
