@@ -140,9 +140,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ambientClips:
   - Name: 
-    Clip: {fileID: 8300000, guid: 67a84fa108b05e6409f8fa53ad85bf88, type: 3}
+    Clip: {fileID: 8300000, guid: b582f041c9750784ba282347c8f504e3, type: 3}
   - Name: 
-    Clip: {fileID: 8300000, guid: 03b49a1991ff15e4d8f7d4d1c8102b55, type: 3}
+    Clip: {fileID: 8300000, guid: 04f5a3d955862c040965e66f92b8cc2e, type: 3}
   effectClips: []
   audioSource: {fileID: 6481762506937549621}
   minimumIdleTime: 3

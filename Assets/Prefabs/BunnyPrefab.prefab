@@ -485,8 +485,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4774cbb5c52e22f4990c8e33526591c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ambientClips: []
-  effectClips: []
+  ambientClips:
+  - Name: 
+    Clip: {fileID: 8300000, guid: 7b299d5ed1969d544ab7af0a9f1907fa, type: 3}
+  - Name: 
+    Clip: {fileID: 8300000, guid: c65cb70f9e8ae95428a97354778f1d5b, type: 3}
+  effectClips:
+  - Name: Attack
+    Clip: {fileID: 8300000, guid: 4fddd765ed9805748acfe73b76b97c2c, type: 3}
   audioSource: {fileID: 0}
   minimumIdleTime: 1
   maximumIdleTime: 5
