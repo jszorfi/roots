@@ -9,6 +9,16 @@ public class IntroController : MonoBehaviour
     {
         SceneManager.LoadScene("MasterScene");
     }
+
+    public void BackToMenu()
+    {
+        SceneManager.LoadScene("IntroScene");
+    }
+
+    public void ToOutroScene()
+    {
+        SceneManager.LoadScene("OutroScene");
+    }
     public void ExitGame()
     {
         Application.Quit();
