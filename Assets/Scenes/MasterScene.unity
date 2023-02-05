@@ -307,7 +307,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -504,6 +504,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RadishSkills
       objectReference: {fileID: 0}
+    - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2198938343801104825, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -588,6 +592,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2604969484276127614, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 85bc7919d71a9fe40bb48b2054442da5, type: 3}
     - target: {fileID: 4396231238114254931, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -656,6 +664,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Attack
       objectReference: {fileID: 0}
+    - target: {fileID: 8236564860849253996, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4fc2c234bd421d345bec300bf21ad2a0, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
 --- !u!1 &446964772
@@ -889,6 +901,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CarrotSkills
       objectReference: {fileID: 0}
+    - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2198938343801104825, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -977,6 +993,10 @@ PrefabInstance:
       propertyPath: m_Material
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2604969484276127614, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 85bc7919d71a9fe40bb48b2054442da5, type: 3}
     - target: {fileID: 3923186523543006500, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -1065,6 +1085,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Attack
       objectReference: {fileID: 0}
+    - target: {fileID: 8236564860849253996, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8aff82dcc85da24418d4768bbd4e1943, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
 --- !u!224 &483092126 stripped
@@ -1090,6 +1114,10 @@ PrefabInstance:
     - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Name
       value: ShrineOptions
+      objectReference: {fileID: 0}
+    - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2198938343801104825, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Pivot.x
@@ -1194,7 +1222,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1267,7 +1295,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1381,7 +1409,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1637,6 +1665,10 @@ PrefabInstance:
     - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Name
       value: FieldOptions
+      objectReference: {fileID: 0}
+    - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2198938343801104825, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Pivot.x
@@ -1943,7 +1975,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3032,7 +3064,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4800473984868118122, guid: da070bd9766410e408e27e7a3ae3b8b6, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3574,8 +3606,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Finish build
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 00c045c4f49b092439c90d4fec8a8ca6, type: 2}
+  m_sharedMaterial: {fileID: -1655609530047902956, guid: 00c045c4f49b092439c90d4fec8a8ca6, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4096,6 +4128,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuilderOptions
       objectReference: {fileID: 0}
+    - target: {fileID: 8852431055974852631, guid: c9e0bbc19579c1c4cb816b880a6b1b19, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9e0bbc19579c1c4cb816b880a6b1b19, type: 3}
 --- !u!224 &1830115358 stripped
@@ -4575,6 +4611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PotatoSkills
       objectReference: {fileID: 0}
+    - target: {fileID: 2198938343801104824, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2198938343801104825, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -4659,6 +4699,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2604969484276127614, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 85bc7919d71a9fe40bb48b2054442da5, type: 3}
     - target: {fileID: 4396231238114254931, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
@@ -4727,5 +4771,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Attack
       objectReference: {fileID: 0}
+    - target: {fileID: 8236564860849253996, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 8aff82dcc85da24418d4768bbd4e1943, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3ed640a536ec7114bba2d7b99dd7d5c1, type: 3}
