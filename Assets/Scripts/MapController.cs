@@ -314,7 +314,7 @@ public class MapController : MonoBehaviour
 
                                 if(b != null)
                                 {
-
+                                    previousNode.Occupy(selectedUnit);
                                 }
                             }
 
