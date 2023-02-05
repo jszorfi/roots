@@ -347,9 +347,10 @@ MonoBehaviour:
   maxHealth: 10
   health: 10
   skillStrength: 7
-  areaSkillStrength: 0
-  repairStrength: 0
+  areaSkillStrength: 4
+  repairStrength: 2
   skillStrengthMultiplier: 1
   skillkRange: 1
   movementRange: 3
   currentMovement: 3
+  hasActtion: 1

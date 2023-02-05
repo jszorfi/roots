@@ -170,13 +170,14 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   maxHealth: 10
   health: 10
-  skillStrength: 0
-  areaSkillStrength: 0
-  repairStrength: 0
+  skillStrength: 3
+  areaSkillStrength: 2
+  repairStrength: 2
   skillStrengthMultiplier: 1
   skillkRange: 3
-  movementRange: 0
-  currentMovement: 0
+  movementRange: 3
+  currentMovement: 3
+  hasActtion: 1
 --- !u!1 &6650840218449409205
 GameObject:
   m_ObjectHideFlags: 0
