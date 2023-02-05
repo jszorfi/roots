@@ -77,6 +77,19 @@ public class Map2D
         init(v3.x, v3.y, ox, oy);
     }
 
+    public bool makeImpassable(Vector2Int p)
+    {
+        MapNode n = getNode(p);
+
+        if (n.Occupant == null)
+        {
+            n.Cost = -1;
+            return true;
+        }
+
+        return false;
+    }
+
     public void init(int sx, int sy, int ox, int oy)
     {
         offset = new Vector2Int(ox, oy);

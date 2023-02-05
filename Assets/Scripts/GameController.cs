@@ -228,7 +228,7 @@ public class GameController : MonoBehaviour
         turn++;
         if (turn >= 5)
         {
-            // WIN
+            gameObject.GetComponent<IntroController>().ToOutroScene();
         }
         else
         {

@@ -118,19 +118,19 @@ public class MapController : MonoBehaviour
         carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
         potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
 
-        bunnyInst1 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 2.5f, -2.0f), Quaternion.identity);
-        bunnyInst2 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 3.5f, -2.0f), Quaternion.identity);
+        //bunnyInst1 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 2.5f, -2.0f), Quaternion.identity);
+        //bunnyInst2 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 3.5f, -2.0f), Quaternion.identity);
 
-        map.getNode(-10, 2).Occupy(bunnyInst1.GetComponent<Enemy>());
-        map.getNode(-10, 3).Occupy(bunnyInst2.GetComponent<Enemy>());
+        //map.getNode(-10, 2).Occupy(bunnyInst1.GetComponent<Enemy>());
+        //map.getNode(-10, 3).Occupy(bunnyInst2.GetComponent<Enemy>());
 
-        bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-10, 2);
-        bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-10, 3);
+        //bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-10, 2);
+        //bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-10, 3);
 
         characters.Add(carrotInst.GetComponent<Carrot>());
         characters.Add(potatoInst.GetComponent<Potato>());
-        enemies.Add(bunnyInst1.GetComponent<Enemy>());
-        enemies.Add(bunnyInst2.GetComponent<Enemy>());
+        //enemies.Add(bunnyInst1.GetComponent<Enemy>());
+        //enemies.Add(bunnyInst2.GetComponent<Enemy>());
 
     }
 
@@ -770,5 +770,10 @@ public class MapController : MonoBehaviour
         enemies[enemies.Count - 1].GetComponent<Enemy>().pos = pos;
         return true;
 
+    }
+
+    public void Treeeeeee(Vector2Int p)
+    {
+        map.makeImpassable(p);
     }
 }
