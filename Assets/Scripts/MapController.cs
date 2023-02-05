@@ -171,7 +171,7 @@ public class MapController : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             {
                 MapNode clickedNode = map.getNode(mouseTileMapCoords);
-
+                Character chara;
                 //If no unit is selected, we can select a unit (building or character) or an empty fields
                 if (selectedUnit == null)
                 {
@@ -184,11 +184,15 @@ public class MapController : MonoBehaviour
                     //If the node is occuped, it is either a Character, Enemy, or Building
                     if (clickedNode.Occupant != null)
                     {
-                        Character chara = clickedNode.Occupant as Character;
+                        chara = clickedNode.Occupant as Character;
                         if (chara != null && chara.isBusy())
                         {
                             return;
                         }
+
+                        //If we are here, that means a character has been selected, so we enter movement mode
+
+                        selectionState = SelectionState.Movement;
 
                         selectedUnit = clickedNode.Occupant;
                         selectedUnit.onClicked();
@@ -244,52 +248,105 @@ public class MapController : MonoBehaviour
                 else
                 {
 
-                    selectionState = SelectionState.Movement;
-                    MapNode previousNode = map.getNode(selectedUnit.pos);
+                    // What we can do here is context sensitive
 
-                    if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
+                    switch (selectionState)
                     {
-                        if(gameController.phase == Phase.Build)
-                        {
-                            Character c = selectedUnit as Character;
-                            c.move(clipVect3Int(mouseTileMapCoords));
-                            clickedNode.Occupy(selectedUnit);
-                        }
-                        else if(gameController.phase == Phase.PlayerTurn)
-                        {
-                            List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
-                            Character c = selectedUnit as Character;
+                        case SelectionState.NoSelection:
+                            break;
 
-                            if (path.Count == 0 || c.currentMovement == 0)
+                        case SelectionState.Movement:
+                            
+                            MapNode previousNode = map.getNode(selectedUnit.pos);
+
+                            if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                             {
-                                //If we can't go anywhere, occupy the tile we just left
-                                previousNode.Occupy(selectedUnit);
+                                if (gameController.phase == Phase.Build)
+                                {
+                                    Character c = selectedUnit as Character;
+                                    c.move(clipVect3Int(mouseTileMapCoords));
+                                    clickedNode.Occupy(selectedUnit);
+                                }
+                                else if (gameController.phase == Phase.PlayerTurn)
+                                {
+                                    List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
+                                    Character c = selectedUnit as Character;
+
+                                    if (path.Count == 0 || c.currentMovement == 0)
+                                    {
+                                        //If we can't go anywhere, occupy the tile we just left
+                                        previousNode.Occupy(selectedUnit);
+                                    }
+                                    else
+                                    {
+                                        Vector2Int target = path[path.Count - 1].position;
+
+                                        if (path.Count > c.currentMovement)
+                                        {
+                                            target = path[c.currentMovement - 1].position;
+                                            c.currentMovement = 0;
+                                        }
+                                        else
+                                        {
+                                            c.currentMovement -= path.Count;
+                                        }
+
+                                        c.move(target);
+                                        map.getNode(target).Occupy(selectedUnit);
+                                    }
+                                }
                             }
-                            else
+
+                            deselect();
+
+                            break;
+                        case SelectionState.Attack:
+                            //We can (hopefully) safely assume that the selected unit is a character
+                            chara = selectedUnit as Character;
+
+                            //If we clicked where there is no unit, we can stop and deselect
+                            if ( clickedNode.Occupant != null )
                             {
-                                Vector2Int target = path[path.Count - 1].position;
+                                chara.targetedSkill(clickedNode.Occupant);
+                            }
+                            deselect();
 
-                                if (path.Count > c.currentMovement)
-                                {
-                                    target = path[c.currentMovement - 1].position;
-                                    c.currentMovement = 0;
-                                }
-                                else
-                                {
-                                    c.currentMovement -= path.Count ;
-                                }
+                            break;
 
-                                c.move(target);
-                                map.getNode(target).Occupy(selectedUnit);
+                        case SelectionState.Skill:
+                            //We can (hopefully) safely assume that the selected unit is a character
+                            chara = selectedUnit as Character;
 
-                                //TODO: DRAIN MOVEMENT POINTS
+                            int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords));
+
+                            if ( (chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged ) && hamDist == chara.skillkRange)
+                            {
+                                chara.areaSkill(chara.skillkRange == (int)SkillRange.CloseQuarters ? allneighbours4(selectedPosition.pos2D) : allneighbours8(selectedPosition.pos2D));
+                            }
+                            else if ( chara.skillkRange == (int)SkillRange.Ranged && hamDist <= chara.skillkRange )
+                            {
+                                chara.areaSkill(allneighbours8(selectedPosition.pos2D));
                             }
 
+                            deselect();
 
-                        }
+                            break;
+                        case SelectionState.Repair:
+                            //We can (hopefully) safely assume that the selected unit is a character
+                            chara = selectedUnit as Character;
 
+                            //If we clicked where there is no unit, we can stop the desection
+                            if (clickedNode.Occupant != null && HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords)) <= 2 && clickedNode.Occupant is Building)
+                            {
+                                chara.repair(clickedNode.Occupant as Building);
+                            }
+
+                            deselect();
+
+                            break;
+                        default:
+                            break;
                     }
-                    deselect();
                 }
 
             }
@@ -310,7 +367,6 @@ public class MapController : MonoBehaviour
 
     public void Attack()
     {
-        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
         selectionState = SelectionState.Attack;
         Character chara = selectedUnit as Character;
         highlightRedFromCenter(selectedUnit.pos, (SkillRange)chara.skillkRange);
@@ -318,7 +374,6 @@ public class MapController : MonoBehaviour
 
     public void Skill()
     {
-        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
         selectionState = SelectionState.Skill;
         Character chara = selectedUnit as Character;
         highlightRedFromCenter(selectedUnit.pos, (SkillRange)chara.skillkRange);
@@ -326,7 +381,6 @@ public class MapController : MonoBehaviour
 
     public void Repair()
     {
-        selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
         selectionState = SelectionState.Repair;
         Character chara = selectedUnit as Character;
         highlightRedFromCenter(selectedUnit.pos, SkillRange.All);
@@ -341,28 +395,34 @@ public class MapController : MonoBehaviour
             case UnitType.Field:
                 resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
+                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Shed:
                 resCreators.Add(Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Woodmill:
                 resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
                 buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Carrot:
                 characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                characters[characters.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             case UnitType.Radish:
                 characters.Add(Instantiate(radishPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                characters[characters.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             case UnitType.Potato:
                 characters.Add(Instantiate(potatoPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
+                characters[characters.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count-1]);
                 break;
             default:
@@ -565,6 +625,67 @@ public class MapController : MonoBehaviour
 
         return r;
     }
+
+    public List<Unit> allneighbours4(Vector2Int pos)
+    {
+        List<Unit> r = new List<Unit>();
+        List<Unit> allUnits = new List<Unit>();
+
+        allUnits.AddRange(characters);
+        allUnits.AddRange(buildings);
+        allUnits.AddRange(enemies);
+
+        foreach (var item in allUnits)
+        {
+            if (HamiltonianDistance(item.pos, pos) == 1)
+            {
+                r.Add(item);
+            }
+        }
+
+        return r;
+    }
+
+    public List<Unit> allneighbours8(Vector2Int pos)
+    {
+        List<Unit> r = new List<Unit>();
+        List<Unit> allUnits = new List<Unit>();
+
+        allUnits.AddRange(characters);
+        allUnits.AddRange(buildings);
+        allUnits.AddRange(enemies);
+
+        foreach (var item in allUnits)
+        {
+            if (HamiltonianDistance(item.pos, pos) == 2)
+            {
+                r.Add(item);
+            }
+        }
+
+        return r;
+    }
+
+    public List<Unit> allneighbours4and8(Vector2Int pos)
+    {
+        List<Unit> r = new List<Unit>();
+        List<Unit> allUnits = new List<Unit>();
+
+        allUnits.AddRange(characters);
+        allUnits.AddRange(buildings);
+        allUnits.AddRange(enemies);
+
+        foreach (var item in allUnits)
+        {
+            if (HamiltonianDistance(item.pos, pos) == 2 || HamiltonianDistance(item.pos, pos) == 10)
+            {
+                r.Add(item);
+            }
+        }
+
+        return r;
+    }
+
 
     private void plant(SeedType s, Sprite spr)
     {

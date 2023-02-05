@@ -26,7 +26,14 @@ public abstract class Unit : MonoBehaviour
         if (health < 0)
         {
             canvasController.mapController.Die(this);
-            animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
+            if (animator != null)
+            {
+                animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
+            }
+            else 
+            {
+                Destroy(gameObject);
+            }
         }
     }
     public abstract void refresh();
