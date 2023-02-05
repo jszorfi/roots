@@ -30,7 +30,7 @@ public class MapController : MonoBehaviour
 
     enum SelectionState
     {
-        NoSelection,
+        Building,
         Movement,
         Attack,
         Skill,
@@ -61,7 +61,7 @@ public class MapController : MonoBehaviour
     public GameObject theCauldron;
     public GameObject cows;
 
-    private SelectionState selectionState = SelectionState.NoSelection;
+    private SelectionState selectionState = SelectionState.Building;
 
 
     //Public
@@ -162,10 +162,13 @@ public class MapController : MonoBehaviour
 
             MapNode hoverNode = map.getNode(mouseTileMapCoords);
 
-            if(hoverNode.Occupant == null )
+            if(hoverNode.Occupant == null)
             {
-                Debug.Log("Setting build cursor");
                 Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.ForceSoftware);
+            }
+            else
+            {
+                Cursor.SetCursor(basicCursor, Vector2.zero, CursorMode.ForceSoftware);
             }
 
 
@@ -257,12 +260,11 @@ public class MapController : MonoBehaviour
                 }
                 else
                 {
-
                     // What we can do here is context sensitive
 
                     switch (selectionState)
                     {
-                        case SelectionState.NoSelection:
+                        case SelectionState.Building:
                             break;
 
                         case SelectionState.Movement:
@@ -272,44 +274,47 @@ public class MapController : MonoBehaviour
                             if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
                             {
                                 Character c = selectedUnit as Character;
+                                Building b = selectedUnit as Building;
 
-                                if (c == null)
+                                if (c != null)
                                 {
-                                    deselect();
-                                    return;
-                                }
-
-                                if (gameController.phase == Phase.Build)
-                                {
-                                    c.move(clipVect3Int(mouseTileMapCoords));
-                                    clickedNode.Occupy(selectedUnit);
-                                }
-                                else if (gameController.phase == Phase.PlayerTurn)
-                                {
-                                    List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
-
-                                    if (path.Count == 0 || c.currentMovement == 0)
+                                    if (gameController.phase == Phase.Build)
                                     {
-                                        //If we can't go anywhere, occupy the tile we just left
-                                        previousNode.Occupy(selectedUnit);
+                                        c.move(clipVect3Int(mouseTileMapCoords));
+                                        clickedNode.Occupy(selectedUnit);
                                     }
-                                    else
+                                    else if (gameController.phase == Phase.PlayerTurn)
                                     {
-                                        Vector2Int target = path[path.Count - 1].position;
+                                        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
 
-                                        if (path.Count > c.currentMovement)
+                                        if (path.Count == 0 || c.currentMovement == 0)
                                         {
-                                            target = path[c.currentMovement - 1].position;
-                                            c.currentMovement = 0;
+                                            //If we can't go anywhere, occupy the tile we just left
+                                            previousNode.Occupy(selectedUnit);
                                         }
                                         else
                                         {
-                                            c.currentMovement -= path.Count;
-                                        }
+                                            Vector2Int target = path[path.Count - 1].position;
 
-                                        c.move(target);
-                                        map.getNode(target).Occupy(selectedUnit);
+                                            if (path.Count > c.currentMovement)
+                                            {
+                                                target = path[c.currentMovement - 1].position;
+                                                c.currentMovement = 0;
+                                            }
+                                            else
+                                            {
+                                                c.currentMovement -= path.Count;
+                                            }
+
+                                            c.move(target);
+                                            map.getNode(target).Occupy(selectedUnit);
+                                        }
                                     }
+                                }
+
+                                if(b != null)
+                                {
+                                    previousNode.Occupy(selectedUnit);
                                 }
                             }
 
@@ -484,7 +489,7 @@ public class MapController : MonoBehaviour
     {
         //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
         //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
-        selectionState = SelectionState.NoSelection;
+        selectionState = SelectionState.Building;
         selectedUnit = null;
         selectedPosition = null;
         canvasController.clear();

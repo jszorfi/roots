@@ -145,8 +145,8 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: 04f5a3d955862c040965e66f92b8cc2e, type: 3}
   effectClips: []
   audioSource: {fileID: 6481762506937549621}
-  minimumIdleTime: 3
-  maximumIdleTime: 4
+  minimumIdleTime: 10
+  maximumIdleTime: 20
 --- !u!82 &6481762506937549621
 AudioSource:
   m_ObjectHideFlags: 0
