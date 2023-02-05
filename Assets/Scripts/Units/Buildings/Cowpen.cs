@@ -1,7 +1,7 @@
 public class Cowpen : ResourceCreator
 {
     //public int deadBunnyCount = 0;
-    Cowpen() { resource = ResourceType.fertilizer; }
+    Cowpen() { resource = ResourceType.fertilizer; resourceCount = 1; }
     public override void onClicked()
     {
         //nope
