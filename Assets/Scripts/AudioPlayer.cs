@@ -40,7 +40,7 @@ public class AudioPlayer : MonoBehaviour
     void Update()
     {
         // Checking whether a clip should be played
-        if (timePassed > timeToPass)
+        if (ambientClips.Count != 0 && timePassed > timeToPass)
         {
             // Playing the next audio clip
             int clipIndexToPlay = UnityEngine.Random.Range(0, ambientClips.Count);

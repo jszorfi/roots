@@ -66,10 +66,14 @@ public class Enemy : Character
         if (minHealthUnit != null)
         {
             targetedSkill(minHealthUnit);
+            AudioPlayer player = gameObject.GetComponent<AudioPlayer>();
+            player.PlayAudioByName("Attack");
         }
     }
-    public void Update()
+
+    public new void Update()
     {
+        base.Update();
         if (isWaitingToAttack && !isBusy())
         {
             isWaitingToAttack = false;
