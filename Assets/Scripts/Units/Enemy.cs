@@ -67,7 +67,7 @@ public class Enemy : Character
         {
             targetedSkill(minHealthUnit);
             AudioPlayer player = gameObject.GetComponent<AudioPlayer>();
-            player.PlayAudioByName("Attack");
+            player.PlayAudioByName("Spell");
         }
     }
 

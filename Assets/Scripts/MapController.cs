@@ -210,6 +210,11 @@ public class MapController : MonoBehaviour
                             return;
                         }
 
+                        if (chara is Carrot || chara is Potato || chara is Radish)
+                        {
+                            chara.gameObject.GetComponent<AudioPlayer>().PlayAudioByName("Select");
+                        }
+
                         //If we are here, that means a character has been selected, so we enter movement mode
 
                         selectionState = SelectionState.Movement;
@@ -413,22 +418,28 @@ public class MapController : MonoBehaviour
         switch (unitType)
         {
             case UnitType.Field:
-                resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                GameObject field = Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
+                resCreators.Add(field.GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 buildings.Add(resCreators[resCreators.Count - 1]);
+                field.GetComponent<AudioPlayer>().PlayAudioByName("Build");
                 break;
             case UnitType.Shed:
-                resCreators.Add(Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                GameObject shed = Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
+                resCreators.Add(shed.GetComponent<ResourceCreator>());
                 resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 buildings.Add(resCreators[resCreators.Count - 1]);
+                shed.GetComponent<AudioPlayer>().PlayAudioByName("Build");
                 break;
             case UnitType.Woodmill:
-                resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
+                GameObject mill = Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
+                resCreators.Add(mill.GetComponent<ResourceCreator>());
                 resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
                 buildings.Add(resCreators[resCreators.Count - 1]);
+                mill.GetComponent<AudioPlayer>().PlayAudioByName("Build");
                 break;
             case UnitType.Carrot:
                 characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
@@ -597,6 +608,7 @@ public class MapController : MonoBehaviour
     {
         Field f = selectedUnit as Field;
         f.fertilize();
+        f.GetComponent<AudioPlayer>().PlayAudioByName("Fertilize");
     }
     public void moveEnemy(Enemy e, Vector2Int target)
     {
@@ -720,6 +732,7 @@ public class MapController : MonoBehaviour
         f.planted = s;
 
         f.gameObject.GetComponent<SpriteRenderer>().sprite = spr;
+        f.gameObject.GetComponent<AudioPlayer>().PlayAudioByName("Seed");
 
         deselect();
     }

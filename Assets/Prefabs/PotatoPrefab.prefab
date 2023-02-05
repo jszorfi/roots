@@ -474,8 +474,10 @@ MonoBehaviour:
   effectClips:
   - Name: Select
     Clip: {fileID: 8300000, guid: d32805696dbc3d045944d733e53d0756, type: 3}
-  - Name: Attack
+  - Name: Spell
     Clip: {fileID: 8300000, guid: f046d9656788749479f2b475d7aad9af, type: 3}
+  - Name: Steps
+    Clip: {fileID: 8300000, guid: 56e2023194a5f344aa3d4d0d768e30ab, type: 3}
   audioSource: {fileID: 0}
   minimumIdleTime: 1
   maximumIdleTime: 5

@@ -24,11 +24,13 @@ public abstract class Character : Unit
     public virtual void targetedSkill(Unit target)
     {
         animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
+        audioPlayer.PlayAudioByName("Spell");
         hasActtion = false;
     }
     public virtual void areaSkill(List<Unit> targets)
     {
         animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
+        audioPlayer.PlayAudioByName("Spell");
         hasActtion = false;
     }
 

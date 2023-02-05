@@ -218,6 +218,8 @@ MonoBehaviour:
     Clip: {fileID: 8300000, guid: b23aa6e74d2f0ff45a1399ce439c41d2, type: 3}
   - Name: Seed
     Clip: {fileID: 8300000, guid: 35c4701ede6e56c449021dbb637b46d8, type: 3}
+  - Name: Fertilize
+    Clip: {fileID: 8300000, guid: 6f60b136950d65c45bbf8ceac9dfd7b3, type: 3}
   audioSource: {fileID: 0}
   minimumIdleTime: 1
   maximumIdleTime: 5
