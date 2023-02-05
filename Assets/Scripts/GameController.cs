@@ -185,7 +185,7 @@ public class GameController : MonoBehaviour
 
     private void SpawnEnemiesForWave()
     {
-        List<int> currentWave = waves[turn--];
+        List<int> currentWave = waves[turn-1];
         var enemyspawnercopy = enemySpawnerList;
 
         if (currentWave.Count == 0)
