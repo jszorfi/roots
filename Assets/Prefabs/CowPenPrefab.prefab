@@ -126,7 +126,6 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   maxHealth: 10
   health: 10
-  deadBunnyCount: 0
 --- !u!114 &4612035235742111567
 MonoBehaviour:
   m_ObjectHideFlags: 0
