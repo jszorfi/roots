@@ -6,7 +6,7 @@ using UnityEngine.Tilemaps;
 public class EnemySpawner : MonoBehaviour
 {
     private MapController mapController;
-    private Vector2Int pos;
+    public Vector2Int pos;
 
 
     public void setPos(Vector2Int p)
@@ -17,9 +17,9 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
        mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
-
-       pos = mapController.clipVect3Int(mapController.gameObject.GetComponent<Tilemap>().WorldToCell(gameObject.transform.position));
+        
+        pos = mapController.clipVect3Int(mapController.gameObject.GetComponent<Tilemap>().LocalToCell(gameObject.transform.position));
     }
-    
+
 
 }
