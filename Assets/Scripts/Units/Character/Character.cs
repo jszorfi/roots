@@ -11,8 +11,14 @@ public abstract class Character : Unit
     public int movementRange;
     public int currentMovement;
 
-    public abstract void targetedSkill(Unit target);
-    public abstract void areaSkill(List<Unit> targets);
+    public virtual void targetedSkill(Unit target)
+    {
+        animator.SetAnimationByName("CastSpell");
+    }
+    public virtual void areaSkill(List<Unit> targets)
+    {
+        animator.SetAnimationByName("CastSpell");
+    }
 
     public void receiveHealing(int healing)
     {

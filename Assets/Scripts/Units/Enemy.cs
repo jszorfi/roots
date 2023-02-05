@@ -9,6 +9,7 @@ public class Enemy : Character
 
     public override void targetedSkill(Unit target)
     {
+        base.targetedSkill(target);
         target.receiveDamage(skillStrength);
         var potato = target as Potato;
         if (potato != null)
@@ -19,6 +20,7 @@ public class Enemy : Character
 
     public override void areaSkill(List<Unit> targets)
     {
+        base.areaSkill(targets);
         foreach (var target in targets)
         {
             target.receiveDamage(areaSkillStrength);
