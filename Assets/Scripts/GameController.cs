@@ -238,6 +238,7 @@ public class GameController : MonoBehaviour
         }
         else
         {
+            mapController.theCauldron.GetComponent<Cauldron>().setPhase(turn-2);
             EndFight();
         }
     }

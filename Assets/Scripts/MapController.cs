@@ -58,6 +58,7 @@ public class MapController : MonoBehaviour
     private GameObject potatoInst;
     private GameObject bunnyInst1;
     private GameObject bunnyInst2;
+    public GameObject theCauldron;
 
     private SelectionState selectionState = SelectionState.NoSelection;
 
@@ -75,6 +76,7 @@ public class MapController : MonoBehaviour
     public GameObject       shedPrefab;
     public GameObject       fieldPrefab;
     public GameObject       woodmillPrefab;
+    public GameObject       cauldronPrefab;
     public Sprite           carrotFarm;
     public Sprite           potatoFarm;
     public Sprite           raddishFarm;
@@ -110,14 +112,20 @@ public class MapController : MonoBehaviour
 
         map = new Map2D(tilemap.size, tilemapSizeHalf.x, tilemapSizeHalf.y);
 
-        carrotInst = Instantiate(carrotPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);
-        potatoInst = Instantiate(potatoPrefab, new Vector3(0.5f, 1.5f, -2.0f), Quaternion.identity);
+        theCauldron = Instantiate(cauldronPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);
+        map.getNode(0, 0).Occupy(theCauldron.GetComponent<Carrot>());
+        theCauldron.GetComponent<Cauldron>().pos = new Vector2Int(0, 0);
+        buildings.Add(theCauldron.GetComponent<Cauldron>());
+        //bunnyInst1 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 2.5f, -2.0f), Quaternion.identity);
 
-        map.getNode(0, 0).Occupy(carrotInst.GetComponent<Carrot>());
-        map.getNode(0, 1).Occupy(potatoInst.GetComponent<Potato>());
+        //carrotInst = Instantiate(carrotPrefab, new Vector3(0.5f, 0.5f, -2.0f), Quaternion.identity);
+        //potatoInst = Instantiate(potatoPrefab, new Vector3(0.5f, 1.5f, -2.0f), Quaternion.identity);
 
-        carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
-        potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
+        //map.getNode(0, 0).Occupy(carrotInst.GetComponent<Carrot>());
+        //map.getNode(0, 1).Occupy(potatoInst.GetComponent<Potato>());
+
+        //carrotInst.GetComponent<Carrot>().pos = new Vector2Int(0, 0);
+        //potatoInst.GetComponent<Potato>().pos = new Vector2Int(0, 1);
 
         //bunnyInst1 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 2.5f, -2.0f), Quaternion.identity);
         //bunnyInst2 = Instantiate(bunnyPrefab, new Vector3(-9.5f, 3.5f, -2.0f), Quaternion.identity);
@@ -128,8 +136,8 @@ public class MapController : MonoBehaviour
         //bunnyInst1.GetComponent<Enemy>().pos = new Vector2Int(-10, 2);
         //bunnyInst2.GetComponent<Enemy>().pos = new Vector2Int(-10, 3);
 
-        characters.Add(carrotInst.GetComponent<Carrot>());
-        characters.Add(potatoInst.GetComponent<Potato>());
+        //characters.Add(carrotInst.GetComponent<Carrot>());
+        //characters.Add(potatoInst.GetComponent<Potato>());
         //enemies.Add(bunnyInst1.GetComponent<Enemy>());
         //enemies.Add(bunnyInst2.GetComponent<Enemy>());
 

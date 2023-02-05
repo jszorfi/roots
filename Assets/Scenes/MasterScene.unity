@@ -728,6 +728,7 @@ MonoBehaviour:
   shedPrefab: {fileID: 1428083332931784292, guid: 6ce2b63ff1fa6204cbea25fa6ce89bf6, type: 3}
   fieldPrefab: {fileID: 1428083332931784292, guid: 8eec23798e6bb1f4bb788feeaba12292, type: 3}
   woodmillPrefab: {fileID: 1428083332931784292, guid: 298367ca499731c4cba01455bb1fe5c7, type: 3}
+  cauldronPrefab: {fileID: 1428083332931784292, guid: 7dac4700f3f5867448b955478e7746fb, type: 3}
   carrotFarm: {fileID: 21300000, guid: a01f98197897a3347a68c1ed6cf52ef9, type: 3}
   potatoFarm: {fileID: 21300000, guid: 4b13519267b1c9f49a1fecc532535590, type: 3}
   raddishFarm: {fileID: 21300000, guid: 5203516ba78fc2e48b6fc1d25819f26a, type: 3}
@@ -4792,6 +4793,8 @@ MonoBehaviour:
   - {fileID: 561551753}
   - {fileID: 1250997691}
   - {fileID: 234234541}
+  turn: 1
+  wave: 0
 --- !u!4 &1996207455
 Transform:
   m_ObjectHideFlags: 0
