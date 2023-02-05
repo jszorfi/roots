@@ -6,7 +6,8 @@ public class Cauldron : Building
     IntroController introController;
     SpriteRenderer dipslayedSprite;
     public List<Sprite> sprites;
-    public void Start()
+
+    public new void Start()
     {
         base.Start();
         introController = gameController.gameObject.GetComponent<IntroController>();
