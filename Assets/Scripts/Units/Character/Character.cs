@@ -34,7 +34,6 @@ public abstract class Character : Unit
 
     public override void refresh()
     {
-        base.refresh();
         skillStrengthMultiplier = 1;
         currentMovement = movementRange;
     }

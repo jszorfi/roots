@@ -5,4 +5,9 @@ public class Woodmill : ResourceCreator
     {
         //nope
     }
+
+    public override void refresh()
+    {
+        //nope
+    }
 }

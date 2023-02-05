@@ -5,4 +5,9 @@ public class Shed : ResourceCreator
     {
         //nope
     }
+
+    public override void refresh()
+    {
+        //nope
+    }
 }

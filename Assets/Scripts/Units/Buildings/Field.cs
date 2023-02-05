@@ -22,7 +22,6 @@ public class Field : ResourceCreator
 
     public override void refresh()
     {
-        base.refresh();
         planted = SeedType.none;
         resourceCount = 1;
     }

@@ -7,7 +7,6 @@ public abstract class Unit : MonoBehaviour
     public int maxHealth;
     public int health;
     public Tuple<ResourceType, int> cost;
-    private bool isDead = false;
     private RectTransform healthBar;
 
     protected CanvasController canvasController;
@@ -26,13 +25,9 @@ public abstract class Unit : MonoBehaviour
         healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * healthBar.sizeDelta.x, healthBar.sizeDelta.y);
         if (health < 0)
         {
-            animator.SetAnimationByName("Die");
-            isDead = true;
+            canvasController.mapController.Die(this);
+            animator.SetAnimationByName("Die", delegate { Destroy(gameObject); });
         }
     }
-    public virtual void refresh()
-    {
-        if (isDead)
-            Destroy(gameObject);
-    }
+    public abstract void refresh();
 }

@@ -17,7 +17,6 @@ public class Cowpen : ResourceCreator
 
     public override void refresh()
     {
-        base.refresh();
         deadBunnyCount = 0;
     }
 
