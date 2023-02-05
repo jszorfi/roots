@@ -28,7 +28,7 @@ public abstract class Unit : MonoBehaviour
     }
 
     public abstract void onClicked();
-    public void receiveDamage(int damage)
+    public virtual void receiveDamage(int damage)
     {
         health -= damage;
         healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * maxHealthWidth, healthBar.sizeDelta.y);
