@@ -61,6 +61,7 @@ public class MapController : MonoBehaviour
     public List<Enemy> enemies;
     public List<Character> characters;
     public List<ResourceCreator> resCreators;
+    public List<Building> buildings;
 
     // Start is called before the first frame update
     void Start()
@@ -237,7 +238,7 @@ public class MapController : MonoBehaviour
                                 }
                                 else
                                 {
-                                    c.currentMovement -= path.Count;
+                                    c.currentMovement -= path.Count ;
                                 }
 
                                 c.move(target);
@@ -285,8 +286,6 @@ public class MapController : MonoBehaviour
     {
         selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
         deselect();
-        
-
     }
 
     public void placeUnit(UnitType unitType)
@@ -298,14 +297,17 @@ public class MapController : MonoBehaviour
             case UnitType.Field:
                 resCreators.Add(Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
+                buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Shed:
                 resCreators.Add(Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
+                buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Woodmill:
                 resCreators.Add(Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<ResourceCreator>());
                 map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count-1]);
+                buildings.Add(resCreators[resCreators.Count - 1]);
                 break;
             case UnitType.Carrot:
                 characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
@@ -431,6 +433,59 @@ public class MapController : MonoBehaviour
     public void plantPotato()
     {
         plant(SeedType.potato, potatoFarm);
+    }
+
+    public void moveEnemy(Enemy e, Vector2Int target)
+    {
+        //Since the target is always a unit or building, we will need to add back it to the list.
+        
+        List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), e.pos, target);
+        path.Add(new PathFinding.PathNode(e.pos));
+        path.Add(new PathFinding.PathNode(target));
+        Character c = selectedUnit as Character;
+
+        if (path.Count == 0)
+        {
+            return;
+        }
+        else
+        {
+            //Vector2Int target = path[path.Count - 1].position;
+
+            //if (path.Count > c.currentMovement)
+            //{
+            //    target = path[c.currentMovement - 1].position;
+            //    c.currentMovement = 0;
+            //}
+            //else
+            //{
+            //    c.currentMovement -= path.Count;
+            //}
+
+            //c.move(target);
+            //map.getNode(target).Occupy(selectedUnit);
+
+            ////TODO: DRAIN MOVEMENT POINTS
+        }
+    }
+
+    public List<Unit> neighbours4(Vector2Int pos)
+    {
+        List<Unit> r = new List<Unit>();
+        List<Unit> allUnits = new List<Unit>();
+
+        allUnits.AddRange(characters);
+        allUnits.AddRange(buildings);
+
+        foreach (var item in allUnits)
+        {
+            if (HamiltonianDistance(item.pos, pos) == 1)
+            {
+                r.Add(item);
+            }
+        }
+
+        return r;
     }
 
     private void plant(SeedType s, Sprite spr)
