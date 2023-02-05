@@ -16,7 +16,8 @@ public class Cauldron : Building
 
     void OnDestroy()
     {
-        introController.Defeat();
+        if (!gameController.won)
+            introController.Defeat();
     }
     public override void onClicked()
     {

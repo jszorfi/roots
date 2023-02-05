@@ -12,6 +12,7 @@ public class GameController : MonoBehaviour
 {
     public Phase phase = Phase.Build;
     public TMP_Text buildPhaseText;
+    public bool won = false;
 
     //A turn consists of however many ints have been provided.
     public List<int> turn1;
@@ -185,7 +186,7 @@ public class GameController : MonoBehaviour
 
     private void SpawnEnemiesForWave()
     {
-        List<int> currentWave = waves[turn-1];
+        List<int> currentWave = waves[turn - 1];
         var enemyspawnercopy = enemySpawnerList;
 
         if (currentWave.Count == 0)
@@ -193,7 +194,7 @@ public class GameController : MonoBehaviour
             return;
         }
 
-        if(wave >= currentWave.Count)
+        if (wave >= currentWave.Count)
         {
             return;
         }
@@ -235,11 +236,12 @@ public class GameController : MonoBehaviour
         wave = 0;
         if (turn > 5)
         {
+            won = true;
             gameObject.GetComponent<IntroController>().ToOutroScene();
         }
         else
         {
-            mapController.theCauldron.GetComponent<Cauldron>().setPhase(turn-2);
+            mapController.theCauldron.GetComponent<Cauldron>().setPhase(turn - 2);
             EndFight();
         }
     }
