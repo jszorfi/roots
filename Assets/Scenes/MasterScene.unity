@@ -716,6 +716,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e0d1111ada591449dc532d343fe1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  theCauldron: {fileID: 0}
   tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
   blueHighlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
   redHighlightTile: {fileID: 11400000, guid: e493606e18111604db59f9ea0c24edba, type: 2}
@@ -4682,7 +4683,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0
+  m_Volume: 0.2
   m_Pitch: 1
   Loop: 0
   Mute: 0
