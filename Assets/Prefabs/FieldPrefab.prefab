@@ -99,8 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pos: {x: 0, y: 0}
-  maxHealth: 0
-  health: 0
+  maxHealth: 10
+  health: 10
   planted: 0
 --- !u!1 &4618943296941692727
 GameObject:
