@@ -162,10 +162,13 @@ public class MapController : MonoBehaviour
 
             MapNode hoverNode = map.getNode(mouseTileMapCoords);
 
-            if(hoverNode.Occupant == null )
+            if(hoverNode.Occupant == null)
             {
-                Debug.Log("Setting build cursor");
                 Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.ForceSoftware);
+            }
+            else
+            {
+                Cursor.SetCursor(basicCursor, Vector2.zero, CursorMode.ForceSoftware);
             }
 
 
