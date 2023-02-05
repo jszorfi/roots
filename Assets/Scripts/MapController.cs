@@ -21,6 +21,22 @@ public class MapController : MonoBehaviour
         Buildings = 3
     }
 
+    enum SkillRange : int
+    {
+        CloseQuarters = 1,
+        Ranged = 2,
+        All = 3
+    }
+
+    enum SelectionState
+    {
+        NoSelection,
+        Movement,
+        Attack,
+        Skill,
+        Repair
+    }
+
     //Private
     private Vector3Int bottomLeftBounds;
     private Vector3Int topRightBounds;
@@ -38,6 +54,14 @@ public class MapController : MonoBehaviour
 
     private List<Vector3Int> fixedHighlights;
 
+    private GameObject carrotInst;
+    private GameObject potatoInst;
+    private GameObject bunnyInst1;
+    private GameObject bunnyInst2;
+
+    private SelectionState selectionState = SelectionState.NoSelection;
+    
+
     //Public
     public Tile             tile;
     public Tile             blueHighlightTile;
@@ -54,10 +78,6 @@ public class MapController : MonoBehaviour
     public Sprite           carrotFarm;
     public Sprite           potatoFarm;
     public Sprite           raddishFarm;
-    private GameObject      carrotInst;
-    private GameObject      potatoInst;
-    private GameObject      bunnyInst1;
-    private GameObject      bunnyInst2;
 
     [HideInInspector]
     public List<Enemy> enemies;
@@ -178,7 +198,7 @@ public class MapController : MonoBehaviour
                         if (gameController.phase == Phase.PlayerTurn)
                         {
                             //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
-                            Vector2Int movementShadowBottomRight = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.currentMovement, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.currentMovement, bottomLeftBounds.y));
+                            Vector2Int movementShadowBottomLeft = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.currentMovement, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.currentMovement, bottomLeftBounds.y));
                             Vector2Int movementShadowTopRight    = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.currentMovement, topRightBounds.x  ), Mathf.Min(mouseTileMapCoords.y + chara.currentMovement, topRightBounds.y  ));
                             
                             //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
@@ -187,9 +207,9 @@ public class MapController : MonoBehaviour
                             List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
                             fullPathGraph.Add(new PathFinding.PathNode(currPos));
 
-                            for (int i = movementShadowBottomRight.x; i <= movementShadowTopRight.x; i++)
+                            for (int i = movementShadowBottomLeft.x; i <= movementShadowTopRight.x; i++)
                             {
-                                for (int j = movementShadowBottomRight.y; j <= movementShadowTopRight.y; j++)
+                                for (int j = movementShadowBottomLeft.y; j <= movementShadowTopRight.y; j++)
                                 {
                                     Vector2Int posToCheck = new Vector2Int(i, j);
                                     if ( HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
@@ -223,6 +243,8 @@ public class MapController : MonoBehaviour
                 }
                 else
                 {
+
+                    selectionState = SelectionState.Movement;
                     MapNode previousNode = map.getNode(selectedUnit.pos);
 
                     if (clickedNode.Occupant == null && previousNode.Leave(selectedUnit))
@@ -289,19 +311,25 @@ public class MapController : MonoBehaviour
     public void Attack()
     {
         selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
-        deselect();
+        selectionState = SelectionState.Attack;
+        Character chara = selectedUnit as Character;
+        highlightRedFromCenter(selectedUnit.pos, (SkillRange)chara.skillkRange);
     }
 
     public void Skill()
     {
         selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
-        deselect();
+        selectionState = SelectionState.Skill;
+        Character chara = selectedUnit as Character;
+        highlightRedFromCenter(selectedUnit.pos, (SkillRange)chara.skillkRange);
     }
 
     public void Repair()
     {
         selectedUnit.gameObject.GetComponent<SpriteAnimator>().SetAnimationByName("Cast Spell");
-        deselect();
+        selectionState = SelectionState.Repair;
+        Character chara = selectedUnit as Character;
+        highlightRedFromCenter(selectedUnit.pos, SkillRange.All);
     }
 
     public void placeUnit(UnitType unitType)
@@ -374,6 +402,7 @@ public class MapController : MonoBehaviour
     {
         //   Vector2Int v = map2DToTileMapCoordinates(selectedUnit.pos.x, selectedUnit.pos.y);
         //   tilemap.SetTile(new Vector3Int( v.x, v.y, 2), null);
+        selectionState = SelectionState.NoSelection;
         selectedUnit = null;
         selectedPosition = null;
         canvasController.clear();
@@ -545,5 +574,47 @@ public class MapController : MonoBehaviour
         f.gameObject.GetComponent<SpriteRenderer>().sprite = spr;
 
         deselect();
+    }
+
+    private void highlightRedFromCenter(Vector2Int center, SkillRange sr)
+    {
+        //This could be made prettier, I am sure, but right now don't care
+        //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
+        int radius = 10;
+
+        switch (sr)
+        {
+            case SkillRange.CloseQuarters:
+                radius = 1;
+                break;
+            case SkillRange.Ranged:
+            case SkillRange.All:
+                radius = 2;
+                break;
+        }
+
+
+        Vector2Int selectShadowBottomLeft = new Vector2Int(Mathf.Max(center.x - radius, bottomLeftBounds.x), Mathf.Max(center.y - radius, bottomLeftBounds.y));
+        Vector2Int selectShadowTopRight = new Vector2Int(Mathf.Min(center.x + radius, topRightBounds.x), Mathf.Min(center.y + radius, topRightBounds.y));
+
+        for (int i = selectShadowBottomLeft.x; i <= selectShadowTopRight.x; i++)
+        {
+            for (int j = selectShadowBottomLeft.y; j <= selectShadowTopRight.y; j++)
+            {
+                Vector2Int posToCheck = new Vector2Int(i, j);
+                int hamDist = HamiltonianDistance(posToCheck, center);
+
+                if ((sr == SkillRange.CloseQuarters || sr == SkillRange.Ranged) && hamDist == radius)              
+                {
+                    fixHighlightTile(posToCheck, redHighlightTile);
+                }
+                else if (sr == SkillRange.All && hamDist <= radius)
+                {
+                    fixHighlightTile(posToCheck, redHighlightTile);
+                }
+
+            }
+        }
+
     }
 }

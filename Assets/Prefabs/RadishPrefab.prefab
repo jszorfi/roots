@@ -174,7 +174,7 @@ MonoBehaviour:
   areaSkillStrength: 0
   repairStrength: 0
   skillStrengthMultiplier: 1
-  skillkRange: 0
+  skillkRange: 3
   movementRange: 0
   currentMovement: 0
 --- !u!1 &6650840218449409205
