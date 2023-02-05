@@ -353,13 +353,13 @@ MonoBehaviour:
   pos: {x: 0, y: 0}
   maxHealth: 10
   health: 10
-  skillStrength: 2
-  areaSkillStrength: 2
+  skillStrength: 4
+  areaSkillStrength: 3
   repairStrength: 0
   skillStrengthMultiplier: 1
   skillkRange: 2
-  movementRange: 2
-  currentMovement: 2
+  movementRange: 3
+  currentMovement: 3
   hasActtion: 1
 --- !u!82 &7053215469162547989
 AudioSource:
