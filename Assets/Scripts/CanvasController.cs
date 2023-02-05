@@ -14,6 +14,8 @@ public class CanvasController : MonoBehaviour
     private CanvasGroup shrineOptions;
     private CanvasGroup fieldOptions;
 
+    private Image night;
+
     public TMP_Text wood;
     public TMP_Text plough;
     public TMP_Text fertilizer;
@@ -35,6 +37,7 @@ public class CanvasController : MonoBehaviour
         gameController = GameObject.Find("GameController").gameObject.GetComponent<GameController>();
         mapController = GameObject.Find("Tilemap").GetComponent<MapController>();
         finishTurn = GameObject.Find("FinishTurn").GetComponent<Button>();
+        night = GameObject.Find("Night").gameObject.GetComponent<Image>();
 
         var skills = gameObject.transform.Find("Skills").gameObject.transform;
         var potatoSkills2 = skills.Find("PotatoSkills").gameObject;
