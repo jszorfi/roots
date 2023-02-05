@@ -74,7 +74,7 @@ public class GameController : MonoBehaviour
                 canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), true);
             }
         }
-        canvasController.night.enabled = true;
+        //canvasController.night.enabled = true;
         canvasController.finishTurnInactive.enabled = false;
         canvasController.finishTurnText.text = "Finish turn";
     }
@@ -139,7 +139,7 @@ public class GameController : MonoBehaviour
 
         bool moreSpawn = false;
 
-        if(waves[turn-1].Count > wave)
+        if (waves[turn - 1].Count > wave)
         {
             moreSpawn = true;
         }
@@ -166,7 +166,7 @@ public class GameController : MonoBehaviour
                 canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), false);
             }
         }
-        canvasController.night.enabled = false;
+        //canvasController.night.enabled = false;
         canvasController.finishTurnInactive.enabled = false;
         canvasController.finishTurnText.text = "Finish build";
     }
