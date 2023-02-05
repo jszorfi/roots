@@ -164,7 +164,8 @@ public class MapController : MonoBehaviour
 
             if(hoverNode.Occupant == null )
             {
-                Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.Auto);
+                Debug.Log("Setting build cursor");
+                Cursor.SetCursor(buildCursor, Vector2.zero, CursorMode.ForceSoftware);
             }
 
 
