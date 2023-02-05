@@ -23,7 +23,7 @@ public abstract class Unit : MonoBehaviour
     {
         health -= damage;
         healthBar.sizeDelta = new Vector2((float)health / (float)maxHealth * healthBar.sizeDelta.x, healthBar.sizeDelta.y);
-        if (health < 0)
+        if (health <= 0)
         {
             canvasController.mapController.Die(this);
             if (animator != null)
