@@ -172,4 +172,4 @@ MonoBehaviour:
   repairStrength: 0
   skillStrengthMultiplier: 1
   skillkRange: 0
-  movementRange: 0
+  movementRange: 2

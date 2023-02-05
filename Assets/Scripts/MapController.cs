@@ -40,7 +40,9 @@ public class MapController : MonoBehaviour
 
     //Public
     public Tile             tile;
-    public Tile             highlightTile;
+    public Tile             blueHighlightTile;
+    public Tile             redHighlightTile;
+    public Tile             purpleHighlightTile;
     public Vector3Int       tilemapSizeHalf;
     public GameObject       carrotPrefab;
     public GameObject       potatoPrefab;
@@ -109,7 +111,7 @@ public class MapController : MonoBehaviour
             Vector3Int newHighlightCoords;
 
             newHighlightCoords = mouseTileMapCoords;
-            tilemap.SetTile(newHighlightCoords, highlightTile);
+            tilemap.SetTile(newHighlightCoords, blueHighlightTile);
 
             if (!oldHighlightSet)
             {
@@ -151,8 +153,42 @@ public class MapController : MonoBehaviour
                         selectedUnit = clickedNode.Occupant;
                         selectedUnit.onClicked();
                         selectPos(mouseTileMapCoords);
-                        //       tilemap.SetTile(new Vector3Int(tileMapCoordinates.x, tileMapCoordinates.y, 2), highlightTile);
+
+                        //If we are in a fight phase, the characters movement shadow needs to be displyed
+                        if (gameController.phase == Phase.PlayerTurn)
+                        {
+                            //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
+                            Vector2Int movementShadowBottomRight = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.movementRange, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.movementRange, bottomLeftBounds.y));
+                            Vector2Int movementShadowTopRight    = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.movementRange, topRightBounds.x  ), Mathf.Min(mouseTileMapCoords.y + chara.movementRange, topRightBounds.y  ));
+                            
+                            //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
+                            Vector2Int currPos = clipVect3Int(mouseTileMapCoords);
+                            
+                            List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
+                            fullPathGraph.Add(new PathFinding.PathNode(currPos));
+
+                            for (int i = movementShadowBottomRight.x; i <= movementShadowTopRight.x; i++)
+                            {
+                                for (int j = movementShadowBottomRight.y; j <= movementShadowTopRight.y; j++)
+                                {
+                                    Vector2Int posToCheck = new Vector2Int(i, j);
+                                    if ( HamiltonianDistance(posToCheck, currPos) <= chara.movementRange)
+                                    {
+                                        //Maybe copying instead of recreating the list will boost speed;
+                                        List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
+
+                                        List <PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, posToCheck);
+
+                                        if(path.Count > 0 && path.Count <= chara.movementRange)
+                                        {
+                                            fixHighlightTile(posToCheck, purpleHighlightTile);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
+
                     //If the node is not occupied, we are selecting an empty field.
                     else
                     {
@@ -173,15 +209,35 @@ public class MapController : MonoBehaviour
                     {
                         if(gameController.phase == Phase.Build)
                         {
-
+                            Character c = selectedUnit as Character;
+                            c.move(clipVect3Int(mouseTileMapCoords));
+                            clickedNode.Occupy(selectedUnit);
                         }
                         else if(gameController.phase == Phase.PlayerTurn)
                         {
                             List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
-
                             Character c = selectedUnit as Character;
-                            c.move(clipVect3Int(mouseTileMapCoords));
-                            clickedNode.Occupy(selectedUnit);
+
+                            if (path.Count == 0 || c.movementRange == 0)
+                            {
+                                //If we can't go anywhere, occupy the tile we just left
+                                previousNode.Occupy(selectedUnit);
+                            }
+                            else
+                            {
+                                Vector2Int target = path[path.Count - 1].position;
+
+                                if (path.Count > c.movementRange)
+                                {
+                                    target = path[c.movementRange - 1].position;
+                                }
+
+                                c.move(target);
+                                map.getNode(target).Occupy(selectedUnit);
+
+                                //TODO: DRAIN MOVEMENT POINTS
+                            }
+
 
                         }
 
@@ -277,7 +333,7 @@ public class MapController : MonoBehaviour
         selectedPosition = new MapPos2D();
         selectedPosition.pos2D = v;
         fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
-        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], highlightTile);
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], blueHighlightTile);
     }
 
     private void selectPos(Vector3Int v)
@@ -285,7 +341,7 @@ public class MapController : MonoBehaviour
         selectedPosition = new MapPos2D();
         selectedPosition.pos2D = clipVect3Int(v);
         fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
-        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], highlightTile);
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], blueHighlightTile);
     }
 
     private void deselect()
@@ -329,6 +385,29 @@ public class MapController : MonoBehaviour
 
         return false;
 
+    }
+
+    public void fixHighlightTile(Vector2Int pos, Tile tile)
+    {
+        fixedHighlights.Add(new Vector3Int(pos.x, pos.y, (int)TilemapLayers.FixHiglight));
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count-1], tile);
+    }
+
+    public int HamiltonianDistance(Vector2Int v1, Vector2Int v2)
+    {
+        return (Mathf.Abs(v1.x - v2.x) + Mathf.Abs(v1.y - v2.y));
+    }
+
+    public List<PathFinding.PathNode> CopyPNList(List<PathFinding.PathNode> pl)
+    {
+        var plr = new List<PathFinding.PathNode>();
+
+        foreach(var i in pl)
+        {
+            plr.Add(new PathFinding.PathNode(i.position));
+        }
+
+        return plr;
     }
 
 }
