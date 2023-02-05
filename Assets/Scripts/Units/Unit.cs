@@ -18,6 +18,8 @@ public abstract class Unit : MonoBehaviour
     protected CanvasController canvasController;
     protected GameController gameController;
     protected SpriteAnimator animator;
+    protected AudioPlayer audioPlayer;
+
     public void Awake()
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
@@ -27,6 +29,7 @@ public abstract class Unit : MonoBehaviour
     public void Start()
     {
         animator = gameObject.GetComponent<SpriteAnimator>();
+        audioPlayer = gameObject.GetComponent<AudioPlayer>();
         healthBar = gameObject.transform.GetChild(0).GetComponent<RectTransform>();
         maxHealthWidth = healthBar.sizeDelta.x;
     }

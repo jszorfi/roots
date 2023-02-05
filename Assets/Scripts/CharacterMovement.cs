@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterMovement : MonoBehaviour
 {
     private SpriteAnimator Animator;
+    private AudioPlayer audioPlayer;
     private List<PathFinding.PathNode> m_NodesOnPath;
     private Vector2Int m_TargetCoordinates;
     private MapController mapController;
@@ -28,17 +29,12 @@ public class CharacterMovement : MonoBehaviour
     {
         mapController = FindObjectOfType<MapController>();
         Animator = gameObject.GetComponent<SpriteAnimator>();
+        audioPlayer = gameObject.GetComponent<AudioPlayer>();
     }
     // Start is called before the first frame update
     void Start()
     {
         Animator = gameObject.GetComponent<SpriteAnimator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     private static Vector3 CellCenterToPoint(Vector2Int cell)
@@ -87,18 +83,22 @@ public class CharacterMovement : MonoBehaviour
             if(nextCoordinates.x > Vector2Int.FloorToInt(transform.position).x)
             {
                 Animator.SetAnimationByName("Walk Right");
+                audioPlayer.PlayAudioByName("Steps");
             }
             else if(nextCoordinates.x < Vector2Int.FloorToInt(transform.position).x)
             {
                 Animator.SetAnimationByName("Walk Left");
+                audioPlayer.PlayAudioByName("Steps");
             }
             else if(nextCoordinates.y > Vector2Int.FloorToInt(transform.position).y)
             {
                 Animator.SetAnimationByName("Walk Down");
+                audioPlayer.PlayAudioByName("Steps");
             }
             else if(nextCoordinates.y < Vector2Int.FloorToInt(transform.position).y)
             {
                 Animator.SetAnimationByName("Walk Down");
+                audioPlayer.PlayAudioByName("Steps");
             }
 
             // Updating the position on the Level 
@@ -114,6 +114,7 @@ public class CharacterMovement : MonoBehaviour
 
         // If we are not moving, play the Idle animation
         Animator.SetAnimationByName("Idle");
+        audioPlayer.StopAudio();
 
         // Indicating that the character is not moving
         m_Moving = false;
