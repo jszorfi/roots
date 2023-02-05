@@ -571,6 +571,11 @@ public class MapController : MonoBehaviour
         plant(SeedType.potato, potatoFarm);
     }
 
+    public void fertilize()
+    {
+        Field f = selectedUnit as Field;
+        f.fertilize();
+    }
     public void moveEnemy(Enemy e, Vector2Int target)
     {
         //Since the target is always a unit or building, we will need to add back it to the list.

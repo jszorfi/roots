@@ -99,7 +99,7 @@ public class CanvasController : MonoBehaviour
     }
     public void updateResources()
     {
-        var res = gameController.Resources;
+        var res = gameController.resources;
         wood.text = res[ResourceType.wood].ToString();
         plough.text = res[ResourceType.plough].ToString();
         fertilizer.text = res[ResourceType.fertilizer].ToString();
@@ -159,8 +159,11 @@ public class CanvasController : MonoBehaviour
     {
         changeDisplayedGroup(shrineOptions);
     }
-    public void displayFieldOptions()
+    public void displayFieldOptions(bool active)
     {
+        Button b = fieldOptions.transform.GetChild(3).gameObject.GetComponent<Button>();
+        b.interactable = active;
+        b.gameObject.transform.Find("Inactive").gameObject.GetComponent<Image>().enabled = !active;
         changeDisplayedGroup(fieldOptions);
     }
 }

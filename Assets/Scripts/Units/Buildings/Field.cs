@@ -12,7 +12,7 @@ public class Field : ResourceCreator
     }
     public override void onClicked()
     {
-        canvasController.displayFieldOptions();
+        canvasController.displayFieldOptions(gameController.resources[ResourceType.fertilizer] > 0);
     }
 
     public void plant(SeedType seed)
@@ -37,5 +37,13 @@ public class Field : ResourceCreator
             case SeedType.radish: createdPlant = ResourceType.radish; break;
         }
         return new Tuple<ResourceType, int>(createdPlant, amount);
+    }
+
+    public void fertilize()
+    {
+        resourceCount += 1;
+        gameController.resources[ResourceType.fertilizer] -= 1;
+        canvasController.updateResources();
+        canvasController.displayFieldOptions(gameController.resources[ResourceType.fertilizer] > 0);
     }
 }

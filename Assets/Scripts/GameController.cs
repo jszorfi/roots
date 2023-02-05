@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour
 
     private MapController mapController;
     private CanvasController canvasController;
-    private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
+    public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
         { ResourceType.wood, 6 },
         { ResourceType.plough, 6 },
         { ResourceType.fertilizer, 6 },
@@ -29,10 +29,6 @@ public class GameController : MonoBehaviour
         {UnitType.Radish, new Tuple<ResourceType, int>( ResourceType.radish, 5 )},
         {UnitType.Potato, new Tuple<ResourceType, int>( ResourceType.potato, 5 )}
     };
-    public Dictionary<ResourceType, int> Resources
-    {
-        get => resources;
-    }
 
     public void placeUnit(UnitType type)
     {
@@ -142,7 +138,7 @@ public class GameController : MonoBehaviour
     }
     public bool haveEnoughResourceForUnit(UnitType unit)
     {
-        if (Resources[unitCosts[unit].Item1] < unitCosts[unit].Item2)
+        if (resources[unitCosts[unit].Item1] < unitCosts[unit].Item2)
             return false;
         return true;
     }

@@ -16,10 +16,12 @@ public abstract class Unit : MonoBehaviour
     private RectTransform hb_right;
 
     protected CanvasController canvasController;
+    protected GameController gameController;
     protected SpriteAnimator animator;
     public void Start()
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
         animator = gameObject.GetComponent<SpriteAnimator>();
         healthBar = gameObject.transform.GetChild(0).GetComponent<RectTransform>();
         maxHealthWidth = healthBar.sizeDelta.x;
