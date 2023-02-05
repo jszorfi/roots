@@ -93,7 +93,7 @@ public class GameController : MonoBehaviour
         }
         if (mapController.enemies.Count == 0)
         {
-            phase = Phase.Build;
+            EndFight();
         }
     }
 
@@ -113,6 +113,10 @@ public class GameController : MonoBehaviour
             }
             canvasController.finishTurnInactive.enabled = false;
             canvasController.finishTurnText.text = "Finish turn";
+        }
+        if (phase != Phase.Build && mapController.enemies.Count == 0)
+        {
+            EndFight();
         }
     }
     private void EndFight()
