@@ -18,10 +18,14 @@ public abstract class Unit : MonoBehaviour
     protected CanvasController canvasController;
     protected GameController gameController;
     protected SpriteAnimator animator;
-    public void Start()
+    public void Awake()
     {
         canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
         gameController = GameObject.Find("GameController").GetComponent<GameController>();
+    }
+
+    public void Start()
+    {
         animator = gameObject.GetComponent<SpriteAnimator>();
         healthBar = gameObject.transform.GetChild(0).GetComponent<RectTransform>();
         maxHealthWidth = healthBar.sizeDelta.x;

@@ -24,11 +24,15 @@ public class CharacterMovement : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        mapController = FindObjectOfType<MapController>();
+        Animator = gameObject.GetComponent<SpriteAnimator>();
+    }
     // Start is called before the first frame update
     void Start()
     {
         Animator = gameObject.GetComponent<SpriteAnimator>();
-        mapController = FindObjectOfType<MapController>();
     }
 
     // Update is called once per frame

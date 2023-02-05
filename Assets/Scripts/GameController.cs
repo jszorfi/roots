@@ -21,8 +21,8 @@ public class GameController : MonoBehaviour
     public List<int> turn5;
     public List<EnemySpawner> enemySpawnerList;
 
-    private int turn = 1;
-    private int wave = 0;
+    public int turn = 1;
+    public int wave = 0;
     private List<List<int>> waves;
 
     private MapController mapController;
@@ -185,13 +185,19 @@ public class GameController : MonoBehaviour
 
     private void SpawnEnemiesForWave()
     {
-        List<int> currentWave = waves[turn];
+        List<int> currentWave = waves[turn--];
         var enemyspawnercopy = enemySpawnerList;
 
         if (currentWave.Count == 0)
         {
             return;
         }
+
+        if(wave >= currentWave.Count)
+        {
+            return;
+        }
+
         int toSpawn = currentWave[wave];
 
         while (toSpawn > 0)
@@ -226,7 +232,7 @@ public class GameController : MonoBehaviour
     void handleFightPhaseEnd()
     {
         turn++;
-        if (turn >= 5)
+        if (turn > 5)
         {
             gameObject.GetComponent<IntroController>().ToOutroScene();
         }
