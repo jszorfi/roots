@@ -1,10 +1,13 @@
 using System;
+using UnityEngine;
 
 public enum SeedType { none, potato, carrot, radish }
 
 public class Field : ResourceCreator
 {
     public SeedType planted;
+    SpriteRenderer render;
+    public Sprite emptySprite;
 
     Field()
     {
@@ -13,6 +16,7 @@ public class Field : ResourceCreator
     public override void onClicked()
     {
         canvasController.displayFieldOptions(gameController.resources[ResourceType.fertilizer] > 0);
+        render = gameObject.GetComponent<SpriteRenderer>();
     }
 
     public void plant(SeedType seed)
@@ -24,6 +28,7 @@ public class Field : ResourceCreator
     {
         planted = SeedType.none;
         resourceCount = 1;
+        render.sprite = emptySprite;
     }
     public override Tuple<ResourceType, int> collectResources()
     {
