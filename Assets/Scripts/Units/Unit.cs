@@ -9,6 +9,11 @@ public abstract class Unit : MonoBehaviour
     public Tuple<ResourceType, int> cost;
     private RectTransform healthBar;
 
+    // Test
+    private RectTransform hb_mid;
+    private RectTransform hb_left;
+    private RectTransform hb_right;
+
     protected CanvasController canvasController;
     protected SpriteAnimator animator;
     public void Start()
