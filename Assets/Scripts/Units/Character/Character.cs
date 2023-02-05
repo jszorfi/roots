@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Diagnostics;
+using TMPro;
 using UnityEngine;
 
 public abstract class Character : Unit
@@ -12,7 +14,14 @@ public abstract class Character : Unit
     public int currentMovement;
     public bool hasActtion = true;
     private bool sleepCalled = false;
+    public TMP_Text stew;
 
+    private Stopwatch timer = new Stopwatch();
+
+    public void Start()
+    {
+        base.Start();
+    }
     public void Update()
     {
         if (!sleepCalled && !hasActtion && currentMovement == 0 && !isBusy())
@@ -20,18 +29,27 @@ public abstract class Character : Unit
             animator.SetAnimationByName("Sleep");
             sleepCalled = true;
         }
+        if (timer.Elapsed.Seconds > 2.0)
+        {
+            stew.enabled = false;
+            timer.Stop();
+        }
     }
     public virtual void targetedSkill(Unit target)
     {
         animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
         audioPlayer.PlayAudioByName("Spell");
         hasActtion = false;
+        stew.enabled = true;
+        timer.Start();
     }
     public virtual void areaSkill(List<Unit> targets)
     {
         animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
         audioPlayer.PlayAudioByName("Spell");
         hasActtion = false;
+        stew.enabled = true;
+        timer.Start();
     }
 
     public void receiveHealing(int healing)
