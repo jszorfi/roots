@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum Phase { Build, PlayerTurn, EnemyTurn }
 public enum UnitType { Field, Shed, Woodmill, Potato, Carrot, Radish }
@@ -48,6 +49,13 @@ public class GameController : MonoBehaviour
     private void EndBuild()
     {
         phase = Phase.PlayerTurn;
+        if (canvasController.displayedGroup)
+        {
+            foreach (Transform s in canvasController.displayedGroup.gameObject.transform)
+            {
+                canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), true);
+            }
+        }
     }
 
     public void FinishTurn()
@@ -74,13 +82,13 @@ public class GameController : MonoBehaviour
     private void EnemyTurn()
     {
         phase = Phase.EnemyTurn;
-        if (mapController.enemies.Count == 0)
-        {
-            phase = Phase.Build;
-        }
         foreach (var enemy in mapController.enemies)
         {
             enemy.Turn();
+        }
+        if (mapController.enemies.Count == 0)
+        {
+            phase = Phase.Build;
         }
     }
 
@@ -110,6 +118,13 @@ public class GameController : MonoBehaviour
         }
         canvasController.updateResources();
         phase = Phase.Build;
+        if (canvasController.displayedGroup)
+        {
+            foreach (Transform s in canvasController.displayedGroup.gameObject.transform)
+            {
+                canvasController.changeButtonState(s.gameObject.GetComponent<Button>(), false);
+            }
+        }
     }
     public bool haveEnoughResourceForUnit(UnitType unit)
     {

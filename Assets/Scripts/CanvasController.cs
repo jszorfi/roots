@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 public class CanvasController : MonoBehaviour
 {
@@ -80,7 +81,12 @@ public class CanvasController : MonoBehaviour
         }
     }
 
-
+    public void changeButtonState(Button button, bool active)
+    {
+        button.interactable = active;
+        var inactive = button.gameObject.transform.Find("Inactive").gameObject.GetComponent<Image>();
+        inactive.enabled = !active;
+    }
     public void updateResources()
     {
         var res = gameController.Resources;
@@ -93,10 +99,7 @@ public class CanvasController : MonoBehaviour
 
         foreach (var button in builderButtons)
         {
-            var active = gameController.haveEnoughResourceForUnit(button.Key);
-            button.Value.interactable = active;
-            var inactive = button.Value.gameObject.transform.Find("Inactive").gameObject.GetComponent<Image>();
-            inactive.enabled = !active;
+            changeButtonState(button.Value, gameController.haveEnoughResourceForUnit(button.Key));
         }
     }
 
@@ -116,14 +119,26 @@ public class CanvasController : MonoBehaviour
 
     public void displayPotatoSkills()
     {
+        foreach (Transform s in potatoSkills.gameObject.transform)
+        {
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+        }
         changeDisplayedGroup(potatoSkills);
     }
     public void displayCarrotSkills()
     {
+        foreach (Transform s in carrotSkills.gameObject.transform)
+        {
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+        }
         changeDisplayedGroup(carrotSkills);
     }
     public void displayRadishSkills()
     {
+        foreach (Transform s in radishSkills.gameObject.transform)
+        {
+            changeButtonState(s.gameObject.GetComponent<Button>(), gameController.phase != Phase.Build);
+        }
         changeDisplayedGroup(radishSkills);
     }
     public void displayBuilderOptions()
