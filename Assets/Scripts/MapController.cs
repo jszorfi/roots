@@ -51,6 +51,9 @@ public class MapController : MonoBehaviour
     public GameObject       shedPrefab;
     public GameObject       fieldPrefab;
     public GameObject       woodmillPrefab;
+    public Sprite           carrotFarm;
+    public Sprite           potatoFarm;
+    public Sprite           raddishFarm;
     private GameObject      carrotInst;
     private GameObject      potatoInst;
 
@@ -158,8 +161,8 @@ public class MapController : MonoBehaviour
                         if (gameController.phase == Phase.PlayerTurn)
                         {
                             //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
-                            Vector2Int movementShadowBottomRight = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.movementRange, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.movementRange, bottomLeftBounds.y));
-                            Vector2Int movementShadowTopRight    = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.movementRange, topRightBounds.x  ), Mathf.Min(mouseTileMapCoords.y + chara.movementRange, topRightBounds.y  ));
+                            Vector2Int movementShadowBottomRight = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.currentMovement, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.currentMovement, bottomLeftBounds.y));
+                            Vector2Int movementShadowTopRight    = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.currentMovement, topRightBounds.x  ), Mathf.Min(mouseTileMapCoords.y + chara.currentMovement, topRightBounds.y  ));
                             
                             //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
                             Vector2Int currPos = clipVect3Int(mouseTileMapCoords);
@@ -172,14 +175,14 @@ public class MapController : MonoBehaviour
                                 for (int j = movementShadowBottomRight.y; j <= movementShadowTopRight.y; j++)
                                 {
                                     Vector2Int posToCheck = new Vector2Int(i, j);
-                                    if ( HamiltonianDistance(posToCheck, currPos) <= chara.movementRange)
+                                    if ( HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
                                     {
                                         //Maybe copying instead of recreating the list will boost speed;
                                         List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
 
                                         List <PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, posToCheck);
 
-                                        if(path.Count > 0 && path.Count <= chara.movementRange)
+                                        if(path.Count > 0 && path.Count <= chara.currentMovement)
                                         {
                                             fixHighlightTile(posToCheck, purpleHighlightTile);
                                         }
@@ -218,7 +221,7 @@ public class MapController : MonoBehaviour
                             List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
                             Character c = selectedUnit as Character;
 
-                            if (path.Count == 0 || c.movementRange == 0)
+                            if (path.Count == 0 || c.currentMovement == 0)
                             {
                                 //If we can't go anywhere, occupy the tile we just left
                                 previousNode.Occupy(selectedUnit);
@@ -227,9 +230,9 @@ public class MapController : MonoBehaviour
                             {
                                 Vector2Int target = path[path.Count - 1].position;
 
-                                if (path.Count > c.movementRange)
+                                if (path.Count > c.currentMovement)
                                 {
-                                    target = path[c.movementRange - 1].position;
+                                    target = path[c.currentMovement - 1].position;
                                 }
 
                                 c.move(target);
@@ -410,4 +413,28 @@ public class MapController : MonoBehaviour
         return plr;
     }
 
+    public void plantCarrot()
+    {
+        plant(SeedType.carrot, carrotFarm);
+    }
+
+    public void plantRadish()
+    {
+        plant(SeedType.radish, raddishFarm);
+    }
+
+    public void plantPotato()
+    {
+        plant(SeedType.potato, potatoFarm);
+    }
+
+    private void plant(SeedType s, Sprite spr)
+    {
+        Field f = selectedUnit as Field;
+        f.planted = s;
+
+        f.gameObject.GetComponent<SpriteRenderer>().sprite = spr;
+
+        deselect();
+    }
 }

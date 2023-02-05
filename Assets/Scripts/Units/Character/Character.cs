@@ -9,6 +9,7 @@ public abstract class Character : Unit
     public int skillStrengthMultiplier = 1;
     public int skillkRange;
     public int movementRange;
+    public int currentMovement;
 
     public abstract void targetedSkill(Character target);
     public abstract void areaSkill(List<Character> targets);
@@ -28,6 +29,7 @@ public abstract class Character : Unit
     public void reset()
     {
         skillStrengthMultiplier = 1;
+        currentMovement = movementRange;
     }
 
     public void move(Vector2Int coordinates)

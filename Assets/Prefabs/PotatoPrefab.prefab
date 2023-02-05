@@ -174,3 +174,4 @@ MonoBehaviour:
   skillStrengthMultiplier: 1
   skillkRange: 0
   movementRange: 3
+  currentMovement: 3

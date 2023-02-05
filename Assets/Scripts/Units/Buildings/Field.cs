@@ -4,7 +4,7 @@ public enum SeedType { none, potato, carrot, radish }
 
 public class Field : ResourceCreator
 {
-    private SeedType planted;
+    public SeedType planted;
 
     Field()
     {
