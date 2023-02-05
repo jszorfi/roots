@@ -232,6 +232,7 @@ public class GameController : MonoBehaviour
     void handleFightPhaseEnd()
     {
         turn++;
+        wave = 0;
         if (turn > 5)
         {
             gameObject.GetComponent<IntroController>().ToOutroScene();
