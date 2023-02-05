@@ -318,6 +318,12 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 6d691697812c5ce40a1b3a35f84e3c08, type: 3}
     FrameDuration: 0.15
     Repeating: 0
+  - Name: Sleep
+    Sprites:
+    - {fileID: 21300000, guid: 3f2e23b8117351c4589aa136ab21e878, type: 3}
+    - {fileID: 21300000, guid: 3dd077f15749a914598a0adfaf1e0971, type: 3}
+    FrameDuration: 0.15
+    Repeating: 1
 --- !u!114 &7994839833213486301
 MonoBehaviour:
   m_ObjectHideFlags: 0
