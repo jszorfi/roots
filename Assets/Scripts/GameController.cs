@@ -12,12 +12,12 @@ public class GameController : MonoBehaviour
     private MapController mapController;
     private CanvasController canvasController;
     private Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
-        { ResourceType.wood, 0 },
+        { ResourceType.wood, 6 },
         { ResourceType.plough, 6 },
-        { ResourceType.fertilizer, 0 },
-        { ResourceType.potato, 0 },
-        { ResourceType.carrot, 0 },
-        { ResourceType.radish, 0 },
+        { ResourceType.fertilizer, 6 },
+        { ResourceType.potato, 6 },
+        { ResourceType.carrot, 6 },
+        { ResourceType.radish, 6 },
     };
 
     public Dictionary<UnitType, Tuple<ResourceType, int>> unitCosts = new Dictionary<UnitType, Tuple<ResourceType, int>> {
