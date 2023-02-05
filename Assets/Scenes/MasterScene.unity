@@ -717,6 +717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theCauldron: {fileID: 0}
+  cows: {fileID: 0}
   tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
   blueHighlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
   redHighlightTile: {fileID: 11400000, guid: e493606e18111604db59f9ea0c24edba, type: 2}
@@ -730,6 +731,7 @@ MonoBehaviour:
   fieldPrefab: {fileID: 1428083332931784292, guid: 8eec23798e6bb1f4bb788feeaba12292, type: 3}
   woodmillPrefab: {fileID: 1428083332931784292, guid: 298367ca499731c4cba01455bb1fe5c7, type: 3}
   cauldronPrefab: {fileID: 1428083332931784292, guid: 7dac4700f3f5867448b955478e7746fb, type: 3}
+  cowpenPrefab: {fileID: 699431538376419830, guid: c67a243c61f7df3448a49fa06c8f8394, type: 3}
   carrotFarm: {fileID: 21300000, guid: a01f98197897a3347a68c1ed6cf52ef9, type: 3}
   potatoFarm: {fileID: 21300000, guid: 4b13519267b1c9f49a1fecc532535590, type: 3}
   raddishFarm: {fileID: 21300000, guid: 5203516ba78fc2e48b6fc1d25819f26a, type: 3}
@@ -4781,7 +4783,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   phase: 0
   buildPhaseText: {fileID: 2038762918}
-  turn1: 02000000
+  turn1: 01000000
   turn2: 0100000002000000
   turn3: 0200000003000000
   turn4: 0200000003000000
