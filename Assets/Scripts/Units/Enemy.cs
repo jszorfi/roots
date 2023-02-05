@@ -37,7 +37,7 @@ public class Enemy : Character
     public void Turn()
     {
         List<Unit> hitable = Enumerable.Concat<Unit>(mapController.buildings, mapController.characters).ToList();
-        Unit closest;
+        Unit closest = null;
         float min = 10000;
         foreach (var h in hitable)
         {
@@ -48,6 +48,9 @@ public class Enemy : Character
                 closest = h;
             }
         }
-        mapController.
+        if (closest != null)
+        {
+            mapController.moveEnemy(this, closest.pos);
+        }
     }
 }
