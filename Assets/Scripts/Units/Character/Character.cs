@@ -14,12 +14,12 @@ public abstract class Character : Unit
 
     public virtual void targetedSkill(Unit target)
     {
-        animator.SetAnimationByName("CastSpell");
+        animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
         hasActtion = false;
     }
     public virtual void areaSkill(List<Unit> targets)
     {
-        animator.SetAnimationByName("CastSpell");
+        animator.SetAnimationByName("Cast Spell", delegate { animator.SetAnimationByName("Idle"); });
         hasActtion = false;
     }
 
