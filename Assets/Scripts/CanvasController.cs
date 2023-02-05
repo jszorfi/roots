@@ -91,7 +91,10 @@ public class CanvasController : MonoBehaviour
 
         foreach (var button in builderButtons)
         {
-            button.Value.interactable = gameController.haveEnoughResourceForUnit(button.Key);
+            var active = gameController.haveEnoughResourceForUnit(button.Key);
+            button.Value.interactable = active;
+            var inactive = button.Value.gameObject.transform.Find("Inactive").gameObject.GetComponent<Image>();
+            inactive.enabled = !active;
         }
     }
 
