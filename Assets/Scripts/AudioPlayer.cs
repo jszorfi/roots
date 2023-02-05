@@ -31,7 +31,7 @@ public class AudioPlayer : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
     }
@@ -66,5 +66,10 @@ public class AudioPlayer : MonoBehaviour
                 audioSource.Play();
             }
         }
+    }
+
+    public void StopAudio()
+    {
+        audioSource.Stop();
     }
 }
