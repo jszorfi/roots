@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
     public Dictionary<ResourceType, int> resources = new Dictionary<ResourceType, int> {
         { ResourceType.wood, 6 },
         { ResourceType.plough, 6 },
-        { ResourceType.fertilizer, 6 },
+        { ResourceType.fertilizer, 4 },
         { ResourceType.potato, 6 },
         { ResourceType.carrot, 6 },
         { ResourceType.radish, 6 },
@@ -39,11 +39,11 @@ public class GameController : MonoBehaviour
 
     public Dictionary<UnitType, Tuple<ResourceType, int>> unitCosts = new Dictionary<UnitType, Tuple<ResourceType, int>> {
         {UnitType.Field, new Tuple<ResourceType, int>( ResourceType.plough, 2 )},
-        {UnitType.Shed, new Tuple<ResourceType, int>( ResourceType.wood, 5 )},
-        {UnitType.Woodmill, new Tuple<ResourceType, int>( ResourceType.wood, 5 )},
-        {UnitType.Carrot, new Tuple<ResourceType, int>( ResourceType.carrot, 5 )},
-        {UnitType.Radish, new Tuple<ResourceType, int>( ResourceType.radish, 5 )},
-        {UnitType.Potato, new Tuple<ResourceType, int>( ResourceType.potato, 5 )}
+        {UnitType.Shed, new Tuple<ResourceType, int>( ResourceType.wood, 4 )},
+        {UnitType.Woodmill, new Tuple<ResourceType, int>( ResourceType.wood, 2 )},
+        {UnitType.Carrot, new Tuple<ResourceType, int>( ResourceType.carrot, 4 )},
+        {UnitType.Radish, new Tuple<ResourceType, int>( ResourceType.radish, 3 )},
+        {UnitType.Potato, new Tuple<ResourceType, int>( ResourceType.potato, 4 )}
     };
 
     public void placeUnit(UnitType type)
