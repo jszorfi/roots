@@ -283,7 +283,7 @@ public class MapController : MonoBehaviour
 
                             MapNode previousNode = map.getNode(selectedUnit.pos);
 
-                            if (clickedNode.Occupant == null && selectedUnit is Character && ! (selectedUnit is Enemy) )
+                            if (clickedNode.Occupant == null && selectedUnit is Character && ! (selectedUnit is Enemy) &&  gameController.phase != Phase.EnemyTurn)
                             {
                                 Character c = selectedUnit as Character;
 
@@ -496,7 +496,7 @@ public class MapController : MonoBehaviour
         tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], blueHighlightTile);
     }
 
-    private void deselect()
+    public void deselect()
     {
         selectionState = SelectionState.Building;
         selectedUnit = null;

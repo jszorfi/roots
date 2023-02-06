@@ -85,6 +85,8 @@ public class GameController : MonoBehaviour
 
     public void FinishTurn()
     {
+        mapController.deselect();
+
         if (phase == Phase.Build)
         {
             EndBuild();
