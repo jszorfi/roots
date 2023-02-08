@@ -48,20 +48,14 @@ public class MapController : MonoBehaviour
     //If selected unit is null, but selectedNode isn't, we have selected an empty node.
     private Unit selectedUnit;
     private MapPos2D selectedPosition;
-
     private CanvasController canvasController;
     private GameController gameController;
-
     private List<Vector3Int> fixedHighlights;
-
     private bool currentCursoBasic = true;
+    private Dictionary<UnitType, GameObject> unitTypeToPrefab;
 
-    private GameObject carrotInst;
-    private GameObject potatoInst;
-    private GameObject bunnyInst1;
-    private GameObject bunnyInst2;
-    public GameObject theCauldron;
-    public GameObject cows;
+
+
 
     private SelectionState selectionState = SelectionState.Building;
 
@@ -93,7 +87,8 @@ public class MapController : MonoBehaviour
     public List<Character> characters;
     public List<ResourceCreator> resCreators;
     public List<Building> buildings;
-
+    public GameObject theCauldron;
+    public GameObject cows;
 
     //If a new unit list is created that is disjoint from the previous ones, add it here.
     public List<Unit> getAllUnits()
@@ -105,6 +100,44 @@ public class MapController : MonoBehaviour
         allUnits.AddRange(enemies);
 
         return allUnits;
+    }
+
+    public void fillUnitTypePrefabDictionary()
+    {
+        unitTypeToPrefab = new Dictionary<UnitType, GameObject>();
+        unitTypeToPrefab.Add(UnitType.Carrot, carrotPrefab);
+        unitTypeToPrefab.Add(UnitType.Radish, radishPrefab);
+        unitTypeToPrefab.Add(UnitType.Potato, potatoPrefab);
+        unitTypeToPrefab.Add(UnitType.Field, fieldPrefab);
+        unitTypeToPrefab.Add(UnitType.Shed, shedPrefab);
+        unitTypeToPrefab.Add(UnitType.Woodmill, woodmillPrefab);
+    }
+
+    public bool unitTypeIsBuilding(UnitType ut)
+    {
+        if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
+
+        return false;
+    }
+
+    public bool unitTypeIsResGen(UnitType ut)
+    {
+        if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
+
+        return false;
+    }
+
+    public bool unitTypePlaysBuildSound(UnitType ut)
+    {
+        if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
+
+        return false;
+    }
+    public bool unitTypeIsCharacter(UnitType ut)
+    {
+        if (ut == UnitType.Carrot || ut == UnitType.Radish || ut == UnitType.Potato) return true;
+
+        return false;
     }
 
     // Start is called before the first frame update
@@ -141,6 +174,8 @@ public class MapController : MonoBehaviour
         resCreators.Add(cows.GetComponent<Cowpen>());
 
         makeTrees();
+
+        fillUnitTypePrefabDictionary();
     }
 
     // Update is called once per frame
@@ -474,53 +509,35 @@ public class MapController : MonoBehaviour
         highlightRedFromCenter(selectedUnit.pos, SkillRange.All);
     }
 
+    //TODO, check if you can substitute this with reflection, what I mean is replacing this with actual typeChecks
     public void placeUnit(UnitType unitType)
     {
         if (selectedPosition == null) { return; /*oof*/ }
 
-        switch (unitType)
+        //The instantiation uses world coordinates, so we need to translate the object to the center of the cell;
+        Vector3 actualPosition = new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f);
+        GameObject prefabToInstantiate = unitTypeToPrefab[unitType];
+        GameObject inst = Instantiate(prefabToInstantiate, actualPosition, Quaternion.identity);
+        Unit u = inst.GetComponent<Unit>();
+        u.pos = selectedPosition.pos2D;
+        map.getNode(selectedPosition.pos2D).Occupy(u);
+
+        if (unitTypeIsBuilding(unitType))
         {
-            case UnitType.Field:
-                GameObject field = Instantiate(fieldPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
-                resCreators.Add(field.GetComponent<ResourceCreator>());
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
-                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
-                buildings.Add(resCreators[resCreators.Count - 1]);
-                field.GetComponent<AudioPlayer>().PlayAudioByName("Build");
-                break;
-            case UnitType.Shed:
-                GameObject shed = Instantiate(shedPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
-                resCreators.Add(shed.GetComponent<ResourceCreator>());
-                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
-                buildings.Add(resCreators[resCreators.Count - 1]);
-                shed.GetComponent<AudioPlayer>().PlayAudioByName("Build");
-                break;
-            case UnitType.Woodmill:
-                GameObject mill = Instantiate(woodmillPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity);
-                resCreators.Add(mill.GetComponent<ResourceCreator>());
-                resCreators[resCreators.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(resCreators[resCreators.Count - 1]);
-                buildings.Add(resCreators[resCreators.Count - 1]);
-                mill.GetComponent<AudioPlayer>().PlayAudioByName("Build");
-                break;
-            case UnitType.Carrot:
-                characters.Add(Instantiate(carrotPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
-                break;
-            case UnitType.Radish:
-                characters.Add(Instantiate(radishPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
-                break;
-            case UnitType.Potato:
-                characters.Add(Instantiate(potatoPrefab, new Vector3((float)selectedPosition.pos2D.x + 0.5f, (float)selectedPosition.pos2D.y + 0.5f, -2.0f), Quaternion.identity).GetComponent<Character>());
-                characters[characters.Count - 1].pos = selectedPosition.pos2D;
-                map.getNode(selectedPosition.pos2D).Occupy(characters[characters.Count - 1]);
-                break;
-            default:
-                break; /*oof*/
+            buildings.Add(resCreators[resCreators.Count - 1]);
+        }
+        if (unitTypeIsResGen(unitType))
+        {
+            resCreators.Add(inst.GetComponent<ResourceCreator>());
+        }
+        if(unitTypeIsCharacter(unitType))
+        {
+            characters.Add(inst.GetComponent<Character>());
+        }
+
+        if (unitTypePlaysBuildSound(unitType))
+        {
+            inst.GetComponent<AudioPlayer>().PlayAudioByName("Build");
         }
 
         deselect();
@@ -534,14 +551,6 @@ public class MapController : MonoBehaviour
     public Vector2Int clipVect3Int(Vector3Int v)
     {
         return new Vector2Int(v.x, v.y);
-    }
-
-    private void selectPos(Vector2Int v)
-    {
-        selectedPosition = new MapPos2D();
-        selectedPosition.pos2D = v;
-        fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
-        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], blueHighlightTile);
     }
 
     private void selectPos(Vector3Int v)

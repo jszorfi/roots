@@ -3,7 +3,27 @@ guid: 13e0d1111ada591449dc532d343fe1fd
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - theCauldron: {instanceID: 0}
+  - cows: {instanceID: 0}
+  - tile: {instanceID: 0}
+  - blueHighlightTile: {instanceID: 0}
+  - redHighlightTile: {instanceID: 0}
+  - purpleHighlightTile: {instanceID: 0}
+  - carrotPrefab: {fileID: 7994839833213486289, guid: c91ccd4eec1c3104db74cdf441a885e0, type: 3}
+  - potatoPrefab: {instanceID: 0}
+  - radishPrefab: {instanceID: 0}
+  - bunnyPrefab: {instanceID: 0}
+  - shedPrefab: {instanceID: 0}
+  - fieldPrefab: {instanceID: 0}
+  - woodmillPrefab: {instanceID: 0}
+  - cauldronPrefab: {instanceID: 0}
+  - cowpenPrefab: {instanceID: 0}
+  - carrotFarm: {instanceID: 0}
+  - potatoFarm: {instanceID: 0}
+  - raddishFarm: {instanceID: 0}
+  - buildCursor: {instanceID: 0}
+  - basicCursor: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
