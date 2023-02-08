@@ -94,6 +94,19 @@ public class MapController : MonoBehaviour
     public List<ResourceCreator> resCreators;
     public List<Building> buildings;
 
+
+    //If a new unit list is created that is disjoint from the previous ones, add it here.
+    public List<Unit> getAllUnits()
+    {
+        List<Unit> allUnits = new List<Unit>();
+
+        allUnits.AddRange(characters);
+        allUnits.AddRange(buildings);
+        allUnits.AddRange(enemies);
+
+        return allUnits;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -350,14 +363,36 @@ public class MapController : MonoBehaviour
                         case SelectionState.Skill:
                             //We can (hopefully) safely assume that the selected unit is a character
                             chara = selectedUnit as Character;
+                            System.Predicate<Unit> distancePredicate = null;
 
-                            if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
+                            //TODO: Simplyfy, the ranges could be simplified if we mainained it with an integer list perhaps? So say, all units 1 distance, 2 distance, etc
+                            switch (chara.skillkRange)
                             {
-                                chara.areaSkill(chara.skillkRange == (int)SkillRange.CloseQuarters ? allneighbours4(selectedPosition.pos2D) : allneighbours8(selectedPosition.pos2D));
+                                case (int)SkillRange.CloseQuarters:
+                                    if(hamDist == chara.skillkRange)
+                                    {
+                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
+                                    }
+                                    break;
+                                case (int)SkillRange.Ranged:
+                                    if(hamDist == chara.skillkRange)
+                                    {
+                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
+                                    }
+                                    break;
+                                case (int)(int)SkillRange.All:
+                                    if(hamDist <= chara.skillkRange)
+                                    {
+                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == 2 || hamiltDist == 1); };
+                                    }
+                                    break;
+                                default:
+                                    break;
                             }
-                            else if (chara.skillkRange == (int)SkillRange.All && hamDist <= chara.skillkRange)
+
+                            if(distancePredicate != null)
                             {
-                                chara.areaSkill(allneighbours4and8(selectedPosition.pos2D));
+                                chara.areaSkill(allUnitsInANeighbourhoodOf(distancePredicate));
                             }
 
                             deselect();
@@ -670,64 +705,13 @@ public class MapController : MonoBehaviour
         return r;
     }
 
-    public List<Unit> allneighbours4(Vector2Int pos)
+    /*
+     * Get units in the neighbourhood of pos defined by isInDistance predicate
+     */
+    public List<Unit> allUnitsInANeighbourhoodOf(System.Predicate<Unit> isInDistance)
     {
-        List<Unit> r = new List<Unit>();
-        List<Unit> allUnits = new List<Unit>();
-
-        allUnits.AddRange(characters);
-        allUnits.AddRange(buildings);
-        allUnits.AddRange(enemies);
-
-        foreach (var item in allUnits)
-        {
-            if (HamiltonianDistance(item.pos, pos) == 1)
-            {
-                r.Add(item);
-            }
-        }
-
-        return r;
-    }
-
-    public List<Unit> allneighbours8(Vector2Int pos)
-    {
-        List<Unit> r = new List<Unit>();
-        List<Unit> allUnits = new List<Unit>();
-
-        allUnits.AddRange(characters);
-        allUnits.AddRange(buildings);
-        allUnits.AddRange(enemies);
-
-        foreach (var item in allUnits)
-        {
-            if (HamiltonianDistance(item.pos, pos) == 2)
-            {
-                r.Add(item);
-            }
-        }
-
-        return r;
-    }
-
-    public List<Unit> allneighbours4and8(Vector2Int pos)
-    {
-        List<Unit> r = new List<Unit>();
-        List<Unit> allUnits = new List<Unit>();
-
-        allUnits.AddRange(characters);
-        allUnits.AddRange(buildings);
-        allUnits.AddRange(enemies);
-
-        foreach (var item in allUnits)
-        {
-            if (HamiltonianDistance(item.pos, pos) == 2 || HamiltonianDistance(item.pos, pos) == 1)
-            {
-                r.Add(item);
-            }
-        }
-
-        return r;
+        List<Unit> allUnits = getAllUnits();
+        return allUnits.FindAll(isInDistance);
     }
 
 
