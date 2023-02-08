@@ -247,24 +247,45 @@ public class MapController : MonoBehaviour
                             List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
                             fullPathGraph.Add(new PathFinding.PathNode(currPos));
 
+                            List<Vector2Int> positionsToCheck = new List<Vector2Int>();
+                            
                             for (int i = movementShadowBottomLeft.x; i <= movementShadowTopRight.x; i++)
                             {
                                 for (int j = movementShadowBottomLeft.y; j <= movementShadowTopRight.y; j++)
                                 {
                                     Vector2Int posToCheck = new Vector2Int(i, j);
+
+                                    //As a tile cost is at minimum 1, we cannot possibly move more than this
                                     if (HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
                                     {
-                                        //Maybe copying instead of recreating the list will boost speed;
-                                        List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
-
-                                        List<PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, posToCheck);
-
-                                        if (path.Count > 0 && path.Count <= chara.currentMovement)
-                                        {
-                                            fixHighlightTile(posToCheck, purpleHighlightTile);
-                                        }
+                                        positionsToCheck.Add(posToCheck);
                                     }
                                 }
+                            }
+
+                            int index = 0;
+                            //Movement shadow is never going to be bigger than a 1000 squares, hopefully....
+                            for(int i = 0; i < 1000; i++)
+                            {
+                                if(index >= positionsToCheck.Count)
+                                {
+                                    break;
+                                }
+
+                                Vector2Int p = positionsToCheck[index];
+
+                                //Maybe copying instead of recreating the list will boost speed;
+                                List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
+                                List<PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, p);
+
+                                for(int j = 0; j < Mathf.Min(chara.currentMovement, path.Count); j++)
+                                {
+                                    fixHighlightTile(path[j].position, purpleHighlightTile);
+                                    positionsToCheck.Remove(path[j].position);
+                                }
+
+                                //if p was unreachable, it wasn't removed, so it should be
+                                positionsToCheck.Remove(p);
                             }
                         }
                     }

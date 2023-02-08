@@ -5,6 +5,48 @@ using UnityEngine;
 public class MapPos2D
 {
     public Vector2Int pos2D;
+
+    public override bool Equals(object obj) => this.Equals(obj as MapPos2D);
+
+    public bool Equals(MapPos2D p)
+    {
+        if (p is null)
+        {
+            return false;
+        }
+
+        // Optimization for a common success case.
+        if (Object.ReferenceEquals(this, p))
+        {
+            return true;
+        }
+
+        // If run-time types are not exactly the same, return false.
+        if (this.GetType() != p.GetType())
+        {
+            return false;
+        }
+
+        return (pos2D.x == p.pos2D.x) && (pos2D.y == p.pos2D.y);
+    }
+
+    public static bool operator ==(MapPos2D lhs, MapPos2D rhs)
+    {
+        if (lhs is null)
+        {
+            if (rhs is null)
+            {
+                return true;
+            }
+
+            // Only the left side is null.
+            return false;
+        }
+        // Equals handles case of null on right side.
+        return lhs.Equals(rhs);
+    }
+
+    public static bool operator !=(MapPos2D lhs, MapPos2D rhs) => !(lhs == rhs);
 }
 
 public class MapNode
