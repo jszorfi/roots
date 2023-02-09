@@ -30,6 +30,11 @@ public class MapPos2D
         return (pos2D.x == p.pos2D.x) && (pos2D.y == p.pos2D.y);
     }
 
+    public override int GetHashCode()
+    {
+        return pos2D.GetHashCode();
+    }
+
     public static bool operator ==(MapPos2D lhs, MapPos2D rhs)
     {
         if (lhs is null)

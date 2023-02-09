@@ -7,7 +7,7 @@ public class Field : ResourceCreator
 {
     public SeedType planted;
     SpriteRenderer render;
-    public Sprite emptySprite;
+    public Sprite emptySprite = null;
 
     Field()
     {
@@ -20,7 +20,6 @@ public class Field : ResourceCreator
             return;
         }
         canvasController.displayFieldOptions(gameController.resources[ResourceType.fertilizer] > 0);
-        render = gameObject.GetComponent<SpriteRenderer>();
     }
 
     public void plant(SeedType seed)
@@ -30,6 +29,7 @@ public class Field : ResourceCreator
 
     public override void refresh()
     {
+        if(render == null) render = gameObject.GetComponent<SpriteRenderer>();
         planted = SeedType.none;
         resourceCount = 1;
         render.sprite = emptySprite;

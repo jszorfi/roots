@@ -4,6 +4,7 @@ public class Carrot : Character
 {
     public override void onClicked()
     {
+        base.onClicked();
         canvasController.displayCarrotSkills(hasActtion);
     }
 

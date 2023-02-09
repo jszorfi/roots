@@ -37,6 +37,14 @@ public class MapController : MonoBehaviour
         Repair
     }
 
+    enum CurrentSelection
+    {
+        Nothing,
+        Position,
+        Unit,
+        Error
+    }
+
     //Private
     private Vector3Int bottomLeftBounds;
     private Vector3Int topRightBounds;
@@ -102,7 +110,7 @@ public class MapController : MonoBehaviour
         return allUnits;
     }
 
-    public void fillUnitTypePrefabDictionary()
+    private void fillUnitTypePrefabDictionary()
     {
         unitTypeToPrefab = new Dictionary<UnitType, GameObject>();
         unitTypeToPrefab.Add(UnitType.Carrot, carrotPrefab);
@@ -113,41 +121,58 @@ public class MapController : MonoBehaviour
         unitTypeToPrefab.Add(UnitType.Woodmill, woodmillPrefab);
     }
 
-    public bool unitTypeIsBuilding(UnitType ut)
+    private bool unitTypeIsBuilding(UnitType ut)
     {
         if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
 
         return false;
     }
 
-    public bool unitTypeIsResGen(UnitType ut)
+    private bool unitTypeIsResGen(UnitType ut)
     {
         if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
 
         return false;
     }
 
-    public bool unitTypePlaysBuildSound(UnitType ut)
+    private bool unitTypePlaysBuildSound(UnitType ut)
     {
         if (ut == UnitType.Field || ut == UnitType.Shed || ut == UnitType.Woodmill) return true;
 
         return false;
     }
-    public bool unitTypeIsCharacter(UnitType ut)
+    private bool unitTypeIsCharacter(UnitType ut)
     {
         if (ut == UnitType.Carrot || ut == UnitType.Radish || ut == UnitType.Potato) return true;
 
         return false;
     }
 
-    // Start is called before the first frame update
-    void Start()
+    public bool worldPosOnMap(Vector3 pos)
     {
-        canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
-        gameController = GameObject.Find("GameController").GetComponent<GameController>();
+        return pos.x >= bottomLeftBounds.x && pos.y >= bottomLeftBounds.y && pos.x <= topRightBounds.x + 1 && pos.y <= topRightBounds.y + 1;
+    }
+
+    private CurrentSelection currentlySelected()
+    {
+        if (selectedPosition == null && selectedUnit == null) return CurrentSelection.Nothing;
+
+        if (selectedUnit == null && selectedPosition != null) return CurrentSelection.Position;
+
+        if (selectedPosition != null && selectedPosition != null) return CurrentSelection.Unit;
+
+        return CurrentSelection.Error;
+    }
+
+
+
+    void Awake()
+    {
         fixedHighlights = new List<Vector3Int>();
+        fillUnitTypePrefabDictionary();
 
         gameObject.transform.position = new Vector3(0, 0, 0);
+        
         tilemap = gameObject.GetComponent<Tilemap>();
         tilemap.origin = new Vector3Int(0, 0, 0);
         tilemap.size = tilemapSizeHalf * 2 + new Vector3Int(1, 1, 0);
@@ -172,10 +197,15 @@ public class MapController : MonoBehaviour
         cows.GetComponent<Cowpen>().pos = new Vector2Int(1, 0);
         buildings.Add(cows.GetComponent<Cowpen>());
         resCreators.Add(cows.GetComponent<Cowpen>());
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
+        gameController = GameObject.Find("GameController").GetComponent<GameController>();
 
         makeTrees();
-
-        fillUnitTypePrefabDictionary();
     }
 
     // Update is called once per frame
@@ -189,7 +219,7 @@ public class MapController : MonoBehaviour
         bool clickedOnUI = isOnSkillPanel(mouseScreen);
 
         // The + 1 is to compensate for the the fact that the coordinates of a tile in its bottom left corner, and not on the skills panel
-        if (mousePos.x >= bottomLeftBounds.x && mousePos.y >= bottomLeftBounds.y && mousePos.x <= topRightBounds.x + 1 && mousePos.y <= topRightBounds.y + 1 && !clickedOnUI)
+        if (worldPosOnMap(mousePos) && !clickedOnUI)
         {
             /*-----------------------
             * Hover Highlight and Cursor handling
@@ -212,7 +242,8 @@ public class MapController : MonoBehaviour
 
             MapNode hoverNode = map.getNode(mouseTileMapCoords);
 
-            if(hoverNode.Occupant == null)
+#pragma warning disable
+            if (hoverNode.Occupant == null)
             {
                 if(currentCursoBasic)
                 {
@@ -228,7 +259,7 @@ public class MapController : MonoBehaviour
                     currentCursoBasic = true;
                 }
             }
-
+#pragma warning restore
 
             /*-----------------------
             * Click handling with fix highlight handling
@@ -236,242 +267,7 @@ public class MapController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                MapNode clickedNode = map.getNode(mouseTileMapCoords);
-                Character chara;
-                //If no unit is selected, we can select a unit (building or character) or an empty fields
-                if (selectedUnit == null)
-                {
-                    //There was already a selection (that wasn't a unit or we wouldn't be here), clear the selection before a new one.
-                    if (selectedPosition != null)
-                    {
-                        deselect();
-                    }
-
-                    //If the node is occuped, it is either a Character, Enemy, or Building
-                    if (clickedNode.Occupant != null)
-                    {
-                        chara = clickedNode.Occupant as Character;
-                        if (chara != null && chara.isBusy())
-                        {
-                            return;
-                        }
-
-                        if (chara is Carrot || chara is Potato || chara is Radish)
-                        {
-                            chara.gameObject.GetComponent<AudioPlayer>().PlayAudioByName("Select");
-                        }
-
-                        //If we are here, that means a character has been selected, so we enter movement mode
-
-                        selectionState = SelectionState.Movement;
-
-                        selectedUnit = clickedNode.Occupant;
-                        selectedUnit.onClicked();
-                        selectPos(mouseTileMapCoords);
-
-                        //If we are in a fight phase, the characters movement shadow needs to be displyed
-                        if (gameController.phase == Phase.PlayerTurn)
-                        {
-                            //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
-                            Vector2Int movementShadowBottomLeft = new Vector2Int(Mathf.Max(mouseTileMapCoords.x - chara.currentMovement, bottomLeftBounds.x), Mathf.Max(mouseTileMapCoords.y - chara.currentMovement, bottomLeftBounds.y));
-                            Vector2Int movementShadowTopRight = new Vector2Int(Mathf.Min(mouseTileMapCoords.x + chara.currentMovement, topRightBounds.x), Mathf.Min(mouseTileMapCoords.y + chara.currentMovement, topRightBounds.y));
-
-                            //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
-                            Vector2Int currPos = clipVect3Int(mouseTileMapCoords);
-
-                            List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
-                            fullPathGraph.Add(new PathFinding.PathNode(currPos));
-
-                            List<Vector2Int> positionsToCheck = new List<Vector2Int>();
-                            
-                            for (int i = movementShadowBottomLeft.x; i <= movementShadowTopRight.x; i++)
-                            {
-                                for (int j = movementShadowBottomLeft.y; j <= movementShadowTopRight.y; j++)
-                                {
-                                    Vector2Int posToCheck = new Vector2Int(i, j);
-
-                                    //As a tile cost is at minimum 1, we cannot possibly move more than this
-                                    if (HamiltonianDistance(posToCheck, currPos) <= chara.currentMovement)
-                                    {
-                                        positionsToCheck.Add(posToCheck);
-                                    }
-                                }
-                            }
-
-                            int index = 0;
-                            //Movement shadow is never going to be bigger than a 1000 squares, hopefully....
-                            for(int i = 0; i < 1000; i++)
-                            {
-                                if(index >= positionsToCheck.Count)
-                                {
-                                    break;
-                                }
-
-                                Vector2Int p = positionsToCheck[index];
-
-                                //Maybe copying instead of recreating the list will boost speed;
-                                List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
-                                List<PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, p);
-
-                                for(int j = 0; j < Mathf.Min(chara.currentMovement, path.Count); j++)
-                                {
-                                    fixHighlightTile(path[j].position, purpleHighlightTile);
-                                    positionsToCheck.Remove(path[j].position);
-                                }
-
-                                //if p was unreachable, it wasn't removed, so it should be
-                                positionsToCheck.Remove(p);
-                            }
-                        }
-                    }
-
-                    //If the node is not occupied, we are selecting an empty field.
-                    else
-                    {
-                        // but empty field selection should only happen in buildphase.
-                        if (gameController.phase == Phase.Build)
-                        {
-                            canvasController.displayBuilderOptions();
-                            selectPos(mouseTileMapCoords);
-                        }
-
-                    }
-                }
-                else
-                {
-                    // What we can do here is context sensitive
-
-                    int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords));
-
-                    switch (selectionState)
-                    {
-                        case SelectionState.Building:
-                            break;
-
-                        case SelectionState.Movement:
-
-                            MapNode previousNode = map.getNode(selectedUnit.pos);
-
-                            if (clickedNode.Occupant == null && selectedUnit is Character && ! (selectedUnit is Enemy) &&  gameController.phase != Phase.EnemyTurn)
-                            {
-                                Character c = selectedUnit as Character;
-
-                                previousNode.Leave(selectedUnit);
-
-                                if (gameController.phase == Phase.Build)
-                                {
-                                    c.move(clipVect3Int(mouseTileMapCoords));
-                                    clickedNode.Occupy(selectedUnit);
-                                }
-                                else if (gameController.phase == Phase.PlayerTurn)
-                                {
-                                    List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(mouseTileMapCoords));
-
-                                    if (path.Count == 0 || c.currentMovement == 0)
-                                    {
-                                        //If we can't go anywhere, occupy the tile we just left
-                                        previousNode.Occupy(selectedUnit);
-                                    }
-                                    else
-                                    {
-                                        Vector2Int target = path[path.Count - 1].position;
-
-                                        if (path.Count > c.currentMovement)
-                                        {
-                                            target = path[c.currentMovement - 1].position;
-                                            c.currentMovement = 0;
-                                        }
-                                        else
-                                        {
-                                            c.currentMovement -= path.Count;
-                                        }
-
-                                        c.move(target);
-                                        map.getNode(target).Occupy(selectedUnit);
-                                    }
-                                }
-                            }
-
-                            deselect();
-
-                            break;
-                        case SelectionState.Attack:
-                            //We can (hopefully) safely assume that the selected unit is a character
-                            chara = selectedUnit as Character;
-
-                            if (clickedNode.Occupant != null)
-                            {
-
-                                if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
-                                {
-                                    chara.targetedSkill(clickedNode.Occupant);
-                                }
-                                else if (chara.skillkRange == (int)SkillRange.All && hamDist <= chara.skillkRange)
-                                {
-                                    chara.targetedSkill(clickedNode.Occupant);
-                                }
-
-                            }
-                            deselect();
-
-                            break;
-
-                        case SelectionState.Skill:
-                            //We can (hopefully) safely assume that the selected unit is a character
-                            chara = selectedUnit as Character;
-                            System.Predicate<Unit> distancePredicate = null;
-
-                            //TODO: Simplyfy, the ranges could be simplified if we mainained it with an integer list perhaps? So say, all units 1 distance, 2 distance, etc
-                            switch (chara.skillkRange)
-                            {
-                                case (int)SkillRange.CloseQuarters:
-                                    if(hamDist == chara.skillkRange)
-                                    {
-                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
-                                    }
-                                    break;
-                                case (int)SkillRange.Ranged:
-                                    if(hamDist == chara.skillkRange)
-                                    {
-                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
-                                    }
-                                    break;
-                                case (int)(int)SkillRange.All:
-                                    if(hamDist <= chara.skillkRange)
-                                    {
-                                        distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == 2 || hamiltDist == 1); };
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
-
-                            if(distancePredicate != null)
-                            {
-                                chara.areaSkill(allUnitsInANeighbourhoodOf(distancePredicate));
-                            }
-
-                            deselect();
-
-                            break;
-                        case SelectionState.Repair:
-                            //We can (hopefully) safely assume that the selected unit is a character
-                            chara = selectedUnit as Character;
-
-                            //If we clicked where there is no unit, we can stop the desection
-                            if (clickedNode.Occupant != null && HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(mouseTileMapCoords)) <= 2 && clickedNode.Occupant is Building)
-                            {
-                                chara.repair(clickedNode.Occupant as Building);
-                            }
-
-                            deselect();
-
-                            break;
-                        default:
-                            break;
-                    }
-                }
-
+                handleClick(mouseTileMapCoords);
             }
 
         }
@@ -485,6 +281,298 @@ public class MapController : MonoBehaviour
             deselect();
         }
 
+
+    }
+
+    private void handleClick(Vector3Int clickedMapCoords)
+    {
+        MapNode clickedNode = map.getNode(clickedMapCoords);
+        Character chara = selectedUnit as Character;
+
+        switch (currentlySelected())
+        {
+            case CurrentSelection.Nothing:
+
+                selectMapNode(clipVect3Int(clickedMapCoords));
+
+                break;
+            case CurrentSelection.Position:
+
+                deselect();
+                selectMapNode(clipVect3Int(clickedMapCoords));
+
+                break;
+            case CurrentSelection.Unit:
+
+                int hamDist = HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(clickedMapCoords));
+
+                //TODO: Selection State should be renamed, as it is not really accurate
+                switch (selectionState)
+                {
+                    case SelectionState.Building:
+                        break;
+
+                    case SelectionState.Movement:
+
+                        MapNode previousNode = map.getNode(selectedUnit.pos);
+
+                        if (clickedNode.Occupant == null && selectedUnit is Character && !(selectedUnit is Enemy) && gameController.phase != Phase.EnemyTurn)
+                        {
+
+                            previousNode.Leave(selectedUnit);
+
+                            if (gameController.phase == Phase.Build)
+                            {
+                                chara.move(clipVect3Int(clickedMapCoords));
+                                clickedNode.Occupy(selectedUnit);
+                            }
+                            else if (gameController.phase == Phase.PlayerTurn)
+                            {
+                                List<PathFinding.PathNode> path = PathFinding.FindPath(map.generatePathNodeList(), selectedUnit.pos, clipVect3Int(clickedMapCoords));
+
+                                if (path.Count == 0 || chara.currentMovement == 0)
+                                {
+                                    //If we can't go anywhere, occupy the tile we just left
+                                    previousNode.Occupy(selectedUnit);
+                                }
+                                else
+                                {
+                                    Vector2Int target = path[path.Count - 1].position;
+
+                                    if (path.Count > chara.currentMovement)
+                                    {
+                                        target = path[chara.currentMovement - 1].position;
+                                        chara.currentMovement = 0;
+                                    }
+                                    else
+                                    {
+                                        chara.currentMovement -= path.Count;
+                                    }
+
+                                    chara.move(target);
+                                    map.getNode(target).Occupy(selectedUnit);
+                                }
+                            }
+                        }
+
+                        deselect();
+
+                        break;
+                    case SelectionState.Attack:
+                        //We can (hopefully) safely assume that the selected unit is a character
+
+                        if (clickedNode.Occupant != null)
+                        {
+
+                            if ((chara.skillkRange == (int)SkillRange.CloseQuarters || chara.skillkRange == (int)SkillRange.Ranged) && hamDist == chara.skillkRange)
+                            {
+                                chara.targetedSkill(clickedNode.Occupant);
+                            }
+                            else if (chara.skillkRange == (int)SkillRange.All && hamDist <= chara.skillkRange)
+                            {
+                                chara.targetedSkill(clickedNode.Occupant);
+                            }
+
+                        }
+
+                        deselect();
+
+                        break;
+
+                    case SelectionState.Skill:
+                        //We can (hopefully) safely assume that the selected unit is a character
+                        chara = selectedUnit as Character;
+                        System.Predicate<Unit> distancePredicate = null;
+
+                        //TODO: Simplyfy, the ranges could be simplified if we mainained it with an integer list perhaps? So say, all units 1 distance, 2 distance, etc
+                        switch (chara.skillkRange)
+                        {
+                            case (int)SkillRange.CloseQuarters:
+                                if (hamDist == chara.skillkRange)
+                                {
+                                    distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
+                                }
+                                break;
+                            case (int)SkillRange.Ranged:
+                                if (hamDist == chara.skillkRange)
+                                {
+                                    distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == chara.skillkRange); };
+                                }
+                                break;
+                            case (int)(int)SkillRange.All:
+                                if (hamDist <= chara.skillkRange)
+                                {
+                                    distancePredicate = x => { int hamiltDist = HamiltonianDistance(x.pos, selectedPosition.pos2D); return (hamiltDist == 2 || hamiltDist == 1); };
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+
+                        if (distancePredicate != null)
+                        {
+                            chara.areaSkill(allUnitsInANeighbourhoodOf(distancePredicate));
+                        }
+
+                        deselect();
+
+                        break;
+                    case SelectionState.Repair:
+
+                        //If we clicked where there is no unit, we can stop the desection
+                        if (clickedNode.Occupant != null && HamiltonianDistance(selectedPosition.pos2D, clipVect3Int(clickedMapCoords)) <= 2 && clickedNode.Occupant is Building)
+                        {
+                            chara.repair(clickedNode.Occupant as Building);
+                        }
+
+                        deselect();
+
+                        break;
+                    default:
+                        break;
+                }
+
+                break;
+            case CurrentSelection.Error:
+                Debug.LogError("Current Selection Is Error");
+                break;
+        }
+
+    }
+
+    private void selectMapNode(Vector2Int clickedPosition)
+    {
+        MapNode clickedNode = map.getNode(clickedPosition);
+        Character chara;
+
+        if (clickedNode.Occupant != null)
+        {
+            //Currently nothing is selected, and we clicked on a non empty position => we select whatever we clicked on
+            //TODO: Maybe put a call to movementshadow into the unit onclicked;
+
+            selectedUnit = clickedNode.Occupant;
+            selectedUnit.onClicked();
+
+            //If we click on a character, we can select it and display it's movement range (the movement range only in fight mode), even if it is an enemy
+            if (clickedNode.Occupant is Character)
+            {
+                chara = clickedNode.Occupant as Character;
+                selectionState = SelectionState.Movement;
+
+                if (chara is Carrot || chara is Potato || chara is Radish)
+                {
+                    chara.gameObject.GetComponent<AudioPlayer>().PlayAudioByName("Select");
+                }
+            }
+        }
+        else
+        {
+            //Currently nothing is selected, and we clicked on an empty position
+
+            if (gameController.phase == Phase.Build)
+            {
+                //We can build in build phase
+                canvasController.displayBuilderOptions();
+            }
+        }
+
+        selectPos(clickedPosition);
+    }
+
+    //Below 2 functions could probably be merged, with a public interfaces to the outside
+    public void displayMovementShadow(Vector2Int center, int movementRange)
+    {
+        //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
+        Vector2Int movementShadowBottomLeft = new Vector2Int(Mathf.Max(center.x - movementRange, bottomLeftBounds.x), Mathf.Max(center.y - movementRange, bottomLeftBounds.y));
+        Vector2Int movementShadowTopRight = new Vector2Int(Mathf.Min(center.x + movementRange, topRightBounds.x), Mathf.Min(center.y + movementRange, topRightBounds.y));
+
+        //Manually add the starting pos, as it is currently impassable(as the char is standing on it)
+        Vector2Int currPos = center;
+
+        List<PathFinding.PathNode> fullPathGraph = map.generatePathNodeList();
+        fullPathGraph.Add(new PathFinding.PathNode(currPos));
+
+        List<Vector2Int> positionsToCheck = new List<Vector2Int>();
+
+        for (int i = movementShadowBottomLeft.x; i <= movementShadowTopRight.x; i++)
+        {
+            for (int j = movementShadowBottomLeft.y; j <= movementShadowTopRight.y; j++)
+            {
+                Vector2Int posToCheck = new Vector2Int(i, j);
+
+                //As a tile cost is at minimum 1, we cannot possibly move more than this
+                if (HamiltonianDistance(posToCheck, currPos) <= movementRange)
+                {
+                    positionsToCheck.Add(posToCheck);
+                }
+            }
+        }
+
+        int index = 0;
+        //Movement shadow is never going to be bigger than a 1000 squares, hopefully....
+        for (int i = 0; i < 1000; i++)
+        {
+            if (index >= positionsToCheck.Count)
+            {
+                break;
+            }
+
+            Vector2Int p = positionsToCheck[index];
+
+            //Maybe copying instead of recreating the list will boost speed;
+            List<PathFinding.PathNode> fullPathCopy = CopyPNList(fullPathGraph);
+            List<PathFinding.PathNode> path = PathFinding.FindPath(fullPathCopy, currPos, p);
+
+            for (int j = 0; j < Mathf.Min(movementRange, path.Count); j++)
+            {
+                fixHighlightTile(path[j].position, purpleHighlightTile);
+                positionsToCheck.Remove(path[j].position);
+            }
+
+            //if p was unreachable, it wasn't removed, so it should be
+            positionsToCheck.Remove(p);
+        }
+    }
+
+    private void highlightRedFromCenter(Vector2Int center, SkillRange sr)
+    {
+        //This could be made prettier, I am sure, but right now don't care
+        //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
+        int radius = 10;
+
+        switch (sr)
+        {
+            case SkillRange.CloseQuarters:
+                radius = 1;
+                break;
+            case SkillRange.Ranged:
+            case SkillRange.All:
+                radius = 2;
+                break;
+        }
+
+
+        Vector2Int selectShadowBottomLeft = new Vector2Int(Mathf.Max(center.x - radius, bottomLeftBounds.x), Mathf.Max(center.y - radius, bottomLeftBounds.y));
+        Vector2Int selectShadowTopRight = new Vector2Int(Mathf.Min(center.x + radius, topRightBounds.x), Mathf.Min(center.y + radius, topRightBounds.y));
+
+        for (int i = selectShadowBottomLeft.x; i <= selectShadowTopRight.x; i++)
+        {
+            for (int j = selectShadowBottomLeft.y; j <= selectShadowTopRight.y; j++)
+            {
+                Vector2Int posToCheck = new Vector2Int(i, j);
+                int hamDist = HamiltonianDistance(posToCheck, center);
+
+                if ((sr == SkillRange.CloseQuarters || sr == SkillRange.Ranged) && hamDist == radius)
+                {
+                    fixHighlightTile(posToCheck, redHighlightTile);
+                }
+                else if (sr == SkillRange.All && hamDist <= radius)
+                {
+                    fixHighlightTile(posToCheck, redHighlightTile);
+                }
+
+            }
+        }
 
     }
 
@@ -548,9 +636,12 @@ public class MapController : MonoBehaviour
         return map.generatePathNodeList();
     }
 
-    public Vector2Int clipVect3Int(Vector3Int v)
+    private void selectPos(Vector2Int v)
     {
-        return new Vector2Int(v.x, v.y);
+        selectedPosition = new MapPos2D();
+        selectedPosition.pos2D = v;
+        fixedHighlights.Add(new Vector3Int(v.x, v.y, (int)TilemapLayers.FixHiglight));
+        tilemap.SetTile(fixedHighlights[fixedHighlights.Count - 1], blueHighlightTile);
     }
 
     private void selectPos(Vector3Int v)
@@ -679,6 +770,7 @@ public class MapController : MonoBehaviour
         Field f = selectedUnit as Field;
         f.fertilize();
         f.GetComponent<AudioPlayer>().PlayAudioByName("Fertilize");
+        deselect();
     }
     public void moveEnemy(Enemy e, Vector2Int target)
     {
@@ -756,48 +848,6 @@ public class MapController : MonoBehaviour
         deselect();
     }
 
-    private void highlightRedFromCenter(Vector2Int center, SkillRange sr)
-    {
-        //This could be made prettier, I am sure, but right now don't care
-        //brute force, check for every tile in a box neightbourhood if it is available. I am sure I could think of a way to calculate which are needed but fuck that.
-        int radius = 10;
-
-        switch (sr)
-        {
-            case SkillRange.CloseQuarters:
-                radius = 1;
-                break;
-            case SkillRange.Ranged:
-            case SkillRange.All:
-                radius = 2;
-                break;
-        }
-
-
-        Vector2Int selectShadowBottomLeft = new Vector2Int(Mathf.Max(center.x - radius, bottomLeftBounds.x), Mathf.Max(center.y - radius, bottomLeftBounds.y));
-        Vector2Int selectShadowTopRight = new Vector2Int(Mathf.Min(center.x + radius, topRightBounds.x), Mathf.Min(center.y + radius, topRightBounds.y));
-
-        for (int i = selectShadowBottomLeft.x; i <= selectShadowTopRight.x; i++)
-        {
-            for (int j = selectShadowBottomLeft.y; j <= selectShadowTopRight.y; j++)
-            {
-                Vector2Int posToCheck = new Vector2Int(i, j);
-                int hamDist = HamiltonianDistance(posToCheck, center);
-
-                if ((sr == SkillRange.CloseQuarters || sr == SkillRange.Ranged) && hamDist == radius)
-                {
-                    fixHighlightTile(posToCheck, redHighlightTile);
-                }
-                else if (sr == SkillRange.All && hamDist <= radius)
-                {
-                    fixHighlightTile(posToCheck, redHighlightTile);
-                }
-
-            }
-        }
-
-    }
-
     public bool SpawnEnemy(Vector2Int pos)
     {
         if (map.getNode(pos).Occupant != null)
@@ -820,5 +870,10 @@ public class MapController : MonoBehaviour
         {
             map.makeImpassable(t.pos);
         }
+    }
+
+    public Vector2Int clipVect3Int(Vector3Int v)
+    {
+        return new Vector2Int(v.x, v.y);
     }
 }

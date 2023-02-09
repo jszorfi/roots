@@ -86,4 +86,17 @@ public abstract class Character : Unit
         CharacterMovement m = gameObject.GetComponent<CharacterMovement>();
         return m.isMoving();
     }
+
+    public override void onClicked()
+    {
+        if (gameController.phase != Phase.PlayerTurn || isBusy())
+        {
+            return;
+        }
+
+        MapController mc = GameObject.Find("Tilemap").GetComponent<MapController>();
+
+        mc.displayMovementShadow(pos, currentMovement);
+
+    }
 }

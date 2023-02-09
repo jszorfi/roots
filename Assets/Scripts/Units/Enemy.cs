@@ -3,7 +3,7 @@ using System.Linq;
 
 public class Enemy : Character
 {
-    public override void onClicked() { /*nope*/ }
+    public override void onClicked() { base.onClicked(); }
     private bool isWaitingToAttack = false;
 
     public override void targetedSkill(Unit target)

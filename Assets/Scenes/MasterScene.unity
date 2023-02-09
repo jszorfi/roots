@@ -716,8 +716,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13e0d1111ada591449dc532d343fe1fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theCauldron: {fileID: 0}
-  cows: {fileID: 0}
   tile: {fileID: 11400000, guid: 653c077a72f24114e847b81f69064a0c, type: 2}
   blueHighlightTile: {fileID: 11400000, guid: 325b73c40af8c29418260468ad74aac5, type: 2}
   redHighlightTile: {fileID: 11400000, guid: e493606e18111604db59f9ea0c24edba, type: 2}
@@ -735,13 +733,15 @@ MonoBehaviour:
   carrotFarm: {fileID: 21300000, guid: a01f98197897a3347a68c1ed6cf52ef9, type: 3}
   potatoFarm: {fileID: 21300000, guid: 4b13519267b1c9f49a1fecc532535590, type: 3}
   raddishFarm: {fileID: 21300000, guid: 5203516ba78fc2e48b6fc1d25819f26a, type: 3}
-  buildCursor: {fileID: 2800000, guid: 85bc7919d71a9fe40bb48b2054442da5, type: 3}
-  basicCursor: {fileID: 2800000, guid: e087ceab391bb6a4e83cc87171eb4a75, type: 3}
+  buildCursor: {fileID: 2800000, guid: 295e560133122454f85e82bfc8a20600, type: 3}
+  basicCursor: {fileID: 2800000, guid: b11dee449cec23d4bab374a1e716c7c5, type: 3}
   trees: []
   enemies: []
   characters: []
   resCreators: []
   buildings: []
+  theCauldron: {fileID: 0}
+  cows: {fileID: 0}
 --- !u!483693784 &446964775
 TilemapRenderer:
   m_ObjectHideFlags: 0

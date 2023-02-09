@@ -4,6 +4,7 @@ public class Radish : Character
 {
     public override void onClicked()
     {
+        base.onClicked();
         canvasController.displayRadishSkills(hasActtion);
     }
     public override void targetedSkill(Unit target)
